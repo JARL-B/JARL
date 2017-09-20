@@ -3,8 +3,8 @@ import time
 import asyncio
 import datetime
 
-#from globalvars import *
-#from validate_event import validate_event
+from RemindMe.validate_event import validate_event
+from RemindMe.globalvars import calendar
 
 
 async def set_event(message, client):

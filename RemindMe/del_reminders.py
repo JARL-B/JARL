@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from globalvars import *
+from RemindMe.globalvars import *
 
 
 async def del_reminders(message, client):
@@ -58,16 +58,4 @@ async def del_reminders(message, client):
     except IndexError:
       continue
 
-  try:
-    await client.delete_messages(msgs)
-  except:
-    pass
-
   msg = await client.send_message(message.channel, 'Deleted {} reminders!'.format(dels))
-
-  try:
-    await asyncio.sleep(1.4)
-
-    await client.delete_message(msg)
-  except:
-    pass
