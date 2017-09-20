@@ -11,6 +11,9 @@ from RemindMe.set_event import set_event
 from RemindMe.set_interval import set_interval
 from RemindMe.del_reminders import del_reminders
 
+from TheManagement.autoclear import autoclear
+from TheManagement.clear_channel import clear_channel
+
 from check_reminders import check_reminders
 from change_prefix import change_prefix
 from dev_tools import dev_tools
@@ -36,8 +39,41 @@ command_map = {
   'del' : del_reminders,
   'dev' : dev_tools,
   'donate' : donate,
-  'update' : update
+  'update' : update,
+  'clear' : clear_channel,
+  'autoclear' : autoclear
 }
+
+async def validate_cmd(message):
+  if message.server != None and message.server.id in prefix.keys():
+    pref = prefix[message.server.id]
+  else:
+    pref = '&'
+
+  if message.content[0] != pref: ## These functions call if the prefix isnt present
+    if message.content.startswith('mbprefix'):
+
+      if message.channel.id in channel_blacklist:
+        await blacklist_msg(message)
+        return
+
+      await change_prefix(message)
+
+    return
+
+  cmd = message.content.split(' ')[0][1:] # extract the keyword
+  if cmd in command_map.keys():
+
+    if message.channel.id in channel_blacklist and cmd != 'help':
+      await blacklist_msg(message)
+
+      return
+
+    else:
+      await command_map[cmd](message,client)
+
+      return
+
 
 @client.event ## print some stuff to console when the bot is activated
 async def on_ready():
@@ -55,38 +91,45 @@ async def on_message(message): ## when a message arrives at the bot ##
   if message.content in ['', None]: ## if the message is a file ##
     return
 
-  cmd_content = message.content.lower() ## lower the command ##
+  await validate_cmd(message)
 
-  if message.server != None and message.server.id in prefix.keys():
-    pref = prefix[message.server.id]
-  else:
-    pref = '$'
+  ## run stuff here if there is no command ##
+  if message.channel.id in autoclears.keys():
+    await asyncio.sleep(autoclears[message.channel.id])
+    await client.delete_message(message)
 
-  if message.content[0] != pref: ## These functions call if the prefix isnt present
-    if message.content.startswith('rbprefix'):
+  if message.author.id in users.keys():
+    if time.time() - users[message.author.id] < 1:
 
-      if message.channel.id in channel_blacklist:
-        await blacklist_msg(message)
-        return
+      if message.author.id in warnings.keys():
 
-      await change_prefix(message)
+        warnings[message.author.id] += 1
+        if warnings[message.author.id] == 4:
+          await client.send_message(message.channel, 'Please slow down {}'.format(message.author.mention))
 
-    return
+        elif warnings[message.author.id] == 6:
 
-  cmd = cmd_content.split(' ')[0][1:] # extract the keyword
-  if cmd in command_map.keys():
+          overwrite = discord.PermissionOverwrite()
+          overwrite.send_messages = False
+          await client.edit_channel_permissions(message.channel, message.author, overwrite)
+          await client.send_message(message.channel, '{}, you\'ve been muted for spam. Please contact an admin to review your status.'.format(message.author.mention))
 
-    if message.channel.id in channel_blacklist and cmd != 'help':
-      await blacklist_msg(message)
+      else:
+        print('user added to warning list')
+        warnings[message.author.id] = 1
 
-      return
+      users[message.author.id] = time.time()
 
     else:
-      await command_map[cmd](message, client)
+      users[message.author.id] = time.time()
+      warnings[message.author.id] = 0
 
-      return
+  else:
+    print('registered user for auto-muting')
+    users[message.author.id] = time.time()
 
-try:
+
+try: ## token grabbing code
   with open('token','r') as token_f:
     token = token_f.read().strip('\n')
 

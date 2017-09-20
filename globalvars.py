@@ -1,6 +1,7 @@
 import json
 
 from RemindMe.globalvars import *
+from TheManagement.globalvars import *
 
 client = discord.Client() ## defined the client
 
