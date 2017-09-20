@@ -1,2 +1,1 @@
-# JARL
-JARL Bot for Discord
+# JARL\nThe ultimate multi-bot
