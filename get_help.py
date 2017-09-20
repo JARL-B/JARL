@@ -1,9 +1,8 @@
 import discord
 import asyncio
-from globalvars import *
 
 
-async def get_help(message):
+async def get_help(message,client):
   em = discord.Embed(title='**HELP**',description=
   '''
 __Key Commands__

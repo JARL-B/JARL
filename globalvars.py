@@ -1,3 +1,5 @@
+import json
+
 from RemindMe.globalvars import *
 
 client = discord.Client() ## defined the client
@@ -6,22 +8,10 @@ prefix = {}
 blacklist = []
 
 try:
-  with open('prefix','r') as f: ## TODO change to JSON file
-    pref = f.read().strip()
-    pref = ''.join(pref)
-    pref = pref.split(';')
+  with open('prefix.json','r') as f: ## TODO change to JSON file
+    prefix = json.load(f)
 
-    for item in pref:
-      if len(item) < 2:
-        pref.remove(item)
-
-    for item in pref:
-      item = item.split(',')
-      if item[1] == '$':
-        continue
-      prefix[item[0]] = item[1]
-
-except FileNotFoundError:
+except:
   print('no prefix file found')
 
 try:

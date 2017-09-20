@@ -3,6 +3,7 @@ import asyncio
 from globalvars import *
 import time
 import csv
+import json
 from itertools import chain
 
 
@@ -43,11 +44,11 @@ async def check_reminders():
           intervals.remove(inv)
 
 
-    with open('calendar','w') as f:
+    with open('calendar.csv','w') as f:
       writer = csv.writer(f,delimiter=',',lineterminator=';')
       writer.writerows(calendar) ## uses a CSV writer to write the data to file.
 
-    with open('intervals','w') as f:
+    with open('intervals.csv','w') as f:
       writer = csv.writer(f,delimiter=',',lineterminator=';')
       writer.writerows(intervals) ## uses a CSV writer to write the data to file.
 
@@ -57,12 +58,5 @@ async def check_reminders():
         bl_s += i + ','
 
       f.write(bl_s)
-
-    with open('prefix','w') as f:
-      pref_s = ''
-      for k,v in prefix.items():
-        pref_s += k + ',' + v + ';'
-
-      f.write(pref_s)
 
     await asyncio.sleep(1.2)

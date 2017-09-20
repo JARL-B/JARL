@@ -21,17 +21,17 @@ async def dev_tools(message):
   elif command == 'channelid':
     await client.send_message(message.channel, message.channel.id)
 
-  elif command == 'patrons':
-    li = [i.name for i in get_patrons()]
-    await client.send_message(message.channel, ' '.join(li))
-
-  elif command == 'donors':
-    li = [i.name for i in get_patrons('Donors')]
-    await client.send_message(message.channel, ' '.join(li))
-
-  elif command == 'upatrons':
-    li = [i.name for i in get_patrons('Ultra-Patrons')]
-    await client.send_message(message.channel, ' '.join(li))
+  #elif command == 'patrons':
+  #  li = [i.name for i in get_patrons()]
+  #  await client.send_message(message.channel, ' '.join(li))
+#
+#  elif command == 'donors':
+#    li = [i.name for i in get_patrons('Donors')]
+#    await client.send_message(message.channel, ' '.join(li))
+#
+#  elif command == 'upatrons':
+#    li = [i.name for i in get_patrons('Ultra-Patrons')]
+#    await client.send_message(message.channel, ' '.join(li))
 
   elif command == 'servers':
     await client.send_message(message.channel, '\n'.join([s.name + '; ' + s.id for s in client.servers]))
