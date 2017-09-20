@@ -2,8 +2,11 @@ from RemindMe.globalvars import *
 
 client = discord.Client() ## defined the client
 
+prefix = {}
+blacklist = []
+
 try:
-  with open('prefix','r') as f:
+  with open('prefix','r') as f: ## TODO change to JSON file
     pref = f.read().strip()
     pref = ''.join(pref)
     pref = pref.split(';')

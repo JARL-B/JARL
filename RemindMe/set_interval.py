@@ -2,10 +2,9 @@ import discord
 import asyncio
 import time
 
-from globalvars import *
-from format_time import format_time
+#from globalvars import *
+#from format_time import format_time
 from get_patrons import get_patrons
-from get_binds import get_binds
 
 async def set_interval(message, client):
   if message.author in get_patrons(level='Donor') or message.server.id in get_binds():

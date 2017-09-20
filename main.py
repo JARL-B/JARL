@@ -6,12 +6,12 @@ import time
 
 from globalvars import *
 
-from RemindMe.check_reminders import check_reminders
 from RemindMe.set_reminder import set_reminder
 from RemindMe.set_event import set_event
 from RemindMe.set_interval import set_interval
 from RemindMe.del_reminders import del_reminders
 
+from check_reminders import check_reminders
 from change_prefix import change_prefix
 from dev_tools import dev_tools
 from add_blacklist import add_blacklist

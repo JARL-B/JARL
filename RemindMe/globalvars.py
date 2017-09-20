@@ -41,7 +41,3 @@ for reminder in calendar:
 for inv in intervals:
   if len(inv) != 4:
     intervals.remove(inv)
-
-for item in channel_blacklist:
-  if len(item) < 3:
-    channel_blacklist.remove(item)

@@ -2,8 +2,8 @@ import discord
 import time
 import asyncio
 
-from globalvars import *
-from format_time import format_time
+#from globalvars import *
+#from format_time import format_time
 
 
 async def set_reminder(message, client):

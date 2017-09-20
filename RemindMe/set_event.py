@@ -3,9 +3,9 @@ import time
 import asyncio
 import datetime
 
-from globalvars import *
-from validate_event import validate_event
-from get_binds import get_binds
+#from globalvars import *
+#from validate_event import validate_event
+
 
 async def set_event(message, client):
   if ',' in message.content or ';' in message.content:
