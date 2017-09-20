@@ -3,7 +3,7 @@ from datetime import datetime
 from globalvars import *
 
 
-async def del_reminders(message):
+async def del_reminders(message, client):
   msgs = [message]
 
   t = await client.send_message(message.channel, 'Listing reminders on this server... (be patient, this might take some time)\nAlso, please note the times are done relative to UK time. Thanks.')

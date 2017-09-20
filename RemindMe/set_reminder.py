@@ -6,7 +6,7 @@ from globalvars import *
 from format_time import format_time
 
 
-async def set_reminder(message):
+async def set_reminder(message, client):
   if ',' in message.content or ';' in message.content:
     await client.send_message(message.channel, 'Sorry, but you cannot place commas or semi-colons inside your reminders due to storage formats')
   else:

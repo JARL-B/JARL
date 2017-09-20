@@ -49,13 +49,13 @@ async def on_ready():
 
 @client.event
 async def on_message(message): ## when a message arrives at the bot ##
-  if message.author.id == client.user.id:
+  if message.author.id == client.user.id: ## if the message has been sent by the bot ##
     return
 
-  if message.content in ['', None]:
+  if message.content in ['', None]: ## if the message is a file ##
     return
 
-  cmd_content = message.content.lower()
+  cmd_content = message.content.lower() ## lower the command ##
 
   if message.server != None and message.server.id in prefix.keys():
     pref = prefix[message.server.id]
@@ -82,7 +82,7 @@ async def on_message(message): ## when a message arrives at the bot ##
       return
 
     else:
-      await command_map[cmd](message)
+      await command_map[cmd](message, client)
 
       return
 

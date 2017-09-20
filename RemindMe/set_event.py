@@ -7,7 +7,7 @@ from globalvars import *
 from validate_event import validate_event
 from get_binds import get_binds
 
-async def set_event(message):
+async def set_event(message, client):
   if ',' in message.content or ';' in message.content:
     await client.send_message(message.channel, 'Sorry, but you cannot place commas or semi-colons inside your events due to storage formats')
   else:
