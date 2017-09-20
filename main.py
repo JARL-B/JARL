@@ -6,23 +6,18 @@ import time
 
 from globalvars import *
 
-from get_help import get_help
-from check_reminders import check_reminders
+from RemindMe.check_reminders import check_reminders
+from RemindMe.set_reminder import set_reminder
+from RemindMe.set_event import set_event
+from RemindMe.set_interval import set_interval
+from RemindMe.del_reminders import del_reminders
+
 from change_prefix import change_prefix
-from set_reminder import set_reminder
-from set_event import set_event
-from add_blacklist import add_blacklist
-from get_time import get_time
-from set_playing import set_playing
-from create_issue import create_issue
-from accept_invite import accept_invite
-from transport import transport
-from set_interval import set_interval
-from del_reminders import del_reminders
 from dev_tools import dev_tools
+from add_blacklist import add_blacklist
 from donate import donate
-from bind import bind
 from update import update
+from get_help import get_help
 
 
 async def blacklist_msg(message):
@@ -36,17 +31,10 @@ command_map = {
   'help' : get_help,
   'remind' : set_reminder,
   'event' : set_event,
-  'etime' : get_time,
-  'playing' : set_playing,
   'blacklist' : add_blacklist,
-  'suggestion' : create_issue,
-  'issue' : create_issue,
-  'invite' : accept_invite,
-  'transport_me' : transport,
   'interval' : set_interval, ## patron only ##
   'del' : del_reminders,
   'dev' : dev_tools,
-  'bind' : bind,
   'donate' : donate,
   'update' : update
 }
@@ -57,8 +45,6 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
-
-    await client.change_presence(game=discord.Game(name='with ur calendar bb ;)'))
 
 
 @client.event
