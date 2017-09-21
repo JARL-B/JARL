@@ -13,6 +13,7 @@ from RemindMe.del_reminders import del_reminders
 
 from TheManagement.autoclear import autoclear
 from TheManagement.clear_channel import clear_channel
+from TheManagement.spamfilter import spamfilter
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
@@ -41,10 +42,11 @@ command_map = {
   'donate' : donate,
   'update' : update,
   'clear' : clear_channel,
-  'autoclear' : autoclear
+  'autoclear' : autoclear,
+  'spam' : spamfilter
 }
 
-async def validate_cmd(message):
+async def validate_cmd(message): ## method for doing the commands
   if message.server != None and message.server.id in prefix.keys():
     pref = prefix[message.server.id]
   else:
@@ -74,31 +76,8 @@ async def validate_cmd(message):
 
       return
 
-
-@client.event ## print some stuff to console when the bot is activated
-async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
-
-
-@client.event
-async def on_message(message): ## when a message arrives at the bot ##
-  if message.author.id == client.user.id: ## if the message has been sent by the bot ##
-    return
-
-  if message.content in ['', None]: ## if the message is a file ##
-    return
-
-  await validate_cmd(message)
-
-  ## run stuff here if there is no command ##
-  if message.channel.id in autoclears.keys():
-    await asyncio.sleep(autoclears[message.channel.id])
-    await client.delete_message(message)
-
-  if message.author.id in users.keys():
+async def watch_spam(message):
+  if message.author.id in users.keys(): ## all the stuff to do with smap filtering
     if time.time() - users[message.author.id] < 1:
 
       if message.author.id in warnings.keys():
@@ -127,6 +106,33 @@ async def on_message(message): ## when a message arrives at the bot ##
   else:
     print('registered user for auto-muting')
     users[message.author.id] = time.time()
+
+
+@client.event ## print some stuff to console when the bot is activated
+async def on_ready():
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
+
+
+@client.event
+async def on_message(message): ## when a message arrives at the bot ##
+  if message.author.id == client.user.id: ## if the message has been sent by the bot ##
+    return
+
+  if message.content in ['', None]: ## if the message is a file ##
+    return
+
+  await validate_cmd(message)
+
+  ## run stuff here if there is no command ##
+  if message.channel.id in autoclears.keys(): ## autoclearing
+    await asyncio.sleep(autoclears[message.channel.id])
+    await client.delete_message(message)
+
+  if message.channel.id in spam_filter:
+    await watch_spam(message)
 
 
 try: ## token grabbing code
