@@ -54,7 +54,7 @@ async def validate_cmd(message): ## method for doing the commands
   if message.server != None and message.server.id in prefix.keys():
     pref = prefix[message.server.id]
   else:
-    pref = '&'
+    pref = '$'
 
   if message.content[0] != pref: ## These functions call if the prefix isnt present
     if message.content.startswith('mbprefix'):
@@ -133,6 +133,8 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+
+    await client.change_presence(game=discord.Game(name='$help'))
 
 
 @client.event
