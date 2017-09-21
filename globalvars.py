@@ -6,17 +6,17 @@ from TheManagement.globalvars import *
 client = discord.Client() ## defined the client
 
 prefix = {}
-blacklist = []
+channel_blacklist = []
 
 try:
-  with open('prefix.json','r') as f: ## TODO change to JSON file
+  with open('DATA/prefix.json','r') as f:
     prefix = json.load(f)
 
 except:
   print('no prefix file found')
 
 try:
-  with open('blacklist','r') as f:
+  with open('DATA/blacklist','r') as f:
     bl = f.read().strip('\n')
     bl = ''.join(bl)
     channel_blacklist = bl.split(',')

@@ -7,3 +7,10 @@ async def spamfilter(message,client):
   else:
     spam_filter.append(message.channel.id)
     await client.send_message(message.channel, 'Spam filtering has been enabled for ' + message.channel.mention)
+
+  with open('DATA/spamfilter','w') as f:
+    bl_s = ''
+    for i in spam_filter:
+      bl_s += i + ','
+
+    f.write(bl_s)

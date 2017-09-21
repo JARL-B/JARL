@@ -44,15 +44,15 @@ async def check_reminders():
           intervals.remove(inv)
 
 
-    with open('calendar.csv','w') as f:
+    with open('DATA/calendar.csv','w') as f:
       writer = csv.writer(f,delimiter=',',lineterminator=';')
       writer.writerows(calendar) ## uses a CSV writer to write the data to file.
 
-    with open('intervals.csv','w') as f:
+    with open('DATA/intervals.csv','w') as f:
       writer = csv.writer(f,delimiter=',',lineterminator=';')
       writer.writerows(intervals) ## uses a CSV writer to write the data to file.
 
-    with open('blacklist','w') as f:
+    with open('DATA/blacklist','w') as f:
       bl_s = ''
       for i in channel_blacklist:
         bl_s += i + ','

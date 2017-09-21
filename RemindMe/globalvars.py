@@ -6,7 +6,7 @@ calendar = []
 intervals = []
 
 try:
-  with open('calendar.csv','r') as f:
+  with open('DATA/calendar.csv','r') as f:
     cal = f.read()
     cal = cal.strip()
     cal = ''.join(cal)
@@ -20,7 +20,7 @@ except FileNotFoundError:
   print('no calendar file found. not loading any reminders')
 
 try:
-  with open('intervals.csv','r') as f:
+  with open('DATA/intervals.csv','r') as f:
     inv = f.read()
     inv = inv.strip()
     inv = ''.join(inv)

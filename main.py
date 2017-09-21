@@ -3,6 +3,8 @@ import asyncio
 import sys
 import os
 import time
+import uuid
+import re
 
 from globalvars import *
 
@@ -14,6 +16,7 @@ from RemindMe.del_reminders import del_reminders
 from TheManagement.autoclear import autoclear
 from TheManagement.clear_channel import clear_channel
 from TheManagement.spamfilter import spamfilter
+from TheManagement.profanityfilter import profanityfilter
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
@@ -43,7 +46,8 @@ command_map = {
   'update' : update,
   'clear' : clear_channel,
   'autoclear' : autoclear,
-  'spam' : spamfilter
+  'spam' : spamfilter,
+  'profanity' : profanityfilter
 }
 
 async def validate_cmd(message): ## method for doing the commands
@@ -107,6 +111,21 @@ async def watch_spam(message):
     print('registered user for auto-muting')
     users[message.author.id] = time.time()
 
+async def watch_profanity(message):
+  compressed = message.content.replace(' ','').replace('-','').replace('_','')
+  uid = uuid.uuid4()
+  with open('profanity.exp','r') as f:
+    for reg in f:
+      reg = reg.strip()
+      exp = re.search(reg,compressed)
+      if exp: ## perform a regex search for illicit terms
+        with open('DATA/profanity_issues','a') as f2:
+          f2.write('{} term detected at {} (UUID {})\n'.format(exp.group(),message.author.name,uid))
+        print('{} term detected at {} (UUID {})'.format(exp.group(),message.author.name,uid))
+        await client.send_message(message.channel, 'Illicit term detected in input {}. If you believe this warning has been administered wrongly, please send the code `{}` to the support channel in the Discord group'.format(message.author.mention,uid))
+        await client.delete_message(message)
+        return
+
 
 @client.event ## print some stuff to console when the bot is activated
 async def on_ready():
@@ -133,6 +152,9 @@ async def on_message(message): ## when a message arrives at the bot ##
 
   if message.channel.id in spam_filter:
     await watch_spam(message)
+
+  if message.channel.id in profanity_filter:
+    await watch_profanity(message)
 
 
 try: ## token grabbing code
