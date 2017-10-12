@@ -1,3 +1,5 @@
+import json
+
 from TheManagement.globalvars import verif_servers
 
 async def verification(message,client):
@@ -7,3 +9,6 @@ async def verification(message,client):
   else:
     await client.send_message(message.channel, 'Custom email verification enabled for this server. New members will be asked for email verification.')
     verif_servers.append(message.server.id)
+
+  with open('DATA/verif_servers.json','w') as f:
+    json.dump(verif_servers,f)
