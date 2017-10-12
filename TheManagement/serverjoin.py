@@ -3,6 +3,10 @@ import json
 from TheManagement.globalvars import join_messages
 
 async def serverjoin(message,client):
+  if not message.author.server_permissions.administrator:
+    await client.send_message(message.channel, 'You must be an admin to run this command.')
+    return
+
   if message.server.id in join_messages.keys():
     if len(message.content.split(' ')) == 1:
       await client.send_message(message.channel, 'Server join messages disabled!')

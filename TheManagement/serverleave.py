@@ -3,6 +3,10 @@ import json
 from TheManagement.globalvars import leave_messages
 
 async def serverleave(message,client):
+  if not message.author.server_permissions.administrator:
+    await client.send_message(message.channel, 'You must be an admin to run this command.')
+    return
+
   if message.server.id in leave_messages.keys():
     if len(message.content.split(' ')) == 1:
       await client.send_message(message.channel, 'Server leave messages disabled!')

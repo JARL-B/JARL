@@ -10,6 +10,9 @@ leave_messages = {}
 spam_filter = []
 profanity_filter = []
 
+emails = {}
+verif_servers = []
+
 try:
   with open('DATA/autoclears.json','r') as f:
     autoclears = json.load(f)
@@ -48,3 +51,10 @@ try:
 
 except FileNotFoundError:
   print('no leave messages file found')
+
+try:
+  with open('DATA/verif_servers.json','r') as f:
+    verif_servers = json.load(f)
+
+except FileNotFoundError:
+  print('no verif servers file found')

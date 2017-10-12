@@ -5,6 +5,8 @@ import os
 import time
 import uuid
 import re
+import smtplib
+import random
 
 from globalvars import *
 
@@ -19,6 +21,7 @@ from TheManagement.spamfilter import spamfilter
 from TheManagement.profanityfilter import profanityfilter
 from TheManagement.serverjoin import serverjoin
 from TheManagement.serverleave import serverleave
+from TheManagement.verification import verification
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
@@ -51,7 +54,8 @@ command_map = {
   'spam' : spamfilter,
   'profanity' : profanityfilter,
   'joinmsg' : serverjoin,
-  'leavemsg' : serverleave
+  'leavemsg' : serverleave,
+  'verif' : verification
 }
 
 async def validate_cmd(message): ## method for doing the commands
@@ -167,11 +171,45 @@ async def on_member_join(member):
   if member.server.id in join_messages.keys():
     await client.send_message(client.get_channel(join_messages[member.server.id][1]),join_messages[member.server.id][0].format(member.name))
 
+  if member.server.id in verif_servers:
+    m = await client.send_message(member, 'To verify yourself on this server, please type your email below:')
+    email = await client.wait_for_message(channel=m.channel,author=member)
+
+    code = ''.join([str(random.randint(0,9)) for _ in range(8)]) # generate an 8 digit verification code
+
+    server = smtplib.SMTP('smtp.gmail.com',587)
+
+    server.ehlo()
+    server.starttls()
+
+    with open('email.json','r') as f:
+      email = json.read(f)
+
+    server.login(email['email'], email['passwd'])
+
+    text = '''
+<h1>Hello</h1>
+Please use the verification code below to verify your Discord user on {server}:
+<strong>{code}</strong>
+'''.format(server=member.server.name,code=code)
+
+    body = '\r\n'.join(['To: {}'.format(email.content),
+                    'From: {}'.format(email['email']),
+                    'Subject: Verify Your Presence on {}'.format(member.server.name),
+                    '', text])
+
+    try:
+      server.sendmail(email['email'], [email.content], text)
+    except:
+      print('There was an error sending the email')
+
+    server.close()
+
+
 @client.event
 async def on_member_remove(member):
   if member.server.id in leave_messages.keys():
     await client.send_message(client.get_channel(leave_messages[member.server.id][1]),leave_messages[member.server.id][0].format(member.name))
-
 
 try: ## token grabbing code
   with open('token','r') as token_f:
