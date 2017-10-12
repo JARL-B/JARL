@@ -17,6 +17,7 @@ from TheManagement.autoclear import autoclear
 from TheManagement.clear_channel import clear_channel
 from TheManagement.spamfilter import spamfilter
 from TheManagement.profanityfilter import profanityfilter
+from TheManagement.serverjoin import serverjoin
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
@@ -47,7 +48,8 @@ command_map = {
   'clear' : clear_channel,
   'autoclear' : autoclear,
   'spam' : spamfilter,
-  'profanity' : profanityfilter
+  'profanity' : profanityfilter,
+  'joinmsg' : serverjoin
 }
 
 async def validate_cmd(message): ## method for doing the commands
@@ -134,7 +136,7 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-    await client.change_presence(game=discord.Game(name='$help'))
+    #await client.change_presence(game=discord.Game(name='$help'))
 
 
 @client.event
@@ -157,6 +159,11 @@ async def on_message(message): ## when a message arrives at the bot ##
 
   if message.channel.id in profanity_filter:
     await watch_profanity(message)
+
+@client.event
+async def on_member_join(member):
+  if member.server.id in join_messages.keys():
+    await client.send_message(member.server.default_channel,join_messages[member.server.id].format(member.user.name))
 
 
 try: ## token grabbing code

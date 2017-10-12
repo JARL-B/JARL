@@ -65,5 +65,5 @@ async def autoclear(message,client):
   else:
     await client.send_message(message.channel, 'Too many parameters provided. Please provide a clearing timer (a decimal number) and a channel name')
 
-  with open('autoclears.json','w') as f:
+  with open('DATA/autoclears.json','w') as f:
     json.dump(autoclears,f)

@@ -4,6 +4,7 @@ import json
 autoclears = {}
 users = {}
 warnings = {}
+join_messages = {}
 
 spam_filter = []
 profanity_filter = []
@@ -32,3 +33,10 @@ try:
 
 except FileNotFoundError:
   print('no profanity filter file found')
+
+try:
+  with open('DATA/join_messages.json','r') as f:
+    join_messages = json.load(f)
+
+except FileNotFoundError:
+  print('no join messages file found')

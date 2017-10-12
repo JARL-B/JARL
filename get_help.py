@@ -25,6 +25,7 @@ __TheManagement Commands__
   > `$autoclear [time/s] [channel]` - enables/disables autoclearing, where messages sent to the channel (default your channel) will be automatically deleted after time (default 10 seconds)
   > `$profanity` - enables/disables anti-profanity. Filters many different words and deletes messages containing these words and various variations on them.
   > `$spam` - enables/disables basic anti-spam. Mutes members who send messages too quickly.
+  > `$joinmsg [message]` - enables/disables a join message. If no join message is provided, the join message will be disabled. To represent the user joining the server in the join message, use 2 curly braces (`{}`).
 
 __Other Commands__
   > `$donate` - view information about donations.
