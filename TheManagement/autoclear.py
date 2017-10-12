@@ -18,6 +18,9 @@ async def autoclear(message,client):
       del autoclears[message.channel.id]
       await client.send_message(message.channel, 'Autoclearing disabled for this channel.')
 
+      with open('DATA/autoclears.json','w') as f:
+        json.dump(autoclears,f)
+
       return
 
     autoclears[message.channel.id] = 10

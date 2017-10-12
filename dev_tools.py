@@ -4,7 +4,7 @@ import discord
 from globalvars import *
 from get_patrons import get_patrons
 
-async def dev_tools(message):
+async def dev_tools(message,client):
   command = message.content.split(' ').pop(1)
 
   if command == 'roles':

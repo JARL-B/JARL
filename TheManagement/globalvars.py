@@ -5,6 +5,7 @@ autoclears = {}
 users = {}
 warnings = {}
 join_messages = {}
+leave_messages = {}
 
 spam_filter = []
 profanity_filter = []
@@ -40,3 +41,10 @@ try:
 
 except FileNotFoundError:
   print('no join messages file found')
+
+try:
+  with open('DATA/leave_messages.json','r') as f:
+    leave_messages = json.load(f)
+
+except FileNotFoundError:
+  print('no leave messages file found')

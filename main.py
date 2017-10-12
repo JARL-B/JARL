@@ -18,6 +18,7 @@ from TheManagement.clear_channel import clear_channel
 from TheManagement.spamfilter import spamfilter
 from TheManagement.profanityfilter import profanityfilter
 from TheManagement.serverjoin import serverjoin
+from TheManagement.serverleave import serverleave
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
@@ -49,7 +50,8 @@ command_map = {
   'autoclear' : autoclear,
   'spam' : spamfilter,
   'profanity' : profanityfilter,
-  'joinmsg' : serverjoin
+  'joinmsg' : serverjoin,
+  'leavemsg' : serverleave
 }
 
 async def validate_cmd(message): ## method for doing the commands
@@ -163,7 +165,12 @@ async def on_message(message): ## when a message arrives at the bot ##
 @client.event
 async def on_member_join(member):
   if member.server.id in join_messages.keys():
-    await client.send_message(member.server.default_channel,join_messages[member.server.id].format(member.user.name))
+    await client.send_message(client.get_channel(join_messages[member.server.id][1]),join_messages[member.server.id][0].format(member.name))
+
+@client.event
+async def on_member_remove(member):
+  if member.server.id in leave_messages.keys():
+    await client.send_message(client.get_channel(leave_messages[member.server.id][1]),leave_messages[member.server.id][0].format(member.name))
 
 
 try: ## token grabbing code
