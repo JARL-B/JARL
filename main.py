@@ -174,51 +174,66 @@ async def on_member_join(member):
     await client.send_message(client.get_channel(join_messages[member.server.id][1]),join_messages[member.server.id][0].format(member.name))
 
   if member.server.id in verif_servers:
-    m = await client.send_message(member, 'To verify yourself on this server, please type your email below:')
-    useremail = await client.wait_for_message(channel=m.channel,author=member)
-    await client.send_message(member, 'We are now sending you a verification email. Please check your inbox and if you can\'t find it, make sure to check spam folders.')
+    while 1:
+      m = await client.send_message(member, 'To verify yourself on this server, please type your email below:')
+      useremail = await client.wait_for_message(channel=m.channel,author=member)
 
-    code = ''.join([str(random.randint(0,9)) for _ in range(8)]) # generate an 8 digit verification code
+      if member.id in emails.keys() and emails[member.id] == useremail.content:
+        await client.send_message(member, 'Thank you, you have already verified your email!')
+        ## RUN ROLING HERE
+        return
 
-    server = smtplib.SMTP('smtp.gmail.com',587)
+      await client.send_message(member, 'We are now sending you a verification email. Please check your inbox and if you can\'t find it, make sure to check spam folders.')
 
-    server.ehlo()
-    server.starttls()
+      code = ''.join([str(random.randint(0,9)) for _ in range(8)]) # generate an 8 digit verification code
 
-    with open('email.json','r') as f:
-      email = json.load(f)
+      server = smtplib.SMTP('smtp.gmail.com',587)
 
-    server.login(email['email'], email['passwd'])
+      server.ehlo()
+      server.starttls()
 
-    text = '''
-<h1>Hello, {name}</h1>
-Please use the verification code below to verify your Discord user on {server}:
-<br>
-<strong>{code}</strong>
-<br>
-Simply DM the code to the BOT and you'll be immediately verified! Thank you for using TheManagement.
-'''.format(name=member.name,server=member.server.name,code=code)
+      with open('email.json','r') as f:
+        email = json.load(f)
 
-    msg = MIMEMultipart()
-    msg['From'] = email['email']
-    msg['To'] = useremail.content
-    msg['Subject'] = 'Verify Your Presence on {}'.format(member.server.name)
+      server.login(email['email'], email['passwd'])
 
-    msg.attach(MIMEText(text, 'html'))
+      text = '''
+  <h1>Hello, {name}</h1>
+  Please use the verification code below to verify your Discord user on {server}:
+  <br>
+  <strong>{code}</strong>
+  <br>
+  Simply DM the code to the BOT and you'll be immediately verified! Thank you for using TheManagement.
+  '''.format(name=member.name,server=member.server.name,code=code)
 
-    try:
-      server.sendmail(email['email'], [useremail.content], msg.as_string())
-    except:
-      await client.send_message(m.channel, 'Oh no :( There was an error sending the verification email. Please try again later')
+      msg = MIMEMultipart()
+      msg['From'] = email['email']
+      msg['To'] = useremail.content
+      msg['Subject'] = 'Verify Your Presence on {}'.format(member.server.name)
 
-    server.close()
+      msg.attach(MIMEText(text, 'html'))
 
-    code_in = await client.wait_for_message(channel=m.channel,author=member)
+      try:
+        server.sendmail(email['email'], [useremail.content], msg.as_string())
+      except:
+        await client.send_message(m.channel, 'Oh no :( There was an error sending the verification email. Please try again later')
 
-    if code_in.content == code:
-      await client.send_message(m.channel, 'Thank you for verifying your account!')
-    else:
-      await client.send_message(m.channel, 'Incorrect code entered.')
+      server.close()
+
+      code_in = await client.wait_for_message(channel=m.channel,author=member)
+
+      if code_in.content == code:
+        await client.send_message(m.channel, 'Thank you for verifying your account!')
+        emails[member.id] = useremail.content
+
+        with open('DATA/emails.json','w') as f:
+          json.dump(emails,f)
+
+        ## RUN ROLING HERE
+
+        return
+      else:
+        await client.send_message(m.channel, 'Incorrect code entered. Please try again...')
 
 
 @client.event

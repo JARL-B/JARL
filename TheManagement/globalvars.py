@@ -58,3 +58,10 @@ try:
 
 except FileNotFoundError:
   print('no verif servers file found')
+
+try:
+  with open('DATA/emails.json','r') as f:
+    emails = json.load(f)
+
+except FileNotFoundError:
+  print('no emails file found')
