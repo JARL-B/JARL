@@ -182,7 +182,12 @@ async def on_member_join(member):
 
       if member.id in emails.keys() and emails[member.id] == useremail.content:
         await client.send_message(member, 'Thank you, you have already verified your email!')
-        ## RUN ROLING HERE
+
+        try:
+          await client.add_roles(member, discord.utils.get(member.server.roles, name='Email Verified'))
+        except:
+          pass
+
         return
 
       await client.send_message(member, 'We are now sending you a verification email. Please check your inbox and if you can\'t find it, make sure to check spam folders.')
@@ -231,7 +236,10 @@ async def on_member_join(member):
         with open('DATA/emails.json','w') as f:
           json.dump(emails,f)
 
-        ## RUN ROLING HERE
+        try:
+          await client.add_roles(member, discord.utils.get(member.server.roles, name='Email Verified'))
+        except:
+          pass
 
         return
       else:
