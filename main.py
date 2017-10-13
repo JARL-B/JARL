@@ -176,8 +176,7 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-    #await client.change_presence(game=discord.Game(name='$help'))
-
+    await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
 
 @client.event
 async def on_message(message): ## when a message arrives at the bot ##
