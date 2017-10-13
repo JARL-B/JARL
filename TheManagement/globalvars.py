@@ -13,6 +13,8 @@ profanity_filter = []
 emails = {}
 verif_servers = []
 
+votes = []
+
 try:
   with open('DATA/autoclears.json','r') as f:
     autoclears = json.load(f)

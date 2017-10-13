@@ -24,6 +24,7 @@ from TheManagement.profanityfilter import profanityfilter
 from TheManagement.serverjoin import serverjoin
 from TheManagement.serverleave import serverleave
 from TheManagement.verification import verification
+from TheManagement.vote import vote
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
@@ -57,7 +58,8 @@ command_map = {
   'profanity' : profanityfilter,
   'joinmsg' : serverjoin,
   'leavemsg' : serverleave,
-  'verif' : verification
+  'verif' : verification,
+  'vote' : vote
 }
 
 async def validate_cmd(message): ## method for doing the commands
@@ -240,6 +242,17 @@ async def on_member_join(member):
 async def on_member_remove(member):
   if member.server.id in leave_messages.keys():
     await client.send_message(client.get_channel(leave_messages[member.server.id][1]),leave_messages[member.server.id][0].format(member.name))
+
+
+@client.event
+async def on_reaction_add(reaction, user):
+  for v in votes:
+    if reaction.message.id == v.message.id:
+      if reaction.emoji == '❎':
+        v.neg_v += 1
+      elif reaction.emoji == '✅':
+        v.pos_v += 1
+      return
 
 try: ## token grabbing code
   with open('token','r') as token_f:
