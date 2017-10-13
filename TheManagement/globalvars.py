@@ -4,11 +4,13 @@ import json
 autoclears = {}
 users = {}
 warnings = {}
+tag_warnings = {}
 join_messages = {}
 leave_messages = {}
 
 spam_filter = []
 profanity_filter = []
+tag_filter = []
 
 emails = {}
 verif_servers = []
@@ -24,7 +26,7 @@ except FileNotFoundError:
 
 try:
   with open('DATA/spamfilter.json','r') as f:
-    spam = json.load(f)
+    spam_filter = json.load(f)
 
 except FileNotFoundError:
   print('no spam filter file found')
@@ -63,3 +65,17 @@ try:
 
 except FileNotFoundError:
   print('no emails file found')
+
+try:
+  with open('DATA/tag_warnings.json','r') as f:
+    tag_warnings = json.load(f)
+
+except FileNotFoundError:
+  print('no tag warnings file found')
+
+try:
+  with open('DATA/tag_filter.json','r') as f:
+    tag_filter = json.load(f)
+
+except FileNotFoundError:
+  print('no tag filter file found')

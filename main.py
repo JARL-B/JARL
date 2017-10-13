@@ -20,6 +20,7 @@ from RemindMe.del_reminders import del_reminders
 from TheManagement.autoclear import autoclear
 from TheManagement.clear_channel import clear_channel
 from TheManagement.spamfilter import spamfilter
+from TheManagement.tagfilter import tagfilter
 from TheManagement.profanityfilter import profanityfilter
 from TheManagement.serverjoin import serverjoin
 from TheManagement.serverleave import serverleave
@@ -55,6 +56,7 @@ command_map = {
   'clear' : clear_channel,
   'autoclear' : autoclear,
   'spam' : spamfilter,
+  'tags' : tagfilter,
   'profanity' : profanityfilter,
   'joinmsg' : serverjoin,
   'leavemsg' : serverleave,
@@ -92,9 +94,32 @@ async def validate_cmd(message): ## method for doing the commands
 
       return
 
+async def watch_tags(message):
+  if not (message.author.server_permissions.administrator or discord.utils.get(message.server.roles, name='Manager:Allow @here') in message.author.roles):
+    if '@everyone' in message.content or '@here' in message.content:
+      await client.delete_message(message)
+
+      if message.author.id not in tag_warnings.keys():
+        tag_warnings[message.author.id] = 0
+
+      tag_warnings[message.author.id] += 1
+      await client.send_message(message.channel, 'Do not use `@everyone` or `@here`! ({}/4)'.format(tag_warnings[message.author.id]))
+
+      if tag_warnings[message.author.id] > 3:
+        await client.ban(message.author)
+
+      with open('DATA/tag_warnings.json','w') as f:
+        json.dump(tag_warnings,f)
+
+    elif message.content.count('@everyone') + message.content.count('@here') > 1:
+      await client.send_message(message.channel, 'Do not use `@everyone` or `@here`!'.format(tag_warnings[message.author.id]))
+
+      await client.ban(message.author)
+
+
 async def watch_spam(message):
   if message.author.id in users.keys(): ## all the stuff to do with smap filtering
-    if time.time() - users[message.author.id] < 1:
+    if time.time() - users[message.author.id] < 2:
 
       if message.author.id in warnings.keys():
 
@@ -170,6 +195,9 @@ async def on_message(message): ## when a message arrives at the bot ##
   if message.channel.id in profanity_filter:
     await watch_profanity(message)
 
+  if message.channel.id in tag_filter:
+    await watch_tags(message)
+
 @client.event
 async def on_member_join(member):
   if member.server.id in join_messages.keys():
@@ -184,7 +212,7 @@ async def on_member_join(member):
         await client.send_message(member, 'Thank you, you have already verified your email!')
 
         try:
-          await client.add_roles(member, discord.utils.get(member.server.roles, name='Email Verified'))
+          await client.add_roles(member, discord.utils.get(member.server.roles, name='Manager:Email Verified'))
         except:
           pass
 
