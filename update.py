@@ -8,7 +8,7 @@ from get_patrons import get_patrons
 
 async def update(message,client):
   if message.author in get_patrons('Staff'):
-    await client.change_presence(game=discord.Game(name='updating... hold on tight!'))
+    #await client.change_presence(game=discord.Game(name='updating... hold on tight!'))
 
     print('Running pull...')
     subprocess.call(['git', 'pull'])
