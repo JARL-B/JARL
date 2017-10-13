@@ -23,19 +23,15 @@ except FileNotFoundError:
   print('no autoclear file found')
 
 try:
-  with open('DATA/spamfilter','r') as f:
-    spam = f.read().strip('\n')
-    spam = ''.join(spam)
-    spam_filter = spam.split(',')
+  with open('DATA/spamfilter.json','r') as f:
+    spam = json.load(f)
 
 except FileNotFoundError:
   print('no spam filter file found')
 
 try:
-  with open('DATA/profanityfilter','r') as f:
-    prof = f.read().strip('\n')
-    prof = ''.join(prof)
-    profanity_filter = prof.split(',')
+  with open('DATA/profanityfilter.json','r') as f:
+    profanity_filter = json.load(f)
 
 except FileNotFoundError:
   print('no profanity filter file found')

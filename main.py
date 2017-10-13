@@ -124,7 +124,7 @@ async def watch_spam(message):
     users[message.author.id] = time.time()
 
 async def watch_profanity(message):
-  compressed = message.content.replace(' ','').replace('-','').replace('_','')
+  compressed = message.content.replace(' ','').replace('-','').replace('_','').replace('^','').replace('\'','').replace('\"','').replace('=','').replace('*','')
   uid = uuid.uuid4()
   with open('profanity.exp','r') as f:
     for reg in f:

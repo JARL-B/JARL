@@ -52,11 +52,7 @@ async def check_reminders():
       writer = csv.writer(f,delimiter=',',lineterminator=';')
       writer.writerows(intervals) ## uses a CSV writer to write the data to file.
 
-    with open('DATA/blacklist','w') as f:
-      bl_s = ''
-      for i in channel_blacklist:
-        bl_s += i + ','
-
-      f.write(bl_s)
+    with open('DATA/blacklist.json','w') as f:
+      json.dump(channel_blacklist,f)
 
     await asyncio.sleep(1.2)

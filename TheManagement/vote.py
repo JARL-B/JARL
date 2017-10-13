@@ -24,7 +24,7 @@ async def vote(message,client):
     p_perc = positive / total
     n_perc = negative / total
 
-    await client.send_message(message.channel, 'Vote results are in!\n Total votes: {t},\n Positive votes: {p},\n Negative votes: {n},\n Percents: {r} in favor to {rn} in contest'.format(t=total,p=positive,n=negative,r=p_perc,rn=n_perc))
+    await client.send_message(message.channel, 'Vote results are in for \'{mes}\'!\n Total votes: {t},\n Positive votes: {p},\n Negative votes: {n},\n Percents: {r} in favor to {rn} in contest'.format(t=total,p=positive,n=negative,r=p_perc,rn=n_perc,mes=v.message.content))
 
 class Vote(object):
   def __init__(self,message):

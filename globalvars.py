@@ -16,10 +16,8 @@ except:
   print('no prefix file found')
 
 try:
-  with open('DATA/blacklist','r') as f:
-    bl = f.read().strip('\n')
-    bl = ''.join(bl)
-    channel_blacklist = bl.split(',')
+  with open('DATA/blacklist.json','r') as f:
+    channel_blacklist = json.load(f)
 
 except FileNotFoundError:
   print('no blacklist file found')
