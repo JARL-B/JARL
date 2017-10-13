@@ -34,19 +34,6 @@ __TheManagement Commands__
 __Other Commands__
   > `$donate` - view information about donations.
 
-  **__FAQ__**
-*What do I do if I blacklist all the channels?!*
-  **__Don't panic!__** No, but seriously don't. Just make another text channel and then use the blacklist command again to un-blacklist (or as some may call, whitelist) the other channels. Simple :)
-
-*What if the prefix gets set to a character that's difficult to access?*
-  The `mbprefix` command doesn't require a prefix to access. Therefore, you can always easily change or reset the prefix.
-
-*Why does the help command work even on blacklisted channels?*
-  The help command functions on blacklisted channels so that users can still access important information, for example how to un-blacklist a channel.
-
-*Should I use `event` or `remind`?*
-  To decide on this, consider: would you use a timer or a calendar to set the reminder? An event accepts a specific date and time as the argument, whereas a remind accepts the amount of time until the reminder, like a stopwatch.
-
 *Do you have a place I can go to get more assistance?*
   Please join our Discord server :)
 
