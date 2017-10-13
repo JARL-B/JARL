@@ -6,6 +6,7 @@ import datetime
 from RemindMe.validate_event import validate_event
 from RemindMe.globalvars import calendar
 
+from get_patrons import get_patrons
 
 async def set_event(message, client):
   if ',' in message.content or ';' in message.content:
@@ -19,7 +20,7 @@ async def set_event(message, client):
       await client.send_message(message.channel, 'You must specify either `server` or `me` for your reminder! `me` will be sent directly to you, whilst `server` will be broadcasted on the current text channel.')
       return
 
-    if not (validate_event(message,msg_scope) and (message.author in get_patrons(level='Patrons') or message.server in get_binds())):
+    if not validate_event(message,msg_scope) and message.author in get_patrons(level='Patrons'):
       await client.send_message(message.channel, 'Sorry, but you have reached the limit of pending reminders. Please note that the server limit is 8 reminders active max and the personal limit is 6 max. You can use `$del` to delete reminders, donate to me on Patreon using `$donate` or blacklist channels to prevent buildup of reminders using `$blacklist`.')
       return
 
