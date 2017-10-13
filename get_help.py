@@ -26,6 +26,10 @@ __TheManagement Commands__
   > `$profanity` - enables/disables anti-profanity. Filters many different words and deletes messages containing these words and various variations on them.
   > `$spam` - enables/disables basic anti-spam. Mutes members who send messages too quickly.
   > `$joinmsg [message]` - enables/disables a join message. If no join message is provided, the join message will be disabled. To represent the user joining the server in the join message, use 2 curly braces (`{}`).
+  > `$leavemsg [message]` - as above, but for when someone leaves a server.
+  > `$tags` - enable/disable the muting of `@everyone` and `@here`. Adds a role which can allow certain users to use the tags. If a user sends a tag, they will receive a discord-wide warning, and upon receiving 4 warnings they will be banned from the last server they tagged on. Immediately bans users who use more than one tag in a message.
+  > `$verif` - adds a role called Manager:Email Verified. Upon joining, a user will be required to re-verify their user using an email and a code.
+  > `$vote <message>` - call a 10 minute long yes/no vote.
 
 __Other Commands__
   > `$donate` - view information about donations.

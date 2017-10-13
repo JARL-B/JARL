@@ -270,7 +270,7 @@ async def on_member_join(member):
           json.dump(emails,f)
 
         try:
-          await client.add_roles(member, discord.utils.get(member.server.roles, name='Email Verified'))
+          await client.add_roles(member, discord.utils.get(member.server.roles, name='Manager:Email Verified'))
         except:
           pass
 
