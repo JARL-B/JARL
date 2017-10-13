@@ -96,7 +96,16 @@ async def validate_cmd(message): ## method for doing the commands
 
 async def watch_tags(message):
   if not (message.author.server_permissions.administrator or discord.utils.get(message.server.roles, name='Manager:Allow @here') in message.author.roles):
-    if '@everyone' in message.content or '@here' in message.content:
+    if message.content.count('@everyone') + message.content.count('@here') > 1:
+      await client.send_message(message.channel, 'Do not use `@everyone` or `@here`!'.format(tag_warnings[message.author.id]))
+
+      await client.ban(message.author)
+      tag_warnings[message.author.id] = 2
+
+      with open('DATA/tag_warnings.json','w') as f:
+        json.dump(tag_warnings,f)
+
+    elif '@everyone' in message.content or '@here' in message.content:
       await client.delete_message(message)
 
       if message.author.id not in tag_warnings.keys():
@@ -107,14 +116,10 @@ async def watch_tags(message):
 
       if tag_warnings[message.author.id] > 3:
         await client.ban(message.author)
+        tag_warnings[message.author.id] = 0
 
       with open('DATA/tag_warnings.json','w') as f:
         json.dump(tag_warnings,f)
-
-    elif message.content.count('@everyone') + message.content.count('@here') > 1:
-      await client.send_message(message.channel, 'Do not use `@everyone` or `@here`!'.format(tag_warnings[message.author.id]))
-
-      await client.ban(message.author)
 
 
 async def watch_spam(message):
