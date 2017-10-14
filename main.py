@@ -26,6 +26,7 @@ from TheManagement.serverjoin import serverjoin
 from TheManagement.serverleave import serverleave
 from TheManagement.verification import verification
 from TheManagement.vote import vote
+from TheManagement.get_emails import get_emails
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
@@ -61,6 +62,7 @@ command_map = {
   'joinmsg' : serverjoin,
   'leavemsg' : serverleave,
   'verif' : verification,
+  'emails' : get_emails,
   'vote' : vote
 }
 
