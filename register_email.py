@@ -1,10 +1,9 @@
 import json
-import smtplib
 import random
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from globalvars import client, emails
+from globalvars import client, emails, gmail
 
 async def register_email(member):
   while 1:
@@ -25,16 +24,6 @@ async def register_email(member):
 
     code = ''.join([str(random.randint(0,9)) for _ in range(8)]) # generate an 8 digit verification code
 
-    server = smtplib.SMTP('smtp.gmail.com',587)
-
-    server.ehlo()
-    server.starttls()
-
-    with open('email.json','r') as f:
-      email = json.load(f)
-
-    server.login(email['email'], email['passwd'])
-
     text = '''
   <h1>Hello, {name}</h1>
   Please use the verification code below to verify your Discord user on {server}:
@@ -45,18 +34,20 @@ async def register_email(member):
   '''.format(name=member.name,server=member.server.name,code=code)
 
     msg = MIMEMultipart()
-    msg['From'] = email['email']
+    msg['From'] = mailserver.email['email']
     msg['To'] = useremail.content
     msg['Subject'] = 'Verify Your Presence on {}'.format(member.server.name)
 
     msg.attach(MIMEText(text, 'html'))
 
+    mailserver.open()
+
     try:
-      server.sendmail(email['email'], [useremail.content], msg.as_string())
+      mailserver.mail.sendmail(mailserver.email['email'], [useremail.content], msg.as_string())
     except:
       await client.send_message(m.channel, 'Oh no :( There was an error sending the verification email. Please try again later')
 
-    server.close()
+    mailserver.close()
 
     code_in = await client.wait_for_message(channel=m.channel,author=member)
 

@@ -37,7 +37,7 @@ try:
     mail_list = json.load(f)
 
 except FileNotFoundError:
-  print('no interval file found. not loading any intervals')
+  print('no mail list file found. not loading any emails')
 
 for reminder in calendar:
   if len(reminder) != 3:

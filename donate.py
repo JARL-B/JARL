@@ -1,6 +1,6 @@
 from globalvars import *
 
-async def donate(message):
+async def donate(message,client):
   await client.send_message(message.channel,
   '''
   Thinking of donating? Press below for my patreon and official bot server :D
