@@ -25,3 +25,6 @@ async def add_blacklist(message):
   else:
     channel_blacklist.append(channel.id)
     await client.send_message(message.channel, 'Added ' + channel.mention + ' to the blacklist.')
+
+  with open('DATA/blacklist.json','w') as f:
+    json.dump(channel_blacklist,f)
