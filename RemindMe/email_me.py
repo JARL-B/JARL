@@ -7,7 +7,8 @@ from register_email import register_email
 async def email_me(message,client):
   if message.author in get_patrons(level='Donor'):
     if message.author.id in emails.keys():
-
+      if message.channel.id not in mail_list.keys():
+        mail_list[message.channel.id] = []
       await client.send_messages(message.channel, 'All reminders in this channel will now be emailed to you!')
 
     else:

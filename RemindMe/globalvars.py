@@ -32,6 +32,12 @@ try:
 except FileNotFoundError:
   print('no interval file found. not loading any intervals')
 
+try:
+  with open('DATA/mail_list.json','r') as f:
+    mail_list = json.load(f)
+
+except FileNotFoundError:
+  print('no interval file found. not loading any intervals')
 
 for reminder in calendar:
   if len(reminder) != 3:
