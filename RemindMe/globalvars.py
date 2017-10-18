@@ -1,7 +1,6 @@
-import discord
-import asyncio
+import json
 
-
+mail_list = {}
 calendar = []
 intervals = []
 

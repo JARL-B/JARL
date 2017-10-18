@@ -12,6 +12,7 @@ from RemindMe.set_reminder import set_reminder
 from RemindMe.set_event import set_event
 from RemindMe.set_interval import set_interval
 from RemindMe.del_reminders import del_reminders
+from RemindMe.email_me import email_me
 
 from TheManagement.autoclear import autoclear
 from TheManagement.clear_channel import clear_channel
@@ -60,7 +61,8 @@ command_map = {
   'leavemsg' : serverleave,
   'verif' : verification,
   'emails' : get_emails,
-  'vote' : vote
+  'vote' : vote,
+  'notify' : email_me
 }
 
 async def validate_cmd(message): ## method for doing the commands
