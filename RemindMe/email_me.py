@@ -25,7 +25,7 @@ async def email_me(message,client):
         json.dump(mail_list,f)
 
     else:
-      await client.send_message(message.channel, 'First you must verify your email!')
+      await client.send_message(message.channel, 'First you must verify your email! Check your DMs!')
       await register_email(message.author)
 
   else:

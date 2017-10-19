@@ -34,7 +34,7 @@ async def dev_tools(message,client):
 #    await client.send_message(message.channel, ' '.join(li))
 
   elif command == 'servers':
-    await client.send_message(message.channel, '\n'.join([s.name + '; ' + s.id for s in client.servers]))
+    await client.send_message(message.channel, len(client.servers))
 
   else:
     await client.send_message(message.channel, 'Hello! You\'ve found the dev options. Commands are `roles`, `serverid`, `channelid` and `patrons`')
