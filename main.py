@@ -52,7 +52,7 @@ command_map = {
   'dev' : dev_tools,
   'donate' : donate,
   'update' : update,
-  'clear' : clear_channel,
+  #'clear' : clear_channel,
   'autoclear' : autoclear,
   'spam' : spamfilter,
   'tags' : tagfilter,

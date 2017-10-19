@@ -1,9 +1,11 @@
 import json
 import random
+import discord
+
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from globalvars import client, emails, gmail
+from globalvars import client, emails, mailserver
 
 async def register_email(member):
   while 1:

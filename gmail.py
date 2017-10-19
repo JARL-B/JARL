@@ -16,5 +16,5 @@ class gmail(object):
 
     self.mail.login(self.email['email'], self.email['passwd'])
 
-  def close():
+  def close(self):
     self.mail.close()
