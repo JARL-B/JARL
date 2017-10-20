@@ -3,6 +3,7 @@ import json
 mail_list = {}
 calendar = []
 intervals = []
+todos = {}
 
 try:
   with open('DATA/calendar.csv','r') as f:
@@ -38,6 +39,13 @@ try:
 
 except FileNotFoundError:
   print('no mail list file found. not loading any emails')
+
+try:
+  with open('DATA/todos.json','r') as f:
+    todos = json.load(f)
+
+except FileNotFoundError:
+  print('no todos file found.')
 
 for reminder in calendar:
   if len(reminder) != 3:

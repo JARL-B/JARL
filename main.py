@@ -13,6 +13,7 @@ from RemindMe.set_event import set_event
 from RemindMe.set_interval import set_interval
 from RemindMe.del_reminders import del_reminders
 from RemindMe.email_me import email_me
+from RemindMe.todo import todo
 
 from TheManagement.autoclear import autoclear
 from TheManagement.clear_channel import clear_channel
@@ -62,7 +63,8 @@ command_map = {
   'verif' : verification,
   'emails' : get_emails,
   'vote' : vote,
-  'notify' : email_me
+  'notify' : email_me,
+  'todo' : todo
 }
 
 async def validate_cmd(message): ## method for doing the commands

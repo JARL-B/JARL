@@ -16,6 +16,7 @@ __Reminder Commands__
   > `$event <server/me> <date-and-time> <message>` - set up an event. Takes times in the format of \[minutes]m[hours]h[days]d[months]/[year]y, for example 0m0h31d12/2018y for 00:00 UTC on the 31st of December 2018.
   > `$interval <time-to-reminder> <interval> <message>` - set up an interval, where the given `message` will be sent every `interval` starting in the given `time-to-reminder`. Takes times in the format of \[num][s/m/h/d].
   > `$notify` - enable/disable personal email reminders for the specific channel.
+  > `$todo` - TODO list related commands. Use `$todo help` for proper information.
   '''
   )
 
