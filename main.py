@@ -26,6 +26,8 @@ from TheManagement.verification import verification
 from TheManagement.vote import vote
 from TheManagement.get_emails import get_emails
 
+from Zalgo.zalgo import zalgo_call
+
 from check_reminders import check_reminders
 from change_prefix import change_prefix
 from dev_tools import dev_tools
@@ -64,7 +66,8 @@ command_map = {
   'emails' : get_emails,
   'vote' : vote,
   'notify' : email_me,
-  'todo' : todo
+  'todo' : todo,
+  'zalgo' : zalgo_call
 }
 
 async def validate_cmd(message): ## method for doing the commands

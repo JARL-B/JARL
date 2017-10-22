@@ -18,7 +18,7 @@ async def todo(message,client):
     await client.send_message(message.channel, embed=Embed(title='{}\'s TODO'.format(message.author.name), description=''.join(msg)))
 
   elif len(splits) > 2:
-    if splits[1] in ['add','append','push']:
+    if splits[1] in ['add','a','append','push']:
       a = ' '.join(splits[2:])
       todos[message.author.id].append(a)
       await client.send_message(message.channel, 'Added \'{}\' to todo!'.format(a))

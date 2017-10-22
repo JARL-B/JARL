@@ -33,6 +33,7 @@ __TheManagement Commands__
   > `$vote <message>` - call a 10 minute long yes/no vote.
 
 __Other Commands__
+  > `$zalgo <msg>` - zalgo-ify some text
   > `$donate` - view information about donations.
 
 *Do you have a place I can go to get more assistance?*
