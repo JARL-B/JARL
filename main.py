@@ -5,6 +5,7 @@ import os
 import time
 import uuid
 import re
+import aiohttp
 
 from globalvars import *
 
@@ -177,12 +178,40 @@ async def watch_profanity(message):
 
 @client.event ## print some stuff to console when the bot is activated
 async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
+  print('Logged in as')
+  print(client.user.name)
+  print(client.user.id)
+  print('------')
 
-    await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
+  servers = len(client.servers)
+
+  headers = {'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0OTkyMDA1OTU0OTk0MTc2MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTA4NzU1ODQyfQ.uzZY6YIL3BHC_y1BR4Jy1xZLXOoY2wz2u8eXEviSM9U'}
+  data = {'server_count': servers}
+  api_url = 'https://discordbots.org/api/bots/349920059549941761/stats'
+  async with aiohttp.ClientSession() as session:
+      await session.post(api_url, data=data, headers=headers)
+
+  await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
+
+@client.event
+async def on_server_join(server):
+  servers = len(client.servers)
+
+  headers = {'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0OTkyMDA1OTU0OTk0MTc2MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTA4NzU1ODQyfQ.uzZY6YIL3BHC_y1BR4Jy1xZLXOoY2wz2u8eXEviSM9U'}
+  data = {'server_count': servers}
+  api_url = 'https://discordbots.org/api/bots/349920059549941761/stats'
+  async with aiohttp.ClientSession() as session:
+      await session.post(api_url, data=data, headers=headers)
+
+@client.event
+async def on_server_remove(server):
+  servers = len(client.servers)
+
+  headers = {'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0OTkyMDA1OTU0OTk0MTc2MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTA4NzU1ODQyfQ.uzZY6YIL3BHC_y1BR4Jy1xZLXOoY2wz2u8eXEviSM9U'}
+  data = {'server_count': servers}
+  api_url = 'https://discordbots.org/api/bots/349920059549941761/stats'
+  async with aiohttp.ClientSession() as session:
+      await session.post(api_url, data=data, headers=headers)
 
 @client.event
 async def on_message(message): ## when a message arrives at the bot ##
@@ -220,7 +249,6 @@ async def on_member_join(member):
 async def on_member_remove(member):
   if member.server.id in leave_messages.keys():
     await client.send_message(client.get_channel(leave_messages[member.server.id][1]),leave_messages[member.server.id][0].format(member.name))
-
 
 @client.event
 async def on_reaction_add(reaction, user):
