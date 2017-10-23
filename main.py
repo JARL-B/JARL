@@ -175,6 +175,22 @@ async def watch_profanity(message):
         await client.delete_message(message)
         return
 
+async def send():
+  session = aiohttp.ClientSession()
+  dump = json.dumps({
+    'server_count': len(client.servers)
+  })
+
+  head = {
+    'authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0OTkyMDA1OTU0OTk0MTc2MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTA4NzU1OTA1fQ.p59GEanXurNBXskgoH-TivkPlU3n-soNeeC2VrPX6zU',
+    'content-type' : 'application/json'
+  }
+
+  url = 'https://discordbots.org/api/bots/stats'
+  async with session.post(url, data=dump, headers=head) as resp:
+    print('returned {0.status} for {1}'.format(resp, dump))
+
+  session.close()
 
 @client.event ## print some stuff to console when the bot is activated
 async def on_ready():
@@ -183,35 +199,23 @@ async def on_ready():
   print(client.user.id)
   print('------')
 
-  servers = len(client.servers)
 
-  headers = {'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0OTkyMDA1OTU0OTk0MTc2MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTA4NzU1ODQyfQ.uzZY6YIL3BHC_y1BR4Jy1xZLXOoY2wz2u8eXEviSM9U'}
+  '''headers = {'authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0OTkyMDA1OTU0OTk0MTc2MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTA4NzU1ODQyfQ.uzZY6YIL3BHC_y1BR4Jy1xZLXOoY2wz2u8eXEviSM9U'}
   data = {'server_count': servers}
   api_url = 'https://discordbots.org/api/bots/349920059549941761/stats'
   async with aiohttp.ClientSession() as session:
-      await session.post(api_url, data=data, headers=headers)
+      await session.post(api_url, data=data, headers=headers)'''
+  await send()
 
   await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
 
 @client.event
 async def on_server_join(server):
-  servers = len(client.servers)
-
-  headers = {'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0OTkyMDA1OTU0OTk0MTc2MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTA4NzU1ODQyfQ.uzZY6YIL3BHC_y1BR4Jy1xZLXOoY2wz2u8eXEviSM9U'}
-  data = {'server_count': servers}
-  api_url = 'https://discordbots.org/api/bots/349920059549941761/stats'
-  async with aiohttp.ClientSession() as session:
-      await session.post(api_url, data=data, headers=headers)
+    await send()
 
 @client.event
 async def on_server_remove(server):
-  servers = len(client.servers)
-
-  headers = {'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0OTkyMDA1OTU0OTk0MTc2MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTA4NzU1ODQyfQ.uzZY6YIL3BHC_y1BR4Jy1xZLXOoY2wz2u8eXEviSM9U'}
-  data = {'server_count': servers}
-  api_url = 'https://discordbots.org/api/bots/349920059549941761/stats'
-  async with aiohttp.ClientSession() as session:
-      await session.post(api_url, data=data, headers=headers)
+    await send()
 
 @client.event
 async def on_message(message): ## when a message arrives at the bot ##
