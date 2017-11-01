@@ -2,7 +2,7 @@ from globalvars import *
 import asyncio
 import discord
 
-async def add_blacklist(message):
+async def add_blacklist(message,client):
   text = message.content.strip().split(' ')
   text.pop(0)
   text = ' '.join(text)
