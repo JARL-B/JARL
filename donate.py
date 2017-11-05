@@ -15,6 +15,8 @@ async def donate(message,client):
   : chat on the Patron-only chat (which is more frequented by myself)
   : pass your suggestions straight to me, rather than sending them to a file on my server
   : use Patron-only commands like `notify` and `interval`
+  : set more reminders
+  : set longer reminders
   : let me make a cup of coffee once a month
 
   Anyone who is a Patron, thank you :D You make this bot sustainable

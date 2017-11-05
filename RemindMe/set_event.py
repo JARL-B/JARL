@@ -79,6 +79,10 @@ async def set_event(message, client):
 
     msg_text = ' '.join(text)
 
+    if len(msg_text) > 150 and message.author not in get_patrons(level='Donor'):
+      await client.send_message(message.channel, 'You are allowed a maximum of 150 characters in your event text (you used {}). Either reduce your message size, or `$donate`.'.format(len(msg_test)))
+      return
+
     calendar.append([reminder_time,msg_author.id,msg_text])
 
     await client.send_message(message.channel, 'New event registered for ' + msg_author.mention + ' in ' + str(int(reminder_time) - int(time.time())) + ' seconds . You can\'t edit the reminder now, so you are free to delete the message.')

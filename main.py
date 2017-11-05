@@ -244,7 +244,10 @@ async def on_message(message): ## when a message arrives at the bot ##
 @client.event
 async def on_member_join(member):
   if member.server.id in join_messages.keys():
-    await client.send_message(client.get_channel(join_messages[member.server.id][1]),join_messages[member.server.id][0].format(member.name))
+    try:
+      await client.send_message(client.get_channel(join_messages[member.server.id][1]),join_messages[member.server.id][0].format(member.name))
+    except:
+      print('Issue encountered administering member join message.')
 
   if member.server.id in verif_servers:
     await register_email(member)
@@ -252,7 +255,10 @@ async def on_member_join(member):
 @client.event
 async def on_member_remove(member):
   if member.server.id in leave_messages.keys():
-    await client.send_message(client.get_channel(leave_messages[member.server.id][1]),leave_messages[member.server.id][0].format(member.name))
+    try:
+      await client.send_message(client.get_channel(leave_messages[member.server.id][1]),leave_messages[member.server.id][0].format(member.name))
+    except:
+      print('Issue encountered administering member leave message.')
 
 @client.event
 async def on_reaction_add(reaction, user):
