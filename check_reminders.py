@@ -8,6 +8,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from itertools import chain
 
+from get_patrons import get_patrons
+
 
 async def check_reminders():
   await client.wait_until_ready()
@@ -59,8 +61,17 @@ async def check_reminders():
         recipient = discord.utils.get(channels,id=inv[2])
 
         try:
-          await client.send_message(recipient,inv[3])
-          print('Administered interval to ' + recipient.name)
+          server_members = recipient.server.members
+          patrons = get_patrons('Donor')
+
+          for m in server_members:
+            if m in patrons:
+              await client.send_message(recipient,inv[3])
+              print('Administered interval to ' + recipient.name)
+              break
+          else:
+            await client.send_message(recipient, 'There appears to be no patrons on your server, so the interval has been removed.')
+            intervals.remove(inv)
 
           print(inv)
           inv[0] = str(int(inv[0]) + int(inv[1])) ## change the time for the next interval
