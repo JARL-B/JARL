@@ -205,7 +205,7 @@ async def on_ready():
   api_url = 'https://discordbots.org/api/bots/349920059549941761/stats'
   async with aiohttp.ClientSession() as session:
       await session.post(api_url, data=data, headers=headers)'''
-  await send()
+  #await send()
 
   await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
 
@@ -246,7 +246,7 @@ async def on_message(message): ## when a message arrives at the bot ##
       await client.send_message(message.channel, 'Failed to perform an action: Not enough permissions (403)')
     except discord.errors.Forbidden:
       try:
-        await client.send_message(message.author, 'Failed to perform 2 actions: Not enough permissions (403)')
+        await client.send_message(message.author, 'Failed to perform actions on {}: Not enough permissions (403)'.format(message.server.name))
       except discord.errors.Forbidden:
         pass
 
