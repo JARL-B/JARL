@@ -225,21 +225,30 @@ async def on_message(message): ## when a message arrives at the bot ##
   if message.content in ['', None]: ## if the message is a file ##
     return
 
-  await validate_cmd(message)
+  try:
+    await validate_cmd(message)
 
-  ## run stuff here if there is no command ##
-  if message.channel.id in autoclears.keys(): ## autoclearing
-    await asyncio.sleep(autoclears[message.channel.id])
-    await client.delete_message(message)
+    ## run stuff here if there is no command ##
+    if message.channel.id in autoclears.keys(): ## autoclearing
+      await asyncio.sleep(autoclears[message.channel.id])
+      await client.delete_message(message)
 
-  if message.channel.id in spam_filter:
-    await watch_spam(message)
+    if message.channel.id in spam_filter:
+      await watch_spam(message)
 
-  if message.channel.id in profanity_filter:
-    await watch_profanity(message)
+    if message.channel.id in profanity_filter:
+      await watch_profanity(message)
 
-  if message.channel.id in tag_filter:
-    await watch_tags(message)
+    if message.channel.id in tag_filter:
+      await watch_tags(message)
+  except discord.errors.Forbidden:
+    try:
+      await client.send_message(message.channel, 'Failed to perform an action: Not enough permissions (403)')
+    except discord.errors.Forbidden:
+      try:
+        await client.send_message(message.author, 'Failed to perform 2 actions: Not enough permissions (403)')
+      except discord.errors.Forbidden:
+        pass
 
 @client.event
 async def on_member_join(member):
