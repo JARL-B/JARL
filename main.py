@@ -205,7 +205,7 @@ async def on_ready():
   api_url = 'https://discordbots.org/api/bots/349920059549941761/stats'
   async with aiohttp.ClientSession() as session:
       await session.post(api_url, data=data, headers=headers)'''
-  #await send()
+  await send()
 
   await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
 
