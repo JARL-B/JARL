@@ -15,6 +15,9 @@ async def check_reminders():
   await client.wait_until_ready()
   while not client.is_closed:
     for reminder in calendar:
+      if len(reminder[2]) > 400:
+        calendar.remove(reminder)
+
       if int(reminder[0]) <= time.time():
         users = client.get_all_members()
         channels = client.get_all_channels()
