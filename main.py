@@ -9,6 +9,8 @@ import aiohttp
 
 from globalvars import *
 
+from Calc.pythagoras import pythagoras
+
 from RemindMe.set_reminder import set_reminder
 from RemindMe.set_event import set_event
 from RemindMe.set_interval import set_interval
@@ -68,7 +70,8 @@ command_map = {
   'vote' : vote,
   'notify' : email_me,
   'todo' : todo,
-  'zalgo' : zalgo_call
+  'zalgo' : zalgo_call,
+  'pythagoras' : pythagoras
 }
 
 async def validate_cmd(message): ## method for doing the commands
@@ -205,7 +208,7 @@ async def on_ready():
   api_url = 'https://discordbots.org/api/bots/349920059549941761/stats'
   async with aiohttp.ClientSession() as session:
       await session.post(api_url, data=data, headers=headers)'''
-  await send()
+  #await send()
 
   await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
 
