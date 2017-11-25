@@ -107,7 +107,7 @@ async def validate_cmd(message): ## method for doing the commands
 async def watch_tags(message):
   if not (message.author.server_permissions.administrator or discord.utils.get(message.server.roles, name='Manager:Allow @here') in message.author.roles):
     if message.content.count('@everyone') + message.content.count('@here') > 1:
-      await client.send_message(message.channel, 'Do not use `@everyone` or `@here`!'.format(tag_warnings[message.author.id]))
+      await client.send_message(message.channel, 'Do not use `@everyone` or `@here`!')
 
       await client.ban(message.author)
       tag_warnings[message.author.id] = 2
@@ -202,13 +202,7 @@ async def on_ready():
   print(client.user.id)
   print('------')
 
-
-  '''headers = {'authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0OTkyMDA1OTU0OTk0MTc2MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTA4NzU1ODQyfQ.uzZY6YIL3BHC_y1BR4Jy1xZLXOoY2wz2u8eXEviSM9U'}
-  data = {'server_count': servers}
-  api_url = 'https://discordbots.org/api/bots/349920059549941761/stats'
-  async with aiohttp.ClientSession() as session:
-      await session.post(api_url, data=data, headers=headers)'''
-  #await send()
+  await send()
 
   await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
 

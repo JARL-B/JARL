@@ -1,5 +1,6 @@
 import asyncio
 import discord
+import time
 
 from globalvars import *
 from get_patrons import get_patrons
@@ -38,6 +39,9 @@ async def dev_tools(message,client):
 
   elif command == 'n_cal':
     await client.send_message(message.channel, len(calendar))
+
+  elif command == 'ping':
+    await client.send_message(message.channel, 'Time to receive and process message: {}ms'.format(round((time.time() - message.timestamp.timestamp())*1000)))
 
   else:
     await client.send_message(message.channel, 'Hello! You\'ve found the dev options. Commands are `roles`, `serverid`, `channelid` and `patrons`')
