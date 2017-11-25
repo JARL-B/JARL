@@ -39,6 +39,7 @@ from donate import donate
 from update import update
 from get_help import get_help
 from register_email import register_email
+from ping import ping
 
 
 async def blacklist_msg(message):
@@ -71,7 +72,8 @@ command_map = {
   'notify' : email_me,
   'todo' : todo,
   'zalgo' : zalgo_call,
-  'pythagoras' : pythagoras
+  'pythagoras' : pythagoras,
+  'ping' : ping
 }
 
 async def validate_cmd(message): ## method for doing the commands
