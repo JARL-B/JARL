@@ -17,6 +17,7 @@ from RemindMe.set_interval import set_interval
 from RemindMe.del_reminders import del_reminders
 from RemindMe.email_me import email_me
 from RemindMe.todo import todo
+from RemindMe.server_todo import server_todo
 
 from TheManagement.autoclear import autoclear
 from TheManagement.clear_channel import clear_channel
@@ -71,6 +72,7 @@ command_map = {
   'vote' : vote,
   'notify' : email_me,
   'todo' : todo,
+  'todos' : server_todo,
   'zalgo' : zalgo_call,
   'pythagoras' : pythagoras,
   'ping' : ping
@@ -96,7 +98,7 @@ async def validate_cmd(message): ## method for doing the commands
   cmd = message.content.split(' ')[0][1:] # extract the keyword
   if cmd in command_map.keys():
 
-    if message.channel.id in channel_blacklist and cmd != 'help':
+    if message.channel.id in channel_blacklist and cmd not in ['help', 'blacklist']:
       await blacklist_msg(message)
 
       return
@@ -204,7 +206,7 @@ async def on_ready():
   print(client.user.id)
   print('------')
 
-  await send()
+  #await send()
 
   await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
 

@@ -8,7 +8,7 @@ async def get_help(message,client):
 __Key Commands__
   > `mbprefix <string>` - change the prefix from $ to anything less than 5 characters. This variable is stored on a per-server level. This command does not use a prefix!
   > `$help` - get a PM of this page.
-  > `$blacklist <channel-name>` - block or unblock a channel from sending commands. If the bot has sufficient rights, it will also remove any commands in blacklisted channels.
+  > `$blacklist [channel-name]` - block or unblock a channel from sending commands. If the bot has sufficient rights, it will also remove any commands in blacklisted channels.
 
 __Reminder Commands__
   > `$del` - delete reminders and intervals on your server.
@@ -17,6 +17,7 @@ __Reminder Commands__
   > `$interval <time-to-reminder> <interval> <message>` - set up an interval, where the given `message` will be sent every `interval` starting in the given `time-to-reminder`. Takes times in the format of \[num][s/m/h/d].
   > `$notify` - enable/disable personal email reminders for the specific channel.
   > `$todo` - TODO list related commands. Use `$todo help` for proper information.
+  > `$todos` - same as `$todo` but for server-wide task management.
   '''
   )
 
