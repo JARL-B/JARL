@@ -4,6 +4,10 @@ from globalvars import *
 
 
 async def change_prefix(message):
+  if not message.author.server_permissions.administrator:
+    await client.send_message(message.channel, 'You must be an admin to run this command.')
+    return
+
   text = message.content.strip().split(' ')
   text.pop(0)
   text = ' '.join(text)
