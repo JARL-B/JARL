@@ -15,7 +15,7 @@ async def set_reminder(message, client):
     text = message.content.split(' ')
     text.pop(0) ## remove the command item
 
-    msg_scope = text.pop(0)
+    msg_scope = text.pop(0).replace('#','')
     try:
       if msg_scope not in [c.name for c in message.server.channels if c.type == discord.ChannelType.text] + ['server', 'me'] and client.get_channel(msg_scope[1:-1]).server != message.server:
         await client.send_message(message.channel, 'You must specify either `server`, `me` or a channel name for your reminder! `me` will be sent directly to you, whilst `server` will be broadcasted on the current text channel.')
