@@ -16,11 +16,17 @@ async def set_reminder(message, client):
     text.pop(0) ## remove the command item
 
     msg_scope = text.pop(0)
-    if not msg_scope in ['server','me']:
-      await client.send_message(message.channel, 'You must specify either `server` or `me` for your reminder! `me` will be sent directly to you, whilst `server` will be broadcasted on the current text channel.')
+    try:
+      if msg_scope not in [c.name for c in message.server.channels if c.type == discord.ChannelType.text] + ['server', 'me'] and client.get_channel(msg_scope[1:-1]).server != message.server:
+        await client.send_message(message.channel, 'You must specify either `server`, `me` or a channel name for your reminder! `me` will be sent directly to you, whilst `server` will be broadcasted on the current text channel.')
+        return
+    except AttributeError:
+      await client.send_message(message.channel, 'You must specify either `server`, `me` or a channel name for your reminder! `me` will be sent directly to you, whilst `server` will be broadcasted on the current text channel.')
       return
 
-    if not validate_event(message,msg_scope) and message.author in get_patrons(level='Patrons'):
+    if not validate_event(message,msg_scope) and message.author not in get_patrons(level='Patrons'):
+      print(validate_event(message, msg_scope))
+      print(message.author in get_patrons(level='Patrons'))
       await client.send_message(message.channel, 'Sorry, but you have reached the limit of pending reminders. Please note that the server limit is 8 reminders active max and the personal limit is 6 max. You can use `$del` to delete reminders, donate to me on Patreon using `$donate` or blacklist channels to prevent buildup of reminders using `$blacklist`.')
       return
 
@@ -35,6 +41,10 @@ async def set_reminder(message, client):
       msg_author = message.channel
     elif msg_scope == 'me':
       msg_author = message.author
+    elif msg_scope[0] == '<':
+      msg_author = client.get_channel(msg_scope[1:-1])
+    else:
+      msg_author = [c for c in message.server.channels if c.name == msg_scope][0]
     msg_text = ' '.join(text)
 
     if len(msg_text) > 150 and message.author not in get_patrons(level='Donor'):

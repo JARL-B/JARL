@@ -20,5 +20,7 @@ async def donate(message,client):
   : let me make a cup of coffee once a month
 
   Anyone who is a Patron, thank you :D You make this bot sustainable
+
+  Please note, you must be connected to the Discord server to receive Patreon rewards.
   '''
   )
