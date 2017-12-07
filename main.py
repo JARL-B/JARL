@@ -32,6 +32,8 @@ from TheManagement.get_emails import get_emails
 
 from Zalgo.zalgo import zalgo_call
 
+from Wikipedia.wiki import wiki
+
 from check_reminders import check_reminders
 from change_prefix import change_prefix
 from dev_tools import dev_tools
@@ -75,7 +77,8 @@ command_map = {
   'todos' : server_todo,
   'zalgo' : zalgo_call,
   'pythagoras' : pythagoras,
-  'ping' : ping
+  'ping' : ping,
+  'wiki' : wiki
 }
 
 async def validate_cmd(message): ## method for doing the commands
