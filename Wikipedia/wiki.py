@@ -19,7 +19,12 @@ async def wiki(message, client):
       summary = wiki_cache[term] + ' *cached definition*'
     except KeyError:
       try:
-        summary = '.'.join(wikipedia.summary(term).split('.', 2)[:2]) + '.'
+        page = wikipedia.page(term)
+        summary = wikipedia.summary(term, sentences=2)
+        try:
+          img = [i for i in page.images if i.lower().endswith('jpg') or i.lower().endswith('png') or i.lower().endswith('bmp') or i.lower().endswith('jpeg')][0]
+        except IndexError:
+          img = ''
       except wikipedia.exceptions.PageError:
         summary = 'Couldn\'t find page by that name.'
       except wikipedia.exceptions.DisambiguationError:
@@ -29,7 +34,13 @@ async def wiki(message, client):
         del wiki_cache[random.choice(wiki_cache.keys())]
       wiki_cache[term] = summary
 
-    await client.send_message(message.channel, embed=discord.Embed(title=term, description=summary))
+    em = discord.Embed(title=term, description=summary)
+    try:
+      em.set_image(url=img)
+    except:
+      pass
+
+    await client.send_message(message.channel, embed=em)
 
     return
 
