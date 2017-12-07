@@ -9,6 +9,7 @@ from gmail import gmail
 client = discord.Client() ## defined the client
 
 prefix = {}
+wiki_cache = {}
 channel_blacklist = []
 
 try:
