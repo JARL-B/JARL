@@ -25,8 +25,6 @@ async def set_reminder(message, client):
       return
 
     if not validate_event(message,msg_scope) and message.author not in get_patrons(level='Patrons'):
-      print(validate_event(message, msg_scope))
-      print(message.author in get_patrons(level='Patrons'))
       await client.send_message(message.channel, 'Sorry, but you have reached the limit of pending reminders. Please note that the server limit is 8 reminders active max and the personal limit is 6 max. You can use `$del` to delete reminders, donate to me on Patreon using `$donate` or blacklist channels to prevent buildup of reminders using `$blacklist`.')
       return
 
