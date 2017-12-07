@@ -34,7 +34,9 @@ __TheManagement Commands__
   > `$vote <message>` - call a 10 minute long yes/no vote.
 
 __Other Commands__
-  > `$zalgo <msg>` - zalgo-ify some text
+  > `$zalgo <msg>` - zalgo-ify some text.
+  > `$wiki <search-term>` - search wikipedia for a summary on a term.
+  > `$pythagoras a=<num> b=<num> c=<num>` - calculate missing lengths on a right-angled triangle. two of a, b and c must be entered.
   > `$donate` - view information about donations.
 
 *Do you have a place I can go to get more assistance?*
