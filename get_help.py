@@ -55,8 +55,6 @@ __Help help__
   Please join our Discord server :)
 
   https://discord.gg/WQVaYmT
-  
-
   '''
   )
 
