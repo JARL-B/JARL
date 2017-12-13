@@ -38,6 +38,15 @@ async def set_interval(message, client):
 
       msg_text = ' '.join(text)
 
+      if msg_text.startswith('-scope='):
+        scope = msg_text.split(' ', 1)[0]
+        msg_text = msg_text.split(' ', 1)[1]
+        msg_scope = scope.split('=', 1)[1]
+        try:
+          msg_author = [c for c in message.server.channels if c.name == msg_scope][0]
+        except IndexError:
+          await client.send_message(message.channel, 'Couldn\'t find channel by name {}'.format(msg_scope))
+
       intervals.append([reminder_time,reminder_interval,msg_author.id,msg_text])
 
       await client.send_message(message.channel, 'New interval registered for ' + msg_author.mention + ' in ' + str(int(reminder_time) - int(time.time())) + ' seconds . You can\'t edit the interval now, so you are free to delete the message.')

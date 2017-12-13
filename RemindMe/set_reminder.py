@@ -42,7 +42,10 @@ async def set_reminder(message, client):
     elif msg_scope[0] == '<':
       msg_author = client.get_channel(msg_scope[1:-1])
     else:
-      msg_author = [c for c in message.server.channels if c.name == msg_scope][0]
+      try:
+        msg_author = [c for c in message.server.channels if c.name == msg_scope][0]
+      except IndexError:
+        await client.send_message(message.channel, 'Couldn\'t find channel by name {}'.format(msg_scope))
     msg_text = ' '.join(text)
 
     if len(msg_text) > 150 and message.author not in get_patrons(level='Donor'):

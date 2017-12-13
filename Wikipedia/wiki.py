@@ -34,7 +34,7 @@ async def wiki(message, client):
         del wiki_cache[random.choice(wiki_cache.keys())]
       wiki_cache[term] = summary
 
-    em = discord.Embed(title=term, description=summary)
+    em = discord.Embed(title=page.title, description=summary)
     try:
       em.set_image(url=img)
     except:
