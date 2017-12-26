@@ -104,4 +104,3 @@ ENV/
 # project specific files
 token
 email.json
-DATA/
