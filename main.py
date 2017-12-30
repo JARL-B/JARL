@@ -20,7 +20,8 @@ from RemindMe.todo import todo
 from RemindMe.server_todo import server_todo
 
 from TheManagement.autoclear import autoclear
-from TheManagement.clear_channel import clear_channel
+#from TheManagement.clear_channel import clear_channel
+from TheManagement.clear_by import clear_by
 from TheManagement.spamfilter import spamfilter
 from TheManagement.tagfilter import tagfilter
 from TheManagement.profanityfilter import profanityfilter
@@ -62,7 +63,7 @@ command_map = {
   'dev' : dev_tools,
   'donate' : donate,
   'update' : update,
-  #'clear' : clear_channel,
+  'clear' : clear_by,
   'autoclear' : autoclear,
   'spam' : spamfilter,
   'tags' : tagfilter,
