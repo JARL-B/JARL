@@ -11,7 +11,6 @@ async def clear_by(message, client):
     return
 
   delete_list = []
-  lambda m: m.author in message.mentions and time.time() - m.timestamp.timestamp() < 1209600
 
   async for m in client.logs_from(message.channel, limit=1000):
     if time.time() - m.timestamp.timestamp() >= 1209600 or len(delete_list) > 99:

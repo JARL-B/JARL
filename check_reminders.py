@@ -69,7 +69,16 @@ async def check_reminders():
 
           for m in server_members:
             if m in patrons:
-              await client.send_message(recipient,inv[3])
+              if inv[3].startswith('-del_on_send'):
+                try:
+                  await client.purge_from(recipient, check=lambda m: m.content == inv[3][12:].strip() and time.time() - m.timestamp.timestamp() < 1209600 and m.author == client.user)
+                except Exception as e:
+                  print(e)
+
+                await client.send_message(recipient,inv[3][12:])
+
+              else:
+                await client.send_message(recipient,inv[3])
               print('Administered interval to ' + recipient.name)
               break
           else:
