@@ -30,6 +30,7 @@ from TheManagement.serverleave import serverleave
 from TheManagement.verification import verification
 from TheManagement.vote import vote
 from TheManagement.get_emails import get_emails
+from TheManagement.term_blacklist import term_blacklist
 
 from Zalgo.zalgo import zalgo_call
 
@@ -66,7 +67,7 @@ command_map = {
   'clear' : clear_by,
   'autoclear' : autoclear,
   'spam' : spamfilter,
-  'tags' : tagfilter,
+  #'tags' : tagfilter,
   'profanity' : profanityfilter,
   'joinmsg' : serverjoin,
   'leavemsg' : serverleave,
@@ -79,7 +80,8 @@ command_map = {
   'zalgo' : zalgo_call,
   'pythagoras' : pythagoras,
   'ping' : ping,
-  'wiki' : wiki
+  'wiki' : wiki,
+  'terms' : term_blacklist
 }
 
 async def validate_cmd(message): ## method for doing the commands
@@ -96,7 +98,6 @@ async def validate_cmd(message): ## method for doing the commands
         return
 
       await change_prefix(message)
-
     return
 
   cmd = message.content.split(' ')[0][1:] # extract the keyword
@@ -104,12 +105,10 @@ async def validate_cmd(message): ## method for doing the commands
 
     if message.channel.id in channel_blacklist and cmd not in ['help', 'blacklist']:
       await blacklist_msg(message)
-
       return
 
     else:
       await command_map[cmd](message,client)
-
       return
 
 async def watch_tags(message):
@@ -231,6 +230,14 @@ async def on_message(message): ## when a message arrives at the bot ##
     return
 
   try:
+    if message.server.id in terms.keys() and terms[message.server.id]['enabled']:
+      if not message.author.server_permissions.administrator:
+        for term in terms[message.server.id]['filters']:
+          if term in message.content:
+            await client.send_message(message.channel, 'Custom filter rules have disabled a term in your message. Please speak to a server admin.')
+            await client.delete_message(message)
+            return
+
     await validate_cmd(message)
 
     ## run stuff here if there is no command ##

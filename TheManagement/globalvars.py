@@ -7,6 +7,7 @@ warnings = {}
 tag_warnings = {}
 join_messages = {}
 leave_messages = {}
+terms = {}
 
 spam_filter = []
 profanity_filter = []
@@ -79,3 +80,10 @@ try:
 
 except FileNotFoundError:
   print('no tag filter file found')
+
+try:
+  with open('DATA/terms.json','r') as f:
+    terms = json.load(f)
+
+except FileNotFoundError:
+  print('no terms filter file found')
