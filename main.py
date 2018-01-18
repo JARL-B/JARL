@@ -139,8 +139,6 @@ async def on_ready():
   print(client.user.id)
   print('------')
 
-  #await send()
-
   await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
 
 @client.event
@@ -153,22 +151,25 @@ async def on_server_remove(server):
 
 @client.event
 async def on_message(message): ## when a message arrives at the bot ##
+  skip_command = False
+
   if message.author.id == client.user.id: ## if the message has been sent by the bot ##
-    return
+    skip_command = True
 
   if message.content in ['', None]: ## if the message is a file ##
-    return
+    skip_command = True
 
   try:
-    if message.server.id in terms.keys() and terms[message.server.id]['enabled']:
-      if not message.author.server_permissions.administrator:
-        for term in terms[message.server.id]['filters']:
-          if term in message.content:
-            await client.send_message(message.channel, 'Custom filter rules have disabled a term in your message. Please speak to a server admin.')
-            await client.delete_message(message)
-            return
+    if not skip_command:
+      if message.server.id in terms.keys() and terms[message.server.id]['enabled']:
+        if not message.author.server_permissions.administrator:
+          for term in terms[message.server.id]['filters']:
+            if term in message.content:
+              await client.send_message(message.channel, 'Custom filter rules have disabled a term in your message. Please speak to a server admin.')
+              await client.delete_message(message)
+              return
 
-    await validate_cmd(message)
+      await validate_cmd(message)
 
     ## run stuff here if there is no command ##
     if message.channel.id in autoclears.keys(): ## autoclearing
@@ -178,11 +179,6 @@ async def on_message(message): ## when a message arrives at the bot ##
     if message.channel.id in spam_filter:
       await watch_spam(message)
 
-    if message.channel.id in profanity_filter:
-      await watch_profanity(message)
-
-    if message.channel.id in tag_filter:
-      await watch_tags(message)
   except discord.errors.Forbidden:
     try:
       await client.send_message(message.channel, 'Failed to perform an action: Not enough permissions (403)')
