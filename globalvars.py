@@ -1,15 +1,11 @@
 import json
-import smtplib
 
 from RemindMe.globalvars import *
 from TheManagement.globalvars import *
 
-from gmail import gmail
-
 client = discord.Client() ## defined the client
 
 prefix = {}
-wiki_cache = {}
 channel_blacklist = []
 
 try:
@@ -25,5 +21,3 @@ try:
 
 except FileNotFoundError:
   print('no blacklist file found')
-
-mailserver = gmail()

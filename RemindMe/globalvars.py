@@ -34,13 +34,6 @@ except FileNotFoundError:
   print('no interval file found. not loading any intervals')
 
 try:
-  with open('DATA/mail_list.json','r') as f:
-    mail_list = json.load(f)
-
-except FileNotFoundError:
-  print('no mail list file found. not loading any emails')
-
-try:
   with open('DATA/todos.json','r') as f:
     todos = json.load(f)
 
