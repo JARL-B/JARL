@@ -4,8 +4,6 @@ from globalvars import *
 import time
 import csv
 import json
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from itertools import chain
 
 from get_patrons import get_patrons
@@ -29,28 +27,6 @@ async def check_reminders():
         try:
           await client.send_message(recipient,reminder[2])
           print('Administered reminder to ' + recipient.name)
-
-          if recipient.id in mail_list.keys():
-            text = '''
-              <h1>Reminder from {recipient.server.name}</h1>
-              {reminder[2]}<br>
-              <em>Thank you for using TheManagement.</em>
-              '''.format(recipient=recipient,reminder=reminder)
-
-            msg = MIMEMultipart()
-            msg['From'] = mailserver.email['email']
-            msg['Subject'] = 'Reminder on {}'.format(recipient.name)
-
-            mailserver.open()
-
-            for uid in mail_list[recipient.id]:
-
-              msg['To'] = emails[uid]
-
-              msg.attach(MIMEText(text, 'html'))
-              mailserver.mail.sendmail(mailserver.email['email'], [msg['To']], msg.as_string())
-
-            mailserver.close()
 
         except:
           print('Couldn\'t find required channel. Skipping a reminder')

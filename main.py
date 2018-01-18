@@ -3,47 +3,30 @@ import asyncio
 import sys
 import os
 import time
-import uuid
-import re
 import aiohttp
 
 from globalvars import *
 
-from Calc.pythagoras import pythagoras
-
 from RemindMe.set_reminder import set_reminder
-from RemindMe.set_event import set_event
+#from RemindMe.set_event import set_event
 from RemindMe.set_interval import set_interval
 from RemindMe.del_reminders import del_reminders
-from RemindMe.email_me import email_me
 from RemindMe.todo import todo
 from RemindMe.server_todo import server_todo
 
 from TheManagement.autoclear import autoclear
-#from TheManagement.clear_channel import clear_channel
 from TheManagement.clear_by import clear_by
 from TheManagement.spamfilter import spamfilter
-from TheManagement.tagfilter import tagfilter
-from TheManagement.profanityfilter import profanityfilter
 from TheManagement.serverjoin import serverjoin
 from TheManagement.serverleave import serverleave
-from TheManagement.verification import verification
-from TheManagement.vote import vote
-from TheManagement.get_emails import get_emails
 from TheManagement.term_blacklist import term_blacklist
-
-from Zalgo.zalgo import zalgo_call
-
-from Wikipedia.wiki import wiki
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
 from dev_tools import dev_tools
 from add_blacklist import add_blacklist
 from donate import donate
-from update import update
 from get_help import get_help
-from register_email import register_email
 from ping import ping
 
 
@@ -57,30 +40,19 @@ async def blacklist_msg(message):
 command_map = {
   'help' : get_help,
   'remind' : set_reminder,
-  'event' : set_event,
   'blacklist' : add_blacklist,
   'interval' : set_interval, ## patron only ##
   'del' : del_reminders,
   'dev' : dev_tools,
   'donate' : donate,
-  'update' : update,
   'clear' : clear_by,
   'autoclear' : autoclear,
   'spam' : spamfilter,
-  #'tags' : tagfilter,
-  'profanity' : profanityfilter,
   'joinmsg' : serverjoin,
   'leavemsg' : serverleave,
-  'verif' : verification,
-  'emails' : get_emails,
-  'vote' : vote,
-  'notify' : email_me,
   'todo' : todo,
   'todos' : server_todo,
-  'zalgo' : zalgo_call,
-  'pythagoras' : pythagoras,
   'ping' : ping,
-  'wiki' : wiki,
   'terms' : term_blacklist
 }
 
@@ -110,33 +82,6 @@ async def validate_cmd(message): ## method for doing the commands
     else:
       await command_map[cmd](message,client)
       return
-
-async def watch_tags(message):
-  if not (message.author.server_permissions.administrator or discord.utils.get(message.server.roles, name='Manager:Allow @here') in message.author.roles):
-    if message.content.count('@everyone') + message.content.count('@here') > 1:
-      await client.send_message(message.channel, 'Do not use `@everyone` or `@here`!')
-
-      await client.ban(message.author)
-      tag_warnings[message.author.id] = 2
-
-      with open('DATA/tag_warnings.json','w') as f:
-        json.dump(tag_warnings,f)
-
-    elif '@everyone' in message.content or '@here' in message.content:
-      await client.delete_message(message)
-
-      if message.author.id not in tag_warnings.keys():
-        tag_warnings[message.author.id] = 0
-
-      tag_warnings[message.author.id] += 1
-      await client.send_message(message.channel, 'Do not use `@everyone` or `@here`! ({}/4)'.format(tag_warnings[message.author.id]))
-
-      if tag_warnings[message.author.id] > 3:
-        await client.ban(message.author)
-        tag_warnings[message.author.id] = 0
-
-      with open('DATA/tag_warnings.json','w') as f:
-        json.dump(tag_warnings,f)
 
 
 async def watch_spam(message):
@@ -169,21 +114,6 @@ async def watch_spam(message):
   else:
     print('registered user for auto-muting')
     users[message.author.id] = time.time()
-
-async def watch_profanity(message):
-  compressed = message.content.replace(' ','').replace('-','').replace('_','').replace('^','').replace('\'','').replace('\"','').replace('=','').replace('*','')
-  uid = uuid.uuid4()
-  with open('profanity.exp','r') as f:
-    for reg in f:
-      reg = reg.strip()
-      exp = re.search(reg,compressed)
-      if exp: ## perform a regex search for illicit terms
-        with open('DATA/profanity_issues','a') as f2:
-          f2.write('{} term detected at {} (UUID {})\n'.format(exp.group(),message.author.name,uid))
-        print('{} term detected at {} (UUID {})'.format(exp.group(),message.author.name,uid))
-        await client.send_message(message.channel, 'Illicit term detected in input {}. If you believe this warning has been administered wrongly, please send the code `{}` to the support channel in the Discord group'.format(message.author.mention,uid))
-        await client.delete_message(message)
-        return
 
 async def send():
   session = aiohttp.ClientSession()
@@ -280,16 +210,6 @@ async def on_member_remove(member):
       await client.send_message(client.get_channel(leave_messages[member.server.id][1]),leave_messages[member.server.id][0].format(member.name))
     except:
       print('Issue encountered administering member leave message.')
-
-@client.event
-async def on_reaction_add(reaction, user):
-  for v in votes:
-    if reaction.message.id == v.message.id:
-      if reaction.emoji == '❎':
-        v.neg_v += 1
-      elif reaction.emoji == '✅':
-        v.pos_v += 1
-      return
 
 try: ## token grabbing code
   with open('token','r') as token_f:
