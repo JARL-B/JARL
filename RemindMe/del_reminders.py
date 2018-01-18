@@ -2,7 +2,6 @@ from datetime import datetime
 
 from RemindMe.globalvars import *
 
-
 async def del_reminders(message, client):
   msgs = [message]
 
@@ -34,7 +33,6 @@ async def del_reminders(message, client):
   num = await client.wait_for_message(author=message.author,channel=message.channel)
   msgs.append(num)
   nums = num.content.split(',')
-
 
   dels = 0
   for i in nums:

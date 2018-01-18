@@ -25,7 +25,7 @@ async def check_reminders():
         recipient = discord.utils.get(msg_points,id=reminder[1])
 
         try:
-          await client.send_message(recipient,reminder[2])
+          await client.send_message(recipient, embed=discord.Embed(description=reminder[2]))
           print('Administered reminder to ' + recipient.name)
 
         except:
@@ -51,7 +51,7 @@ async def check_reminders():
                 except Exception as e:
                   print(e)
 
-                await client.send_message(recipient, inv[3][12:])
+                await client.send_message(recipient, embed=discord.Embed(description=inv[3][12:]))
 
               else:
                 await client.send_message(recipient, inv[3])
@@ -68,12 +68,10 @@ async def check_reminders():
           intervals.remove(inv)
 
 
-    with open('DATA/calendar.csv','w') as f:
-      writer = csv.writer(f,delimiter=',',lineterminator=';')
-      writer.writerows(calendar) ## uses a CSV writer to write the data to file.
+    with open('DATA/calendar.json','w') as f:
+      json.dump(calendar, f) ## uses a CSV writer to write the data to file.
 
-    with open('DATA/intervals.csv','w') as f:
-      writer = csv.writer(f,delimiter=',',lineterminator=';')
-      writer.writerows(intervals) ## uses a CSV writer to write the data to file.
+    with open('DATA/intervals.json','w') as f:
+      json.dump(intervals, f) ## uses a CSV writer to write the data to file.
 
     await asyncio.sleep(1.5)

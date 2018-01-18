@@ -18,4 +18,4 @@ async def change_prefix(message):
     await client.send_message(message.channel, 'Prefix has been set to \'' + text + '\' for this server.')
 
     with open('DATA/prefix.json','w') as f:
-      json.dump(prefix,f)
+      json.dump(prefix, f)
