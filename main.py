@@ -85,7 +85,7 @@ async def validate_cmd(message): ## method for doing the commands
 
 
 async def watch_spam(message):
-  if message.author.id in users.keys(): ## all the stuff to do with smap filtering
+  if message.author.id in users.keys(): ## all the stuff to do with spam filtering
     if time.time() - users[message.author.id] < 2:
 
       if message.author.id in warnings.keys():
@@ -181,7 +181,7 @@ async def on_message(message): ## when a message arrives at the bot ##
 
   except discord.errors.Forbidden:
     try:
-      await client.send_message(message.channel, 'Failed to perform an action: Not enough permissions (403)')
+      await client.send_message(message.channel, embed=discord.Embed(title='Failed to perform an action: Not enough permissions (403)'))
     except discord.errors.Forbidden:
       try:
         await client.send_message(message.author, 'Failed to perform actions on {}: Not enough permissions (403)'.format(message.server.name))

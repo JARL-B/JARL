@@ -51,10 +51,10 @@ async def check_reminders():
                 except Exception as e:
                   print(e)
 
-                await client.send_message(recipient,inv[3][12:])
+                await client.send_message(recipient, inv[3][12:])
 
               else:
-                await client.send_message(recipient,inv[3])
+                await client.send_message(recipient, inv[3])
               print('Administered interval to ' + recipient.name)
               break
           else:
