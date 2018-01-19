@@ -31,7 +31,7 @@ from ping import ping
 
 
 async def blacklist_msg(message):
-  msg = await client.send_message(message.channel, ':x: This text channel has been blacklisted :x:')
+  msg = await client.send_message(message.channel, embed=discord.Embed(description=':x: This text channel has been blacklisted :x:'))
   await client.delete_message(message)
   await asyncio.sleep(2)
   await client.delete_message(msg)
@@ -195,9 +195,6 @@ async def on_member_join(member):
       await client.send_message(client.get_channel(join_messages[member.server.id][1]),join_messages[member.server.id][0].format(member.name))
     except:
       print('Issue encountered administering member join message.')
-
-  if member.server.id in verif_servers:
-    await register_email(member)
 
 @client.event
 async def on_member_remove(member):
