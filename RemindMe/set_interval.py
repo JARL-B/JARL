@@ -42,7 +42,7 @@ async def set_interval(message, client):
   msg_time = format_time(args[0])
 
   if msg_time == None:
-    await client.send_message(message.channel, embed=discord.Embed(description='Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. with no spaces, eg. 10s for 10 seconds or 10s12m15h1d for 10 seconds, 12 minutes, 15 hours and 1 day.'))
+    await client.send_message(message.channel, embed=discord.Embed(description='Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. or `day`/`month`/`year`-`hour`:`minute`:`second`.'))
     return
 
   args.pop(0)

@@ -15,9 +15,7 @@ def format_time(text):
     for clump in text.split('-'):
       if '/' in clump:
         a = clump.split('/')
-        if len(a) == 1:
-          day = a[0]
-        elif len(a) == 2:
+        if len(a) == 2:
           month = a[1]
           day = a[0]
         elif len(a) == 3:
@@ -36,12 +34,17 @@ def format_time(text):
           second = a[2]
         else:
           return None
+
       else:
-        return None
+        day = clump
 
     comp = '{}/{}/{}-{}:{}:{}'.format(day, month, year, hour, minute, second)
+    try:
+      t = datetime.strptime(comp, "%d/%m/%Y-%H:%M:%S").timestamp()
+    except Exception as e:
+      t = None
 
-    return datetime.strptime(comp, "%d/%m/%Y-%H:%M:%S").timestamp()
+    return t
 
   else:
     current_buffer = '0'
