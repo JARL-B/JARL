@@ -6,6 +6,7 @@ from TheManagement.globalvars import *
 client = discord.Client() ## defined the client
 
 prefix = {}
+restrictions = {}
 channel_blacklist = []
 
 try:
@@ -21,3 +22,10 @@ try:
 
 except FileNotFoundError:
   print('no blacklist file found')
+
+try:
+  with open('DATA/restrictions.json','r') as f:
+    restrictions = json.load(f)
+
+except FileNotFoundError:
+  print('no restrictions file found')

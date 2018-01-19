@@ -27,7 +27,9 @@ from dev_tools import dev_tools
 from add_blacklist import add_blacklist
 from donate import donate
 from get_help import get_help
+from info import info
 from ping import ping
+from restrict import restrict
 
 
 async def blacklist_msg(message):
@@ -39,6 +41,7 @@ async def blacklist_msg(message):
 
 command_map = {
   'help' : get_help,
+  'info' : info,
   'remind' : set_reminder,
   'blacklist' : add_blacklist,
   'interval' : set_interval, ## patron only ##
@@ -53,7 +56,7 @@ command_map = {
   'todo' : todo,
   'todos' : server_todo,
   'ping' : ping,
-  'terms' : term_blacklist
+  'restrict' : restrict
 }
 
 async def validate_cmd(message): ## method for doing the commands
@@ -139,7 +142,7 @@ async def on_ready():
   print(client.user.id)
   print('------')
 
-  await client.change_presence(game=discord.Game(name='$help ¬ mbprefix <p>'))
+  await client.change_presence(game=discord.Game(name='$info ¬ mbprefix <p>'))
 
 @client.event
 async def on_server_join(server):
@@ -161,14 +164,6 @@ async def on_message(message): ## when a message arrives at the bot ##
 
   try:
     if not skip_command:
-      if message.server.id in terms.keys() and terms[message.server.id]['enabled']:
-        if not message.author.server_permissions.administrator:
-          for term in terms[message.server.id]['filters']:
-            if term in message.content:
-              await client.send_message(message.channel, 'Custom filter rules have disabled a term in your message. Please speak to a server admin.')
-              await client.delete_message(message)
-              return
-
       await validate_cmd(message)
 
     ## run stuff here if there is no command ##
