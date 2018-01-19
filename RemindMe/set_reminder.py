@@ -2,7 +2,7 @@ import discord
 import time
 import asyncio
 
-from RemindMe.validate_event import validate_event
+from RemindMe.validate_event import count_reminders
 from RemindMe.format_time import format_time
 from RemindMe.globalvars import calendar
 
@@ -44,6 +44,10 @@ async def set_reminder(message, client):
   args.pop(0)
 
   msg_text = ' '.join(args)
+
+  if count_reminders(scope) > 5 and message.author.id not in get_patrons('Donor'):
+    await client.send_message(message.channel, embed=discord.Embed(description='Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($2 tier)'))
+    return
 
   calendar.append([msg_time, scope, msg_text])
 
