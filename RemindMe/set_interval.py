@@ -8,48 +8,59 @@ from RemindMe.globalvars import intervals
 from get_patrons import get_patrons
 
 async def set_interval(message, client):
-  if message.author in get_patrons(level='Donor'):
-    if ',' in message.content or ';' in message.content:
-      await client.send_message(message.channel, 'Sorry, but you cannot place commas or semi-colons inside your reminders due to storage formats')
+
+  if message.author not in get_patrons('Donor'):
+    await client.send_message(message.channel, embed=discord.Embed(description='You need to be a Patron (donating 2$ or more) to access this command! Type `$donate` to find out more.'))
+    return
+
+  args = message.content.split(' ')
+  args.pop(0) # remove the command item
+
+  scope = message.channel.id
+  pref = '#'
+
+  if args[0].startswith('<'): # if a scope is provided
+    tag = args[0][2:-1]
+
+    if args[0][1] == '@': # if the scope is a user
+      pref = '@'
+      scope = message.server.get_member(tag)
+
     else:
-      text = message.content.split(' ')
-      text.pop(0) ## remove the command item
+      pref = '#'
+      scope = message.server.get_channel(tag)
 
-      msg_time = text.pop(0) ## pop the time out
-      if format_time(msg_time) == None:
-        await client.send_message(message.channel, 'Make sure the start time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. with no spaces, eg. 10s for 10 seconds or 10s12m15h1d for 10 seconds, 12 minutes, 15 hours and 1 day.')
-        return
-      else:
-        reminder_time = str(format_time(msg_time))
+    if scope == None:
+      await client.send_message(message.channel, embed=discord.Embed(description='Couldn\'t find a person by your tag present.'))
+      return
 
-      msg_interval = text.pop(0) ## pop the interval length out
+    else:
+      scope = scope.id
 
-      interval = format_time(msg_interval)
-      if interval == None:
-        await client.send_message(message.channel, 'Make sure the interval frequency you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. with no spaces, eg. 10s for 10 seconds or 10s12m15h1d for 10 seconds, 12 minutes, 15 hours and 1 day.')
-        return
-      else:
-        reminder_interval = str(int(round(interval - time.time())))
-        if int(reminder_interval) < 10:
-          await client.send_message(message.channel, 'That interval is a bit short. For server and sanity reasons, please make your interval longer than 10 seconds.')
-          return
+    args.pop(0)
 
-      msg_author = message.channel
+  msg_time = format_time(args[0])
 
-      msg_text = ' '.join(text)
+  if msg_time == None:
+    await client.send_message(message.channel, embed=discord.Embed(description='Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. with no spaces, eg. 10s for 10 seconds or 10s12m15h1d for 10 seconds, 12 minutes, 15 hours and 1 day.'))
+    return
 
-      if msg_text.startswith('-scope='):
-        scope = msg_text.split(' ', 1)[0]
-        msg_text = msg_text.split(' ', 1)[1]
-        msg_scope = scope.split('=', 1)[1]
-        try:
-          msg_author = [c for c in message.server.channels if c.name == msg_scope][0]
-        except IndexError:
-          await client.send_message(message.channel, 'Couldn\'t find channel by name {}'.format(msg_scope))
+  args.pop(0)
 
-      intervals.append([reminder_time,reminder_interval,msg_author.id,msg_text])
+  msg_interval = round(format_time(args[0]) - time.time())
 
-      await client.send_message(message.channel, 'New interval registered for ' + msg_author.mention + ' in ' + str(int(reminder_time) - int(time.time())) + ' seconds . You can\'t edit the interval now, so you are free to delete the message.')
-      print('Registered a new interval for ' + msg_author.name)
-  else:
-    await client.send_message(message.channel, 'You need to be a Patron (donating 2$ or more) to access this command! Type `$donate` to find out more.')
+  if msg_interval == None:
+    await client.send_message(message.channel, embed=discord.Embed(description='Make sure the interval you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. with no spaces, eg. 10s for 10 seconds or 10s12m15h1d for 10 seconds, 12 minutes, 15 hours and 1 day.'))
+    return
+  elif msg_interval < 8:
+    await client.send_message(message.channel, embed=discord.Embed(description='Please make sure your interval timer is longer than 8 seconds.'))
+    return
+
+  args.pop(0)
+
+  msg_text = ' '.join(args)
+
+  intervals.append([msg_time, msg_interval, scope, msg_text])
+
+  await client.send_message(message.channel, embed=discord.Embed(description='New interval registered for <{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'.format(pref + scope, round(msg_time - time.time()))))
+  print('Registered a new interval for {}'.format(message.server.name))
