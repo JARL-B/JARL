@@ -60,6 +60,17 @@ async def set_interval(message, client):
 
   msg_text = ' '.join(args)
 
+  if pref = '#':
+    if not message.author.server_permissions.administrator:
+      if scope not in restrictions.keys():
+        restrictions[scope] = []
+      for role in message.author.roles:
+        if role.id in restrictions[scope]:
+          break
+      else:
+        await client.send_message(message.channel, embed=discord.Embed('You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
+        return
+
   intervals.append([msg_time, msg_interval, scope, msg_text])
 
   await client.send_message(message.channel, embed=discord.Embed(description='New interval registered for <{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'.format(pref + scope, round(msg_time - time.time()))))

@@ -6,6 +6,8 @@ from RemindMe.validate_event import count_reminders
 from RemindMe.format_time import format_time
 from RemindMe.globalvars import calendar
 
+from globalvars import restrictions
+
 from get_patrons import get_patrons
 
 async def set_reminder(message, client):
@@ -48,6 +50,17 @@ async def set_reminder(message, client):
   if count_reminders(scope) > 5 and message.author.id not in get_patrons('Donor'):
     await client.send_message(message.channel, embed=discord.Embed(description='Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($2 tier)'))
     return
+
+  if pref = '#':
+    if not message.author.server_permissions.administrator:
+      if scope not in restrictions.keys():
+        restrictions[scope] = []
+      for role in message.author.roles:
+        if role.id in restrictions[scope]:
+          break
+      else:
+        await client.send_message(message.channel, embed=discord.Embed('You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
+        return
 
   calendar.append([msg_time, scope, msg_text])
 
