@@ -16,6 +16,7 @@ async def info(message, client):
 
   **Welcome to RemindMe!**
   Developer: <@203532103185465344>
+  Cool guy who knows what he's on about: <@174243954487853056>
   Icon: <@253202252821430272>
   Find me on https://discord.gg/WQVaYmT and on https://github.com/JellyWX :)
 

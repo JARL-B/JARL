@@ -9,7 +9,8 @@ async def get_help(message, client):
   '''
 __Key Commands__
   > `mbprefix <string>` - change the prefix from $ to anything less than 5 characters. This variable is stored on a per-server level. This command does not use a prefix!
-  > `$help` - get a PM of this page.
+  > `$help` - get this page.
+  > `$info` - get info on the bot.
   > `$blacklist [channel-name]` - block or unblock a channel from sending commands. If the bot has sufficient rights, it will also remove any commands in blacklisted channels.
 
 __Reminder Commands__
