@@ -22,7 +22,6 @@ from TheManagement.serverleave import serverleave
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
-from dev_tools import dev_tools
 from add_blacklist import add_blacklist
 from donate import donate
 from get_help import get_help
@@ -45,7 +44,6 @@ command_map = {
   'blacklist' : add_blacklist,
   'interval' : set_interval, ## patron only ##
   'del' : del_reminders,
-  'dev' : dev_tools,
   'donate' : donate,
   'clear' : clear_by,
   'autoclear' : autoclear,

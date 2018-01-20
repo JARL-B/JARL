@@ -21,7 +21,7 @@ async def info(message, client):
   Find me on https://discord.gg/WQVaYmT and on https://github.com/JellyWX :)
 
   Framework: `discord.py`
-  Total SLOC: 964 (100% Python) (stats generated using David A. Wheeler's 'SLOCCount')
+  Total SLOC: 925 (100% Python) (stats generated using David A. Wheeler's 'SLOCCount')
   Hosting provider: OVH
 
   *If you have enquiries about new features, please send to the discord server*
