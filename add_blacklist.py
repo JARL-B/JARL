@@ -7,29 +7,35 @@ async def add_blacklist(message,client):
     await message.channel.send('You must be an admin to run this command.')
     return
 
-  text = message.content.strip().split(' ')
+  if len(message.channel_mentions) > 0:
+    disengage_all = True
 
-  if len(text) > 1:
-    text.pop(0)
-    text = ' '.join(text)
+    for mention in message.channel_mentions:
+      if mention.id not in channel_blacklist:
+        disengage_all = False
 
-    text = text.replace('#','')
-    channel = discord.utils.get(client.get_all_channels(),name=text, guild=message.guild)
+    if disengage_all:
+      for mention in message.channel_mentions:
+        channel_blacklist.remove(mention.id)
+
+      await message.channel.send(embed=discord.Embed(description='Removed blacklists from specified channels'))
+
+    else:
+      for mention in message.channel_mentions:
+        if mention.id not in channel_blacklist:
+          channel_blacklist.append(mention.id)
+
+      await message.channel.send(embed=discord.Embed(description='Blacklisted specified channels'))
 
   else:
-    channel = message.channel
+    if message.channel.id in channel_blacklist:
+      channel_blacklist.remove(message.channel.id)
+      await message.channel.send(embed=discord.Embed(description='Removed blacklist from current channel'))
 
-  if channel == None:
-    await message.channel.send('Couldn\'t find a channel matching your keywords.')
-    return
+    else:
+      channel_blacklist.append(message.channel.id)
+      await message.channel.send(embed=discord.Embed(description='Blacklisted current channel'))
 
-  if channel.id in channel_blacklist:
-    channel_blacklist.remove(channel.id)
-    await message.channel.send('Removed ' + channel.mention + ' from the blacklist')
-
-  else:
-    channel_blacklist.append(channel.id)
-    await message.channel.send('Added ' + channel.mention + ' to the blacklist.')
 
   with open('DATA/blacklist.json','w') as f:
     json.dump(channel_blacklist,f)
