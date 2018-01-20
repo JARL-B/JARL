@@ -5,7 +5,7 @@ import time
 from globalvars import *
 from get_patrons import get_patrons
 
-async def dev_tools(message,client):
+async def dev_tools(message, client):
   command = message.content.split(' ').pop(1)
 
   if command == 'roles':

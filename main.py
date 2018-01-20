@@ -19,7 +19,6 @@ from TheManagement.clear_by import clear_by
 from TheManagement.spamfilter import spamfilter
 from TheManagement.serverjoin import serverjoin
 from TheManagement.serverleave import serverleave
-from TheManagement.term_blacklist import term_blacklist
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
@@ -33,10 +32,10 @@ from restrict import restrict
 
 
 async def blacklist_msg(message):
-  msg = await client.send_message(message.channel, embed=discord.Embed(description=':x: This text channel has been blacklisted :x:'))
-  await client.delete_message(message)
+  msg = await message.channel.send(embed=discord.Embed(description=':x: This text channel has been blacklisted :x:'))
+  await message.delete()
   await asyncio.sleep(2)
-  await client.delete_message(msg)
+  await msg.delete()
 
 
 command_map = {
@@ -60,8 +59,8 @@ command_map = {
 }
 
 async def validate_cmd(message): ## method for doing the commands
-  if message.server != None and message.server.id in prefix.keys():
-    pref = prefix[message.server.id]
+  if message.guild != None and message.guild.id in prefix.keys():
+    pref = prefix[message.guild.id]
   else:
     pref = '$'
 
@@ -95,14 +94,12 @@ async def watch_spam(message):
 
         warnings[message.author.id] += 1
         if warnings[message.author.id] == 4:
-          await client.send_message(message.channel, 'Please slow down {}'.format(message.author.mention))
+          await message.channel.send('Please slow down {}'.format(message.author.mention))
 
         elif warnings[message.author.id] == 6:
 
-          overwrite = discord.PermissionOverwrite()
-          overwrite.send_messages = False
-          await client.edit_channel_permissions(message.channel, message.author, overwrite)
-          await client.send_message(message.channel, '{}, you\'ve been muted for spam. Please contact an admin to review your status.'.format(message.author.mention))
+          await message.channel.set_permissions(message.author, send_messages=False)
+          await message.channel.send('{}, you\'ve been muted for spam. Please contact an admin to review your status.'.format(message.author.mention))
 
       else:
         print('user added to warning list')
@@ -121,7 +118,7 @@ async def watch_spam(message):
 async def send():
   session = aiohttp.ClientSession()
   dump = json.dumps({
-    'server_count': len(client.servers)
+    'server_count': len(client.guilds)
   })
 
   head = {
@@ -145,16 +142,16 @@ async def on_ready():
   await client.change_presence(game=discord.Game(name='$info ¬ mbprefix <p>'))
 
 @client.event
-async def on_server_join(server):
+async def on_guild_join(guild):
   await send()
   try:
-    c = [channel for channel in server.channels if channel.permissions_for(server.get_member(client.user.id)).send_messages]
-    await client.send_message(c[0], embed=discord.Embed(description='Thank you for adding me to your server! Use the command `$info` to get more information, and use the `$restrict` command (admin) to allow roles to set server reminders.'))
+    c = [channel for channel in guild.channels if channel.permissions_for(guild.get_member(client.user.id)).send_messages]
+    await c[0].send(embed=discord.Embed(description='Thank you for adding me to your server! Use the command `$info` to get more information, and use the `$restrict` command (admin) to allow roles to set server reminders.'))
   except discord.errors.Forbidden:
     pass
 
 @client.event
-async def on_server_remove(server):
+async def on_guild_remove(guild):
   await send()
 
 @client.event
@@ -174,33 +171,33 @@ async def on_message(message): ## when a message arrives at the bot ##
     ## run stuff here if there is no command ##
     if message.channel.id in autoclears.keys(): ## autoclearing
       await asyncio.sleep(autoclears[message.channel.id])
-      await client.delete_message(message)
+      await message.delete()
 
     if message.channel.id in spam_filter:
       await watch_spam(message)
 
   except discord.errors.Forbidden:
     try:
-      await client.send_message(message.channel, embed=discord.Embed(title='Failed to perform an action: Not enough permissions (403)'))
+      await message.channel.send(embed=discord.Embed(title='Failed to perform an action: Not enough permissions (403)'))
     except discord.errors.Forbidden:
       try:
-        await client.send_message(message.author, 'Failed to perform actions on {}: Not enough permissions (403)'.format(message.server.name))
+        await message.channel.send('Failed to perform actions on {}: Not enough permissions (403)'.format(message.guild.name))
       except discord.errors.Forbidden:
         pass
 
 @client.event
 async def on_member_join(member):
-  if member.server.id in join_messages.keys():
+  if member.guild.id in join_messages.keys():
     try:
-      await client.send_message(client.get_channel(join_messages[member.server.id][1]),join_messages[member.server.id][0].format(member.name))
+      await client.get_channel(join_messages[member.guild.id][1]).send(join_messages[member.guild.id][0].format(member.name))
     except:
       print('Issue encountered administering member join message.')
 
 @client.event
 async def on_member_remove(member):
-  if member.server.id in leave_messages.keys():
+  if member.guild.id in leave_messages.keys():
     try:
-      await client.send_message(client.get_channel(leave_messages[member.server.id][1]),leave_messages[member.server.id][0].format(member.name))
+      await client.get_channel(leave_messages[member.guild.id][1]).send(leave_messages[member.guild.id][0].format(member.name))
     except:
       print('Issue encountered administering member leave message.')
 

@@ -29,7 +29,7 @@ async def set_reminder(message, client):
       scope = message.server.get_channel(tag)
 
     if scope == None:
-      await client.send_message(message.channel, embed=discord.Embed(description='Couldn\'t find a person by your tag present.'))
+      await message.channel.send(embed=discord.Embed(description='Couldn\'t find a person by your tag present.'))
       return
 
     else:
@@ -40,7 +40,7 @@ async def set_reminder(message, client):
   msg_time = format_time(args[0])
 
   if msg_time == None:
-    await client.send_message(message.channel, embed=discord.Embed(description='Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. or `day`/`month`/`year`-`hour`:`minute`:`second`.'))
+    await message.channel.send(embed=discord.Embed(description='Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. or `day`/`month`/`year`-`hour`:`minute`:`second`.'))
     return
 
   args.pop(0)
@@ -48,21 +48,21 @@ async def set_reminder(message, client):
   msg_text = ' '.join(args)
 
   if count_reminders(scope) > 5 and message.author.id not in get_patrons('Donor'):
-    await client.send_message(message.channel, embed=discord.Embed(description='Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($2 tier)'))
+    await message.channel.send(embed=discord.Embed(description='Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($2 tier)'))
     return
 
   if pref == '#':
-    if not message.author.server_permissions.administrator:
+    if not message.author.guild_permissions.administrator:
       if scope not in restrictions.keys():
         restrictions[scope] = []
       for role in message.author.roles:
         if role.id in restrictions[scope]:
           break
       else:
-        await client.send_message(message.channel, embed=discord.Embed(description='You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
+        await message.channel.send(embed=discord.Embed(description='You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
         return
 
   calendar.append([msg_time, scope, msg_text])
 
-  await client.send_message(message.channel, embed=discord.Embed(description='New reminder registered for <{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'.format(pref + scope, round(msg_time - time.time()))))
-  print('Registered a new reminder for {}'.format(message.server.name))
+  await message.channel.send(embed=discord.Embed(description='New reminder registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'.format(pref, scope, round(msg_time - time.time()))))
+  print('Registered a new reminder for {}'.format(message.guild.name))

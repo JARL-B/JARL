@@ -3,8 +3,8 @@ import discord
 from globalvars import prefix
 
 async def info(message, client):
-  if message.server.id in prefix.keys():
-    pref = prefix[message.server.id]
+  if message.guild.id in prefix.keys():
+    pref = prefix[message.guild.id]
   else:
     pref = '$'
 
@@ -31,6 +31,6 @@ async def info(message, client):
   '''.format(pref)
   )
 
-  await client.send_message(message.channel, embed=em)
+  await message.channel.send(embed=em)
 
-  await client.add_reaction(message,'📬')
+  await message.add_reaction('📬')

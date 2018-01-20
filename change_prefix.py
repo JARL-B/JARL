@@ -4,8 +4,8 @@ from globalvars import *
 
 
 async def change_prefix(message):
-  if not message.author.server_permissions.administrator:
-    await client.send_message(message.channel, 'You must be an admin to run this command.')
+  if not message.author.guild_permissions.administrator:
+    await message.channel.send('You must be an admin to run this command.')
     return
 
   text = message.content.strip().split(' ')
@@ -13,9 +13,17 @@ async def change_prefix(message):
   text = ' '.join(text)
 
   if 0 < len(text) < 5:
-    prefix[message.server.id] = text
+    prefix[message.guild.id] = text
     print(prefix)
-    await client.send_message(message.channel, 'Prefix has been set to \'' + text + '\' for this server.')
+    await message.channel.send('Prefix has been set to \'' + text + '\' for this server.')
 
     with open('DATA/prefix.json','w') as f:
       json.dump(prefix, f)
+
+  else:
+    try:
+      current_pref = prefix[message.guild.id]
+    except KeyError:
+      current_pref = '$'
+
+    await message.channel.send('Please make sure your prefix is between 1 and 5 characters. Your current prefix is {}'.format(current_pref))

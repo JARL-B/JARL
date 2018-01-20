@@ -1,8 +1,10 @@
+## PORTED ##
+
 import discord
 import asyncio
 
 
-async def get_help(message,client):
+async def get_help(message, client):
   em = discord.Embed(title='**HELP**',description=
   '''
 __Key Commands__
@@ -17,20 +19,20 @@ __Reminder Commands__
   > `$todo` - TODO list related commands. Use `$todo help` for proper information.
   > `$todos` - same as `$todo` but for server-wide task management.
 
+  '''
+  )
+
+  em2 = discord.Embed(title='**HELP**', description='''
 __TheManagement Commands__
   > `$autoclear [time/s] [channels]` - enables/disables autoclearing, where messages sent to the channel (default your channel) will be automatically deleted after time (default 10 seconds)
   > `$clear <user mentions>` - clears messages made by a user/s. Clears up to 100 messages up to 14 days old (sorry, Discord limitations)
   > `$spam` - enables/disables basic anti-spam. Mutes members who send messages too quickly.
   > `$joinmsg [message]` - enables/disables a join message. If no join message is provided, the join message will be disabled. To represent the user joining the server in the join message, use 2 curly braces (`{}`).
   > `$leavemsg [message]` - as above, but for when someone leaves a server.
-  > `$terms` - enable custom term filtering. Use `$terms show` to list all filters and `$terms [word]` to add to the list.
+  > `$restrict [role mentions]` - add/remove roles from being allowed to send channel reminders and intervals.
 
 __Other Commands__
   > `$donate` - view information about donations.
-  '''
-  )
-
-  em3 = discord.Embed(title='**HELP**', description='''
 
   > a word surrounded by `<` `>` is a required argument
   > a word surrounded by `[` `]` is an optional argument
@@ -43,7 +45,7 @@ __Other Commands__
   '''
   )
 
-  await client.send_message(message.channel, embed=em)
-  await client.send_message(message.channel, embed=em2)
+  await message.channel.send(embed=em)
+  await message.channel.send(embed=em2)
 
-  await client.add_reaction(message,'📬')
+  await message.add_reaction('📬')

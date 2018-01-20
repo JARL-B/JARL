@@ -11,36 +11,37 @@ terms = {}
 spam_filter = []
 
 try:
-  with open('DATA/autoclears.json','r') as f:
+  with open('DATA/autoclears.json', 'r') as f:
     autoclears = json.load(f)
+
+  autoclears = {int(x) : y for x, y in autoclears.items()}
 
 except FileNotFoundError:
   print('no autoclear file found')
 
 try:
-  with open('DATA/spamfilter.json','r') as f:
+  with open('DATA/spamfilter.json', 'r') as f:
     spam_filter = json.load(f)
+
+  spam_filter = list(map(int, spam_filter))
 
 except FileNotFoundError:
   print('no spam filter file found')
 
 try:
-  with open('DATA/join_messages.json','r') as f:
+  with open('DATA/join_messages.json', 'r') as f:
     join_messages = json.load(f)
+
+  join_messages = {int(x) : [y[0], int(y[1])] for x, y in join_messages.items()}
 
 except FileNotFoundError:
   print('no join messages file found')
 
 try:
-  with open('DATA/leave_messages.json','r') as f:
+  with open('DATA/leave_messages.json', 'r') as f:
     leave_messages = json.load(f)
+
+  leave_messages = {int(x) : [y[0], int(y[1])] for x, y in leave_messages.items()}
 
 except FileNotFoundError:
   print('no leave messages file found')
-
-try:
-  with open('DATA/terms.json','r') as f:
-    terms = json.load(f)
-
-except FileNotFoundError:
-  print('no terms filter file found')

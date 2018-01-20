@@ -3,12 +3,19 @@ from datetime import datetime
 from RemindMe.globalvars import *
 
 async def del_reminders(message, client):
-  msgs = [message]
+  if not message.author.guild_permissions.administrator:
+    if scope not in restrictions.keys():
+      restrictions[scope] = []
+    for role in message.author.roles:
+      if role.id in restrictions[scope]:
+        break
+    else:
+      await message.channel.send(embed=discord.Embed(description='You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
+      return
 
-  t = await client.send_message(message.channel, 'Listing reminders on this server... (be patient, this might take some time)\nAlso, please note the times are done relative to UK time. Thanks.')
-  msgs.append(t)
+  await message.channel.send('Listing reminders on this server... (be patient, this might take some time)\nAlso, please note the times are done relative to UK time. Thanks.')
 
-  li = [ch.id for ch in message.server.channels] ## get all channels and their ids in the current server
+  li = [ch.id for ch in message.guild.channels] ## get all channels and their ids in the current server
 
   n = 1
   remli = []
@@ -16,22 +23,18 @@ async def del_reminders(message, client):
   for inv in intervals:
     if inv[2] in li:
       remli.append(inv)
-      t = await client.send_message(message.channel, '  **' + str(n) + '**: \'' + inv[3] + '\' (' + datetime.fromtimestamp(int(inv[0])).strftime('%Y-%m-%d %H:%M:%S') + ')')
-      msgs.append(t)
+      await message.channel.send('  **' + str(n) + '**: \'' + inv[3] + '\' (' + datetime.fromtimestamp(int(inv[0])).strftime('%Y-%m-%d %H:%M:%S') + ')')
       n += 1
 
   for rem in calendar:
     if rem[1] in li:
       remli.append(rem)
-      t = await client.send_message(message.channel, '  **' + str(n) + '**: \'' + rem[2] + '\' (' + datetime.fromtimestamp(int(rem[0])).strftime('%Y-%m-%d %H:%M:%S') + ')')
-      msgs.append(t)
+      await message.channel.send('  **' + str(n) + '**: \'' + rem[2] + '\' (' + datetime.fromtimestamp(int(rem[0])).strftime('%Y-%m-%d %H:%M:%S') + ')')
       n += 1
 
-  t = await client.send_message(message.channel, 'List (1,2,3...) the reminders you wish to delete')
-  msgs.append(t)
+  await message.channel.send('List (1,2,3...) the reminders you wish to delete')
 
-  num = await client.wait_for_message(author=message.author,channel=message.channel)
-  msgs.append(num)
+  num = await client.wait_for('message', check=lambda m: m.author == message.author and m.channel == message.channel)
   nums = num.content.split(',')
 
   dels = 0
@@ -56,4 +59,4 @@ async def del_reminders(message, client):
     except IndexError:
       continue
 
-  msg = await client.send_message(message.channel, 'Deleted {} reminders!'.format(dels))
+  await message.channel.send('Deleted {} reminders!'.format(dels))
