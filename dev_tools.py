@@ -37,8 +37,5 @@ async def dev_tools(message,client):
   elif command == 'servers':
     await client.send_message(message.channel, len(client.servers))
 
-  elif command == 'n_cal':
-    await client.send_message(message.channel, len(calendar))
-
   else:
     await client.send_message(message.channel, 'Hello! You\'ve found the dev options. Commands are `roles`, `serverid`, `channelid` and `patrons`')

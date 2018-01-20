@@ -146,11 +146,16 @@ async def on_ready():
 
 @client.event
 async def on_server_join(server):
-    await send()
+  await send()
+  try:
+    c = [channel for channel in server.channels if channel.permissions_for(server.get_member(client.user.id)).send_messages]
+    await client.send_message(c[0], embed=discord.Embed(description='Thank you for adding me to your server! Use the command `$info` to get more information, and use the `$restrict` command (admin) to allow roles to set server reminders.'))
+  except discord.errors.Forbidden:
+    pass
 
 @client.event
 async def on_server_remove(server):
-    await send()
+  await send()
 
 @client.event
 async def on_message(message): ## when a message arrives at the bot ##
