@@ -22,11 +22,11 @@ async def set_reminder(message, client):
 
     if args[0][1] == '@': # if the scope is a user
       pref = '@'
-      scope = message.guild.get_member(tag)
+      scope = message.guild.get_member(int(tag))
 
     else:
       pref = '#'
-      scope = message.guild.get_channel(tag)
+      scope = message.guild.get_channel(int(tag))
 
     if scope == None:
       await message.channel.send(embed=discord.Embed(description='Couldn\'t find a person by your tag present.'))
