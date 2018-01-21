@@ -139,6 +139,23 @@ async def on_ready():
 
   await client.change_presence(game=discord.Game(name='$info ¬ mbprefix <p>'))
 
+  del_queue = []
+  for channel in autoclears.keys():
+    if client.get_channel(channel) == None:
+      print('removed {}'.format(channel))
+      del_queue.append(channel)
+
+  for i in del_queue:
+    del autoclears[i]
+
+  for channel in channel_blacklist:
+    if client.get_channel(channel) == None:
+      print('removed {}'.format(channel))
+      del_queue.append(channel)
+
+  for i in del_queue:
+    channel_blacklist.remove(i)
+
 @client.event
 async def on_guild_join(guild):
   await send()
@@ -169,7 +186,10 @@ async def on_message(message): ## when a message arrives at the bot ##
     ## run stuff here if there is no command ##
     if message.channel.id in autoclears.keys(): ## autoclearing
       await asyncio.sleep(autoclears[message.channel.id])
-      await message.delete()
+      try:
+        await message.delete()
+      except discord.errors.NotFound:
+        pass
 
     if message.channel.id in spam_filter:
       await watch_spam(message)
