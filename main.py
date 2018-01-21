@@ -8,11 +8,11 @@ import aiohttp
 from globalvars import *
 
 from RemindMe.set_reminder import set_reminder
-#from RemindMe.set_event import set_event
 from RemindMe.set_interval import set_interval
 from RemindMe.del_reminders import del_reminders
 from RemindMe.todo import todo
 from RemindMe.server_todo import server_todo
+from RemindMe.timezone import timezone
 
 from TheManagement.autoclear import autoclear
 from TheManagement.clear_by import clear_by
@@ -53,7 +53,8 @@ command_map = {
   'todo' : todo,
   'todos' : server_todo,
   'ping' : ping,
-  'restrict' : restrict
+  'restrict' : restrict,
+  'timezone' : timezone
 }
 
 async def validate_cmd(message): ## method for doing the commands
@@ -147,6 +148,8 @@ async def on_ready():
 
   for i in del_queue:
     del autoclears[i]
+
+  del_queue = []
 
   for channel in channel_blacklist:
     if client.get_channel(channel) == None:

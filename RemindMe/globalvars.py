@@ -4,6 +4,7 @@ mail_list = {}
 calendar = []
 intervals = []
 todos = {}
+timezones = {}
 
 try:
   with open('DATA/calendar.json', 'r') as f:
@@ -51,6 +52,13 @@ try:
 
 except FileNotFoundError:
   print('no todos file found.')
+
+try:
+  with open('DATA/timezones.json','r') as f:
+    timezones = json.load(f)
+
+except FileNotFoundError:
+  print('no timezones file found.')
 
 for reminder in calendar:
   if len(reminder) != 3:
