@@ -9,8 +9,6 @@ try:
   with open('DATA/calendar.json', 'r') as f:
     calendar = json.load(f)
 
-  calendar = [[x, int(y), z] for x, y, z in calendar]
-
 except FileNotFoundError:
   try:
     with open('DATA/calendar.csv', 'r') as f:
@@ -23,16 +21,12 @@ except FileNotFoundError:
         item = item.split(',')
         calendar.append(item)
 
-    calendar = [[x, int(y), z] for x, y, z in calendar]
-
   except FileNotFoundError:
     print('no calendar file found. not loading any reminders')
 
 try:
   with open('DATA/intervals.json', 'r') as f:
     intervals = json.load(f)
-
-  intervals = [[x, y, int(z), a] for x, y, z, a in intervals]
 
 except FileNotFoundError:
   try:
@@ -46,8 +40,6 @@ except FileNotFoundError:
         item = item.split(',')
         intervals.append(item)
 
-    intervals = [[x, y, int(z), a] for x, y, z, a in intervals]
-
   except FileNotFoundError:
     print('no interval file found. not loading any intervals')
 
@@ -59,6 +51,9 @@ try:
 
 except FileNotFoundError:
   print('no todos file found.')
+
+calendar = [[x, int(y), z] for x, y, z in calendar]
+intervals = [[x, y, int(z), a] for x, y, z, a in intervals]
 
 for reminder in calendar:
   if len(reminder) != 3:
