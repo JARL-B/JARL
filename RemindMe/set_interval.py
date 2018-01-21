@@ -5,6 +5,8 @@ import time
 from RemindMe.format_time import format_time
 from RemindMe.globalvars import intervals
 
+from globalvars import restrictions
+
 from get_patrons import get_patrons
 
 async def set_interval(message, client):

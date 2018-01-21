@@ -30,7 +30,7 @@ async def restrict(message, client):
     await message.channel.send(embed=discord.Embed(description='Enabled channel reminder permissions for roles.'))
 
   else:
-    await message.channel.send(embed=discord.Embed(description='Allowed: <@&{}>'.format('> <@&'.join(restrictions[message.channel.id]))))
+    await message.channel.send(embed=discord.Embed(description='Allowed: {}'.format(' '.join(['<@&' + str(i) + '>' for i in restrictions[message.channel.id]]))))
 
   with open('DATA/restrictions.json', 'w') as f:
     json.dump(restrictions, f)
