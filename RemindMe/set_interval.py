@@ -20,7 +20,7 @@ async def set_interval(message, client):
   pref = '#'
 
   if args[0].startswith('<'): # if a scope is provided
-    tag = args[0][2:-1]
+    tag = int(args[0][2:-1])
 
     if args[0][1] == '@': # if the scope is a user
       pref = '@'
