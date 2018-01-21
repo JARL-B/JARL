@@ -18,6 +18,10 @@ async def set_interval(message, client):
   args = message.content.split(' ')
   args.pop(0) # remove the command item
 
+  if len(args) < 3:
+    await message.channel.send(embed=discord.Embed(title='interval', description='**Usage** ```$interval [channel mention or user mention] <time to or time at> <interval> <message>```\n\n**Example** ```$interval #general 9:30 1d Good morning!``` ```$interval 0s 10s This will be really irritating```'))
+    return
+
   scope = message.channel.id
   pref = '#'
 
