@@ -2,6 +2,8 @@ from datetime import datetime
 
 from RemindMe.globalvars import *
 
+from globalvars import restrictions
+
 async def del_reminders(message, client):
   if not message.author.guild_permissions.administrator:
     if scope not in restrictions.keys():
