@@ -12,8 +12,7 @@ async def donate(message, client):
 
   When you donate, Patreon will automatically rank you up on our Discord server, supposing you have properly linked your Patreon and Discord accounts!
   With your new rank, you'll be able to:
-  : chat on the Patron-only chat (which is more frequented by myself)
-  : pass your suggestions straight to me, rather than sending them to a file on my server
+  : chat on the Patron-only chat
   : use Patron-only commands like `interval`
   : set more reminders
   : set longer reminders

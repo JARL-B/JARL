@@ -47,8 +47,12 @@ async def set_reminder(message, client):
 
   msg_text = ' '.join(args)
 
-  if count_reminders(scope) > 5 and message.author.id not in get_patrons('Donor'):
-    await message.channel.send(embed=discord.Embed(description='Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($2 tier)'))
+  if count_reminders(scope) > 5 and message.author.id not in get_patrons('Patron'):
+    await message.channel.send(embed=discord.Embed(description='Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($5 tier)'))
+    return
+
+  if len(msg_text) > 150 and message.author.id not in get_patrons('Patron'):
+    await message.channel.send(embed=discord.Embed(description='Reminder message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 400 ($5 tier)'.format(len(msg_text))))
     return
 
   if pref == '#':
