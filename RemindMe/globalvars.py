@@ -52,9 +52,6 @@ try:
 except FileNotFoundError:
   print('no todos file found.')
 
-calendar = [[x, int(y), z] for x, y, z in calendar]
-intervals = [[x, y, int(z), a] for x, y, z, a in intervals]
-
 for reminder in calendar:
   if len(reminder) != 3:
     calendar.remove(reminder)
@@ -62,3 +59,6 @@ for reminder in calendar:
 for inv in intervals:
   if len(inv) != 4:
     intervals.remove(inv)
+
+calendar = [[x, int(y), z] for x, y, z in calendar]
+intervals = [[x, y, int(z), a] for x, y, z, a in intervals]
