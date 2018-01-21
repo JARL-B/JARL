@@ -48,7 +48,7 @@ async def check_reminders():
             if m in patrons:
               if inv[3].startswith('-del_on_send'):
                 try:
-                  await recipient.purge(check=lambda m: m.content == inv[3][12:].strip() and time.time() - m.timestamp.timestamp() < 1209600 and m.author == client.user)
+                  await recipient.purge(check=lambda m: m.content == inv[3][12:].strip() and time.time() - m.created_at.timestamp() < 1209600 and m.author == client.user)
                 except Exception as e:
                   print(e)
 

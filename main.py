@@ -163,9 +163,11 @@ async def on_ready():
 async def on_guild_join(guild):
   await send()
   try:
-    c = [channel for channel in guild.channels if channel.permissions_for(guild.get_member(client.user.id)).send_messages]
+    c = [channel for channel in guild.text_channels if channel.permissions_for(guild.get_member(client.user.id)).send_messages]
     await c[0].send(embed=discord.Embed(description='Thank you for adding me to your server! Use the command `$info` to get more information, and use the `$restrict` command (admin) to allow roles to set server reminders.'))
   except discord.errors.Forbidden:
+    pass
+  except IndexError:
     pass
 
 @client.event

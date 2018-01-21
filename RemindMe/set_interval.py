@@ -49,7 +49,7 @@ async def set_interval(message, client):
 
   args.pop(0)
 
-  msg_interval = round(format_time(args[0], message.guild.id) - time.time())
+  msg_interval = format_time(args[0], message.guild.id)
 
   if msg_interval == None:
     await message.channel.send(embed=discord.Embed(description='Make sure the interval you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. with no spaces, eg. 10s for 10 seconds or 10s12m15h1d for 10 seconds, 12 minutes, 15 hours and 1 day.'))
@@ -57,6 +57,9 @@ async def set_interval(message, client):
   elif msg_interval < 8:
     await message.channel.send(embed=discord.Embed(description='Please make sure your interval timer is longer than 8 seconds.'))
     return
+
+  msg_interval -= time.time()
+  msg_interval = round(msg_interval)
 
   args.pop(0)
 
