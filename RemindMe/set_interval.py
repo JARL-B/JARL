@@ -39,7 +39,7 @@ async def set_interval(message, client):
 
     args.pop(0)
 
-  msg_time = format_time(args[0])
+  msg_time = format_time(args[0], message.guild.id)
 
   if msg_time == None:
     await message.channel.send(embed=discord.Embed(description='Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. or `day`/`month`/`year`-`hour`:`minute`:`second`.\n\n*This feature was reworked on the 21/01/2018. Please check the help menu*'))
@@ -47,7 +47,7 @@ async def set_interval(message, client):
 
   args.pop(0)
 
-  msg_interval = round(format_time(args[0]) - time.time())
+  msg_interval = round(format_time(args[0], message.guild.id) - time.time())
 
   if msg_interval == None:
     await message.channel.send(embed=discord.Embed(description='Make sure the interval you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. with no spaces, eg. 10s for 10 seconds or 10s12m15h1d for 10 seconds, 12 minutes, 15 hours and 1 day.'))

@@ -37,7 +37,7 @@ async def set_reminder(message, client):
 
     args.pop(0)
 
-  msg_time = format_time(args[0])
+  msg_time = format_time(args[0], message.guild.id)
 
   if msg_time == None:
     await message.channel.send(embed=discord.Embed(description='Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. or `day`/`month`/`year`-`hour`:`minute`:`second`.\n\n*This feature was reworked on the 21/01/2018. Please check the help menu*'))

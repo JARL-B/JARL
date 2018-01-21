@@ -19,7 +19,7 @@ __Reminder Commands__
   > `$interval [user/channel] <time-to-reminder> <interval> <message>` - set up an interval, where the given `message` will be sent every `interval` starting in the given `time-to-reminder`. Takes times in the formats above. Ex. `$interval 0s 20m Hello World!` will send `Hello World!` to your channel every 20 minutes.
   > `$todo` - TODO list related commands. Use `$todo help` for proper information.
   > `$todos` - same as `$todo` but for server-wide task management.
-
+  > `timezone` - set your server's timezone, for easier date-based reminders (experimental)
   '''
   )
 

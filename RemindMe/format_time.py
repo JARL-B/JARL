@@ -1,7 +1,9 @@
 import time
 from datetime import datetime
 
-def format_time(text):
+from RemindMe.globalvars import timezones
+
+def format_time(text, guildid):
   if '/' in text or ':' in text:
     date = datetime.now()
 
@@ -41,6 +43,8 @@ def format_time(text):
     comp = '{}/{}/{}-{}:{}:{}'.format(day, month, year, hour, minute, second)
     try:
       t = datetime.strptime(comp, "%d/%m/%Y-%H:%M:%S").timestamp()
+      if guildid in timezones.keys():
+        t -= timezones[guildid]
     except Exception as e:
       t = None
 
