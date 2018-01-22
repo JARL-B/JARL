@@ -114,14 +114,26 @@ async def watch_spam(message):
     print('registered user for auto-muting')
     users[message.author.id] = time.time()
 
+try: ## discordbots token grabbing code
+  with open('dbl_token','r') as dbl_token_f:
+    dbl_token = dbl_token_f.read().strip('\n')  
+except FileNotFoundError:
+  print('Discord bots token file not found, please remember to create a file called \'dbl_token\' with your discord bots token in there.')
+else:
+  if dbl_token == "":
+    print('Discord bots token file is empty, please put your token in there')
+
 async def send():
+  if not dbl_token:
+    return
+    
   session = aiohttp.ClientSession()
   dump = json.dumps({
     'server_count': len(client.guilds)
   })
 
   head = {
-    'authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0OTkyMDA1OTU0OTk0MTc2MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTA4NzU1OTA1fQ.p59GEanXurNBXskgoH-TivkPlU3n-soNeeC2VrPX6zU',
+    'authorization': dbl_token,
     'content-type' : 'application/json'
   }
 
