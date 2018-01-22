@@ -13,7 +13,7 @@ try:
 except FileNotFoundError:
   print('no calendar file found. not loading any reminders')
   with open('DATA/calendar.json', 'w') as f:
-    json.dump(f, [])
+    f.write("[]")
   print('created calendar file')
 
 try:
@@ -23,7 +23,7 @@ try:
 except FileNotFoundError:
   print('no interval file found. not loading any intervals')
   with open('DATA/intervals.json', 'w') as f:
-    json.dump(f, [])
+    f.write("[]")
   print('created intervals file')
 
 try:
@@ -35,7 +35,7 @@ try:
 except FileNotFoundError:
   print('no todos file found.')
   with open('DATA/todos.json', 'w') as f:
-    json.dump(f, {})
+    f.write("{}")
   print('created todos file')
 
 try:
@@ -45,7 +45,7 @@ try:
 except FileNotFoundError:
   print('no timezones file found.')
   with open('DATA/timezones.json', 'w') as f:
-    json.dump(f, {})
+    f.write("{}")
   print('created timezones file')
 
 for reminder in calendar:

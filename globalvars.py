@@ -18,7 +18,7 @@ try:
 except:
   print('no prefix file found')
   with open('DATA/prefix.json', 'w') as f:
-    json.dump(f, {})
+    f.write("{}")
   print('prefix file created')
 
 try:
@@ -30,7 +30,7 @@ try:
 except FileNotFoundError:
   print('no blacklist file found')
   with open('DATA/blacklist.json', 'w') as f:
-    json.dump(f, [])
+    f.write("[]")
   print('created blacklist file')
 
 try:
@@ -42,5 +42,5 @@ try:
 except FileNotFoundError:
   print('no restrictions file found')
   with open('DATA/restrictions.json', 'w') as f:
-    json.dump(f, {})
+    f.write("{}")
   print('created restrictions file')
