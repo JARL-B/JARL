@@ -105,4 +105,5 @@ ENV/
 token
 email.json
 dbl_token
-/DATA
+DATA/*
+!DATA/.gitkeep
