@@ -26,7 +26,7 @@ async def check_reminders():
         recipient = discord.utils.get(msg_points,id=reminder[1])
 
         try:
-          await recipient.send(embed=discord.Embed(description=reminder[2]))
+          await recipient.send(reminder[2])
           print('Administered reminder to ' + recipient.name)
 
         except:
@@ -52,10 +52,10 @@ async def check_reminders():
                 except Exception as e:
                   print(e)
 
-                await recipient.send(embed=discord.Embed(description=inv[3][12:]))
+                await recipient.send(inv[3][12:])
 
               else:
-                await recipient.send(embed=discord.Embed(description=inv[3]))
+                await recipient.send(inv[3])
               print('Administered interval to ' + recipient.name)
               break
           else:
