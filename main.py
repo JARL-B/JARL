@@ -242,9 +242,6 @@ try: ## discordbots token grabbing code
     dbl_token = dbl_token_f.read().strip('\n')
 except FileNotFoundError:
   print('Discord bots token file not found, please remember to create a file called \'dbl_token\' with your discord bots token in there.')
-else:
-  if dbl_token == "":
-    print('Discord bots token file is empty, please put your token in there')
 
 else:
   try:
