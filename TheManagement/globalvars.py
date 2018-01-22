@@ -19,7 +19,7 @@ try:
 except FileNotFoundError:
   print('no autoclear file found')
   with open('DATA/autoclears.json', 'w') as f:
-    json.dump(f, {})
+    f.write("{}")
   print('created autoclear file')
 
 try:
@@ -31,7 +31,7 @@ try:
 except FileNotFoundError:
   print('no spam filter file found')
   with open('DATA/spamfilter.json', 'w') as f:
-    json.dump(f, [])
+    f.write("[]")
   print('created spamfilter file')
 
 try:
@@ -43,7 +43,7 @@ try:
 except FileNotFoundError:
   print('no join messages file found')
   with open('DATA/join_messages.json', 'w') as f:
-    json.dump(f, {})
+    f.write("{}")
   print('created join messages file')
 
 try:
@@ -55,5 +55,5 @@ try:
 except FileNotFoundError:
   print('no leave messages file found')
   with open('DATA/leave_messages.json', 'w') as f:
-    json.dump(f, {})
+    f.write("{}")
   print('created leave messages file')
