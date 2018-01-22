@@ -69,7 +69,7 @@ async def set_interval(message, client):
 
   msg_text = ' '.join(args)
 
-  if len(msg_text) > 150 and message.author.id not in get_patrons('Patrons'):
+  if len(msg_text) > 150 and message.author not in get_patrons('Patrons'):
     await message.channel.send(embed=discord.Embed(description='Interval message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 400 ($5 tier)'.format(len(msg_text))))
     return
 
