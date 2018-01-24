@@ -243,12 +243,11 @@ try: ## discordbots token grabbing code
 except FileNotFoundError:
   print('Discord bots token file not found, please remember to create a file called \'dbl_token\' with your discord bots token in there.')
 
-else:
-  try:
-    client.loop.create_task(check_reminders())
-    client.run(token)
-  except:
-    print('Error detected. Restarting in 15 seconds.')
-    time.sleep(15)
+try:
+  client.loop.create_task(check_reminders())
+  client.run(token)
+except:
+  print('Error detected. Restarting in 15 seconds.')
+  time.sleep(15)
 
-    os.execl(sys.executable, sys.executable, *sys.argv)
+  os.execl(sys.executable, sys.executable, *sys.argv)

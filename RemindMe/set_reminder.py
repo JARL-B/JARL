@@ -22,7 +22,15 @@ async def set_reminder(message, client):
   pref = '#'
 
   if args[0].startswith('<'): # if a scope is provided
-    tag = int(args[0][2:-1])
+    if args[0][2:-1][0] == '!':
+      tag = int(args[0][3:-1])
+
+    else:
+      try:
+        tag = int(args[0][2:-1])
+      except ValueError:
+        await message.channel.send(embed=discord.Embed(description='Please ensure your tag links directly to a user or channel, not a role.'))
+        return
 
     if args[0][1] == '@': # if the scope is a user
       pref = '@'
@@ -33,7 +41,7 @@ async def set_reminder(message, client):
       scope = message.guild.get_channel(tag)
 
     if scope == None:
-      await message.channel.send(embed=discord.Embed(description='Couldn\'t find a person by your tag present.'))
+      await message.channel.send(embed=discord.Embed(description='Couldn\'t find a location by your tag present.'))
       return
 
     else:
