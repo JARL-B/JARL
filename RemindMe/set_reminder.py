@@ -15,7 +15,7 @@ async def set_reminder(message, client):
   args.pop(0) # remove the command item
 
   if len(args) < 2:
-    await message.channel.send(embed=discord.Embed(title='remind', description='**Usage** ```$remind [channel mention or user mention] <time to or time at> <message>```\n\n**Example** ```$remind #general 10s Hello world``` ```$remind 10:30 It\'s now 10:30```'))
+    await message.channel.send(embed=discord.Embed(title='remind', description='**Usage** ```$remind [channel mention or user mention] <time to or time at> <message>```\n\n**Example** ```$remind #general 10s Hello world``` ```$remind @everyone 10:30 It\'s now 10:30```'))
     return
 
   scope = message.channel.id
