@@ -2,9 +2,9 @@ import discord
 import asyncio
 from globalvars import *
 import time
-import csv
 import json
 from itertools import chain
+import random
 
 from get_patrons import get_patrons
 
@@ -54,6 +54,30 @@ async def check_reminders():
 
                 await recipient.send(inv[3][12:])
 
+              elif inv[3].startswith('getfrom['):
+                id_started = False
+                chars = ''
+                for char in inv[3][8:].strip():
+                  if char in '0123456789':
+                    id_started = True
+                    chars += char
+                  elif id_started:
+                    break
+
+                channel_id = int(chars)
+                get_from = [s for s in recipient.guild.channels if s.id == channel_id]
+                if not get_from:
+                  print('getfrom call failed')
+                  intervals.remove(inv)
+                  continue
+
+                a = []
+                async for item in get_from[0].history(limit=50):
+                  a.append(item)
+                quote = random.choice(a)
+
+                await recipient.send(quote.content)
+
               else:
                 await recipient.send(inv[3])
               print('Administered interval to ' + recipient.name)
@@ -64,15 +88,16 @@ async def check_reminders():
 
           print(inv)
           inv[0] = int(inv[0]) + int(inv[1]) ## change the time for the next interval
-        except:
+        except Exception as e:
+          print(e)
           print('Couldn\'t find required channel. Skipping an interval')
           intervals.remove(inv)
 
 
     with open('DATA/calendar.json','w') as f:
-      json.dump(calendar, f) ## uses a CSV writer to write the data to file.
+      json.dump(calendar, f) ## uses a JSON writer to write the data to file.
 
     with open('DATA/intervals.json','w') as f:
-      json.dump(intervals, f) ## uses a CSV writer to write the data to file.
+      json.dump(intervals, f) ## uses a JSON writer to write the data to file.
 
     await asyncio.sleep(1.5)
