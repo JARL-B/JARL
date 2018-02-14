@@ -16,6 +16,7 @@ async def timezone(message, client):
     if message.guild.id in timezones.keys():
       a = datetime.fromtimestamp(time.time() + timezones[message.guild.id])
       await message.channel.send(embed=discord.Embed(description='Usage: `$timezone <hours from UTC>`. Your current time should be {}:{}'.format(a.hour, a.minute)))
+      return
     await message.channel.send(embed=discord.Embed(description='Usage: `$timezone <hours from UTC>`'))
 
   else:
