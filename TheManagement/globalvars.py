@@ -7,6 +7,7 @@ warnings = {}
 join_messages = {}
 leave_messages = {}
 terms = {}
+tags = {}
 
 spam_filter = []
 
