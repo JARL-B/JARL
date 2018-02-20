@@ -19,6 +19,7 @@ from TheManagement.clear_by import clear_by
 from TheManagement.spamfilter import spamfilter
 from TheManagement.serverjoin import serverjoin
 from TheManagement.serverleave import serverleave
+from TheManagement.tag import tag
 
 from check_reminders import check_reminders
 from change_prefix import change_prefix
@@ -54,7 +55,8 @@ command_map = {
   'todos' : server_todo,
   'ping' : ping,
   'restrict' : restrict,
-  'timezone' : timezone
+  'timezone' : timezone,
+  'tag' : tag
 }
 
 async def validate_cmd(message): ## method for doing the commands
@@ -116,7 +118,7 @@ async def watch_spam(message):
 
 try: ## discordbots token grabbing code
   with open('dbl_token','r') as dbl_token_f:
-    dbl_token = dbl_token_f.read().strip('\n')  
+    dbl_token = dbl_token_f.read().strip('\n')
 except FileNotFoundError:
   print('Discord bots token file not found, please remember to create a file called \'dbl_token\' with your discord bots token in there.')
 else:
@@ -126,7 +128,7 @@ else:
 async def send():
   if not dbl_token:
     return
-  
+
   session = aiohttp.ClientSession()
   dump = json.dumps({
     'server_count': len(client.guilds)

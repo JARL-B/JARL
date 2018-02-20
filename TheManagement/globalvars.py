@@ -57,3 +57,15 @@ except FileNotFoundError:
   with open('DATA/leave_messages.json', 'w') as f:
     f.write("{}")
   print('created leave messages file')
+
+try:
+  with open('DATA/tags.json', 'r') as f:
+    tags = json.load(f)
+
+  tags = {int(x) : y for x, y in tags.items()}
+
+except FileNotFoundError:
+  print('no tags file found')
+  with open('DATA/tags.json', 'w') as f:
+    f.write('{}')
+  print('created tags file')
