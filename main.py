@@ -29,6 +29,7 @@ from get_help import get_help
 from info import info
 from ping import ping
 from restrict import restrict
+from ffs import ffs
 
 
 async def blacklist_msg(message):
@@ -56,7 +57,8 @@ command_map = {
   'ping' : ping,
   'restrict' : restrict,
   'timezone' : timezone,
-  'tag' : tag
+  'tag' : tag,
+  'ffs' : ffs
 }
 
 async def validate_cmd(message): ## method for doing the commands

@@ -28,7 +28,7 @@ async def timezone(message, client):
     except ValueError:
       if time_units.upper() == 'EST':
         await message.channel.send(embed=discord.Embed(description='If you\'re in America, please use EDT or UEDT rather than EST (EST is also Ekaterinburg Standard Time, UTC+6)'))
-      with open('JSONS/timezones.json', 'r') as f:
+      with open('EXT/timezones.json', 'r') as f:
         tzs = json.load(f)
         if time_units.upper() in tzs.keys():
           total_time_delta = tzs[time_units.upper()] * 3600
