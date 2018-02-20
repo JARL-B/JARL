@@ -1,3 +1,4 @@
+import discord
 from datetime import datetime
 
 from RemindMe.globalvars import *
@@ -5,19 +6,22 @@ from RemindMe.globalvars import *
 from globalvars import restrictions
 
 async def del_reminders(message, client):
-  if not message.author.guild_permissions.administrator:
-    if scope not in restrictions.keys():
-      restrictions[scope] = []
-    for role in message.author.roles:
-      if role.id in restrictions[scope]:
-        break
-    else:
-      await message.channel.send(embed=discord.Embed(description='You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
-      return
+  if not isinstance(message.channel, discord.DMChannel):
+    if not message.author.guild_permissions.administrator:
+      if scope not in restrictions.keys():
+        restrictions[scope] = []
+      for role in message.author.roles:
+        if role.id in restrictions[scope]:
+          break
+      else:
+        await message.channel.send(embed=discord.Embed(description='You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
+        return
+
+    li = [ch.id for ch in message.guild.channels] ## get all channels and their ids in the current server
+  else:
+    li = [message.author.id]
 
   await message.channel.send('Listing reminders on this server... (be patient, this might take some time)\nAlso, please note the times are done relative to UK time. Thanks.')
-
-  li = [ch.id for ch in message.guild.channels] ## get all channels and their ids in the current server
 
   n = 1
   remli = []
