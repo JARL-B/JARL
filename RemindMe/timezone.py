@@ -6,6 +6,9 @@ import json
 from RemindMe.globalvars import timezones
 
 async def timezone(message, client):
+  if isinstance(message.channel, discord.DMChannel):
+    return
+    
   if not message.author.guild_permissions.administrator:
     await message.channel.send(embed=discord.Embed(description='You must be an admin to use this command`'))
     return

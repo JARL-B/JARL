@@ -2,7 +2,10 @@ from globalvars import *
 import asyncio
 import discord
 
-async def add_blacklist(message,client):
+async def add_blacklist(message, client):
+  if isinstance(message.channel, discord.DMChannel):
+    return
+
   if not message.author.guild_permissions.administrator:
     await message.channel.send('You must be an admin to run this command.')
     return

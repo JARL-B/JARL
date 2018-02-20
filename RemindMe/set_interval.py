@@ -10,6 +10,9 @@ from globalvars import restrictions
 from get_patrons import get_patrons
 
 async def set_interval(message, client):
+  if isinstance(message.channel, discord.DMChannel):
+    await message.channel.send('Please use this in a server for now. Functionality will be ported in the future, but for now use your mention as the interval\'s destination')
+    return
 
   if message.author not in get_patrons('Donor'):
     await message.channel.send(embed=discord.Embed(description='You need to be a Patron (donating 2$ or more) to access this command! Type `$donate` to find out more.'))

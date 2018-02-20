@@ -5,7 +5,7 @@ from TheManagement.globalvars import tags
 async def tag(message, client):
   not_done = True
 
-  if message.channel == discord.DMChannel:
+  if isinstance(message.channel, discord.DMChannel):
     return
 
   if message.guild.id not in tags.keys():

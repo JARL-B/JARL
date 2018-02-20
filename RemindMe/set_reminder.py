@@ -11,6 +11,10 @@ from globalvars import restrictions
 from get_patrons import get_patrons
 
 async def set_reminder(message, client):
+  if isinstance(message.channel, discord.DMChannel):
+    await message.channel.send('Please use this in a server for now. Functionality will be ported in the future, but for now use your mention as the reminder\'s destination')
+    return
+
   args = message.content.split(' ')
   args.pop(0) # remove the command item
 

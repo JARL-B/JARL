@@ -3,7 +3,7 @@ from globalvars import *
 async def donate(message, client):
   await message.channel.send(
   '''
-  Thinking of donating? Press below for my patreon and official bot server :D
+  Thinking of adding a monthly contribution? Press below for my patreon and official bot server :D
   https://www.patreon.com/jellywx
 
   https://discord.gg/WQVaYmT

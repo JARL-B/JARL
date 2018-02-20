@@ -1,9 +1,13 @@
 import json
-from discord import Embed
+from discord import Embed, DMChannel
 
 from globalvars import todos
 
 async def server_todo(message, client):
+  if isinstance(message.channel, DMChannel):
+    await message.channel.send('Please use `$todo` for your personal TODO list. `$todos` is only for server use.')
+    return
+
   if message.guild.id not in todos.keys():
     todos[message.guild.id] = []
 

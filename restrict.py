@@ -3,6 +3,9 @@ import json
 from globalvars import restrictions
 
 async def restrict(message, client):
+  if isinstance(message.channel, discord.DMChannel):
+    return
+
   if not message.author.guild_permissions.administrator:
     await message.channel.send(embed=discord.Embed(description='You must be an admin to run this command'))
     return
