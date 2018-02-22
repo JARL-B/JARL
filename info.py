@@ -24,6 +24,9 @@ async def info(message, client):
   Total SLOC: 1145 (100% Python) (stats generated using David A. Wheeler's 'SLOCCount')
   Hosting provider: OVH
 
+  My other bot (Patron only):
+  https://discordapp.com/oauth2/authorize?client_id=411224415863570434&scope=bot&permissions=35840
+
   *If you have enquiries about new features, please send to the discord server*
   *If you have enquiries about bot development for you or your server, please DM me*
 

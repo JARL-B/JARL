@@ -16,7 +16,8 @@ async def donate(message, client):
   : use Patron-only commands like `interval`
   : set more reminders
   : set longer reminders
-  : let me make a cup of coffee once a month
+  : set more/longer tags
+  : use the Patron-only `TrackerBot` to track your game time through Discord
 
   Anyone who is a Patron, thank you :D You make this bot sustainable
 
