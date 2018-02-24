@@ -5,6 +5,7 @@ import asyncio
 from RemindMe.validate_event import count_reminders
 from RemindMe.format_time import format_time
 from RemindMe.globalvars import calendar
+from RemindMe.Reminder import Reminder
 
 from globalvars import restrictions
 
@@ -82,7 +83,7 @@ async def set_reminder(message, client):
         await message.channel.send(embed=discord.Embed(description='You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
         return
 
-  calendar.append([msg_time, scope, msg_text])
+  calendar.append(Reminder(time=msg_time, channel=scope, message=msg_text))
 
   await message.channel.send(embed=discord.Embed(description='New reminder registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'.format(pref, scope, round(msg_time - time.time()))))
   print('Registered a new reminder for {}'.format(message.guild.name))

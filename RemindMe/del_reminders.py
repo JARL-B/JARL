@@ -27,15 +27,15 @@ async def del_reminders(message, client):
   remli = []
 
   for inv in intervals:
-    if inv[2] in li:
+    if inv.channel in li:
       remli.append(inv)
-      await message.channel.send('  **' + str(n) + '**: \'' + inv[3] + '\' (' + datetime.fromtimestamp(int(inv[0])).strftime('%Y-%m-%d %H:%M:%S') + ')')
+      await message.channel.send('  **' + str(n) + '**: \'' + inv.message + '\' (' + datetime.fromtimestamp(inv.time).strftime('%Y-%m-%d %H:%M:%S') + ')')
       n += 1
 
   for rem in calendar:
-    if rem[1] in li:
+    if rem.channel in li:
       remli.append(rem)
-      await message.channel.send('  **' + str(n) + '**: \'' + rem[2] + '\' (' + datetime.fromtimestamp(int(rem[0])).strftime('%Y-%m-%d %H:%M:%S') + ')')
+      await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.fromtimestamp(rem.time).strftime('%Y-%m-%d %H:%M:%S') + ')')
       n += 1
 
   await message.channel.send('List (1,2,3...) the reminders you wish to delete')

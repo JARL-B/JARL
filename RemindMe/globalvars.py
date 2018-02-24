@@ -1,4 +1,5 @@
 import json
+from RemindMe.Reminder import Reminder
 
 mail_list = {}
 calendar = []
@@ -48,13 +49,10 @@ except FileNotFoundError:
     f.write("{}")
   print('created timezones file')
 
-for reminder in calendar:
-  if len(reminder) != 3:
-    calendar.remove(reminder)
+if len(calendar) > 0 and isinstance(calendar[0], list):
+  calendar = [Reminder(dictv={'time' : x, 'channel' : int(y), 'message' : z, 'interval' : None}) for x, y, z in calendar] # NOT NECESSARY PAST FIRST RELAUNCH: convert list of lists to dictionary
+  intervals = [Reminder(dictv={'time' : x, 'interval' : y, 'channel' : int(z), 'message' : a}) for x, y, z, a in intervals]
 
-for inv in intervals:
-  if len(inv) != 4:
-    intervals.remove(inv)
-
-calendar = [[x, int(y), z] for x, y, z in calendar]
-intervals = [[x, y, int(z), a] for x, y, z, a in intervals]
+else:
+  calendar = [Reminder(dictv=r) for r in calendar]
+  intervals = [Reminder(dictv=r) for r in intervals]

@@ -4,6 +4,7 @@ import time
 
 from RemindMe.format_time import format_time
 from RemindMe.globalvars import intervals
+from RemindMe.Reminder import Reminder
 
 from globalvars import restrictions
 
@@ -68,12 +69,13 @@ async def set_interval(message, client):
   if msg_interval == None:
     await message.channel.send(embed=discord.Embed(description='Make sure the interval you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. with no spaces, eg. 10s for 10 seconds or 10s12m15h1d for 10 seconds, 12 minutes, 15 hours and 1 day.'))
     return
-  elif msg_interval < 8:
-    await message.channel.send(embed=discord.Embed(description='Please make sure your interval timer is longer than 8 seconds.'))
-    return
 
   msg_interval -= time.time()
   msg_interval = round(msg_interval)
+
+  if msg_interval < 8:
+    await message.channel.send(embed=discord.Embed(description='Please make sure your interval timer is longer than 8 seconds.'))
+    return
 
   args.pop(0)
 
@@ -94,7 +96,7 @@ async def set_interval(message, client):
         await message.channel.send(embed=discord.Embed(description='You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
         return
 
-  intervals.append([msg_time, msg_interval, scope, msg_text])
+  intervals.append(Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text))
 
   await message.channel.send(embed=discord.Embed(description='New interval registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'.format(pref, scope, round(msg_time - time.time()))))
   print('Registered a new interval for {}'.format(message.guild.name))

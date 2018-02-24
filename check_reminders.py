@@ -14,19 +14,19 @@ async def check_reminders():
   while not client.is_closed():
 
     for reminder in calendar:
-      if len(reminder[2]) > 400:
+      if len(reminder.message) > 400:
         calendar.remove(reminder)
 
-      if int(reminder[0]) <= time.time():
+      if reminder.time <= time.time():
         users = client.get_all_members()
         channels = client.get_all_channels()
 
         msg_points = chain(users, channels)
 
-        recipient = discord.utils.get(msg_points,id=reminder[1])
+        recipient = discord.utils.get(msg_points, id=reminder.channel)
 
         try:
-          await recipient.send(reminder[2])
+          await recipient.send(reminder.message)
           print('Administered reminder to ' + recipient.name)
 
         except:
@@ -35,10 +35,13 @@ async def check_reminders():
         calendar.remove(reminder)
 
     for inv in intervals:
-      if int(inv[0]) <= time.time():
+      if inv.time <= time.time():
         channels = client.get_all_channels()
+        users = client.get_all_members()
 
-        recipient = discord.utils.get(channels,id=inv[2])
+        msg_points = chain(users, channels)
+
+        recipient = discord.utils.get(msg_points, id=inv.channel)
 
         try:
           server_members = recipient.guild.members
@@ -46,7 +49,7 @@ async def check_reminders():
 
           for m in server_members:
             if m in patrons:
-              if inv[3].startswith('-del_on_send'):
+              if inv.message.startswith('-del_on_send'):
                 try:
                   await recipient.purge(check=lambda m: m.content == inv[3][12:].strip() and time.time() - m.created_at.timestamp() < 1209600 and m.author == client.user)
                 except Exception as e:
@@ -54,10 +57,10 @@ async def check_reminders():
 
                 await recipient.send(inv[3][12:])
 
-              elif inv[3].startswith('getfrom['):
+              elif inv.message.startswith('getfrom['):
                 id_started = False
                 chars = ''
-                for char in inv[3][8:].strip():
+                for char in inv.message[8:].strip():
                   if char in '0123456789':
                     id_started = True
                     chars += char
@@ -79,7 +82,7 @@ async def check_reminders():
                 await recipient.send(quote.content)
 
               else:
-                await recipient.send(inv[3])
+                await recipient.send(inv.message)
               print('Administered interval to ' + recipient.name)
               break
           else:
@@ -87,7 +90,7 @@ async def check_reminders():
             intervals.remove(inv)
 
           print(inv)
-          inv[0] = int(inv[0]) + int(inv[1]) ## change the time for the next interval
+          inv.time += inv.interval ## change the time for the next interval
         except Exception as e:
           print(e)
           print('Couldn\'t find required channel. Skipping an interval')
@@ -95,9 +98,9 @@ async def check_reminders():
 
 
     with open('DATA/calendar.json','w') as f:
-      json.dump(calendar, f) ## uses a JSON writer to write the data to file.
+      json.dump([r.__dict__ for r in calendar], f) ## uses a JSON writer to write the data to file.
 
     with open('DATA/intervals.json','w') as f:
-      json.dump(intervals, f) ## uses a JSON writer to write the data to file.
+      json.dump([r.__dict__ for r in intervals], f) ## uses a JSON writer to write the data to file.
 
-    await asyncio.sleep(1.5)
+    await asyncio.sleep(2.5)
