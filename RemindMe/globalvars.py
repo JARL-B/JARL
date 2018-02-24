@@ -8,40 +8,23 @@ calendar = []
 todos = {}
 timezones = {}
 
+variables = [
+    'calendar',
+    'todos',
+    'timezones'
+]
 
+for variable in variables:
+    try:
+        with open('DATA/{}.json'.format(variable), 'r') as f:
+            exec('{} = json.load(f)'.format(variable))
 
-try:
-    with open('DATA/calendar.json', 'r') as f:
-        calendar = json.load(f)
+    except FileNotFoundError:
+        with open('DATA/{}.json'.format(variable), 'w') as f:
+            exec('json.dump({})'.format(variable))
+        print('created {} file'.format(variable))
 
-except FileNotFoundError:
-    print('no calendar file found. not loading any reminders')
-    with open('DATA/calendar.json', 'w') as f:
-        f.write("[]")
-    print('created calendar file')
-
-try:
-    with open('DATA/todos.json','r') as f:
-        todos = json.load(f)
-
-    todos = {int(x) : y for x, y in todos.items()}
-
-except FileNotFoundError:
-    print('no todos file found.')
-    with open('DATA/todos.json', 'w') as f:
-        f.write("{}")
-    print('created todos file')
-
-try:
-    with open('DATA/timezones.json','r') as f:
-        timezones = json.load(f)
-
-except FileNotFoundError:
-    print('no timezones file found.')
-    with open('DATA/timezones.json', 'w') as f:
-        f.write("{}")
-    print('created timezones file')
-
+todos = {int(x) : y for x, y in todos.items()}
 
 calendar = [Reminder(dictv=r) for r in calendar]
 
