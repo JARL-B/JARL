@@ -53,6 +53,9 @@ if len(calendar) > 0 and isinstance(calendar[0], list):
   calendar = [Reminder(dictv={'time' : x, 'channel' : int(y), 'message' : z, 'interval' : None}) for x, y, z in calendar] # NOT NECESSARY PAST FIRST RELAUNCH: convert list of lists to dictionary
   intervals = [Reminder(dictv={'time' : x, 'interval' : y, 'channel' : int(z), 'message' : a}) for x, y, z, a in intervals]
 
+  calendar += intervals
+
 else:
   calendar = [Reminder(dictv=r) for r in calendar]
-  intervals = [Reminder(dictv=r) for r in intervals]
+
+del intervals
