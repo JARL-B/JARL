@@ -18,7 +18,7 @@ async def check_reminders():
 
       reminder = reminders.get()
 
-      if reminder.interval != None and reminder.interval < 8:
+      if reminder.interval != None and int(reminder.interval) < 8:
         raise 'Interval had time lower than 8 seconds'
 
       users = client.get_all_members()

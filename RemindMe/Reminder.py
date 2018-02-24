@@ -1,13 +1,19 @@
 class Reminder():
   def __init__(self, *, dictv=None, interval=None, time=0, message="", channel=None):
     if dictv != None:
-      self.interval = dictv['interval']
+      if dictv['interval'] == None:
+        self.interval = dictv['interval']
+      else:
+        self.interval = int(dictv['interval'])
       self.time = int(dictv['time'])
       self.message = str(dictv['message'])
       self.channel = int(dictv['channel'])
 
     else:
-      self.interval = interval
+      if interval == None:
+        self.interval = interval
+      else:
+        self.interval = int(interval)
       self.time = int(time)
       self.message = str(message)
       self.channel = int(channel)
