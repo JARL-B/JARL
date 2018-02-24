@@ -26,41 +26,27 @@ async def check_reminders():
         recipient = discord.utils.get(msg_points, id=reminder.channel)
 
         try:
-          await recipient.send(reminder.message)
-          print('Administered reminder to ' + recipient.name)
+          if reminder.interval == None:
+            await recipient.send(reminder.message)
+            print('Administered reminder to ' + recipient.name)
 
-        except:
-          print('Couldn\'t find required channel. Skipping a reminder')
+          else:
+            server_members = recipient.guild.members
+            patrons = get_patrons('Donor')
 
-        calendar.remove(reminder)
-
-    for inv in intervals:
-      if inv.time <= time.time():
-        channels = client.get_all_channels()
-        users = client.get_all_members()
-
-        msg_points = chain(users, channels)
-
-        recipient = discord.utils.get(msg_points, id=inv.channel)
-
-        try:
-          server_members = recipient.guild.members
-          patrons = get_patrons('Donor')
-
-          for m in server_members:
-            if m in patrons:
-              if inv.message.startswith('-del_on_send'):
+            if any([m in patrons for m in server_members]):
+              if reminder.message.startswith('-del_on_send'):
                 try:
-                  await recipient.purge(check=lambda m: m.content == inv[3][12:].strip() and time.time() - m.created_at.timestamp() < 1209600 and m.author == client.user)
+                  await recipient.purge(check=lambda m: m.content == reminder.message[12:].strip() and time.time() - m.created_at.timestamp() < 1209600 and m.author == client.user)
                 except Exception as e:
                   print(e)
 
-                await recipient.send(inv[3][12:])
+                await recipient.send(reminder.message[12:])
 
-              elif inv.message.startswith('getfrom['):
+              elif reminder.message.startswith('getfrom['):
                 id_started = False
                 chars = ''
-                for char in inv.message[8:].strip():
+                for char in reminder.message[8:].strip():
                   if char in '0123456789':
                     id_started = True
                     chars += char
@@ -71,7 +57,7 @@ async def check_reminders():
                 get_from = [s for s in recipient.guild.channels if s.id == channel_id]
                 if not get_from:
                   print('getfrom call failed')
-                  intervals.remove(inv)
+                  intervals.remove(reminder)
                   continue
 
                 a = []
@@ -82,25 +68,24 @@ async def check_reminders():
                 await recipient.send(quote.content)
 
               else:
-                await recipient.send(inv.message)
-              print('Administered interval to ' + recipient.name)
-              break
-          else:
-            await recipient.send('There appears to be no patrons on your server, so the interval has been removed.')
-            intervals.remove(inv)
+                await recipient.send(reminder.message)
+              print('Administered interval to {}'.format(recipient.name))
+            else:
+              await recipient.send('There appears to be no patrons on your server, so the interval has been removed.')
+              intervals.remove(reminder)
 
-          print(inv)
-          inv.time += inv.interval ## change the time for the next interval
+            reminder.time += reminder.interval ## change the time for the next interval
+
         except Exception as e:
           print(e)
-          print('Couldn\'t find required channel. Skipping an interval')
-          intervals.remove(inv)
+          print('Couldn\'t find required channel. Skipping a reminder')
+          if reminder.interval != None:
+            calendar.remove(reminder)
 
+        if reminder.interval == None:
+          calendar.remove(reminder)
 
-    with open('DATA/calendar.json','w') as f:
+    with open('DATA/calendar.json', 'w') as f:
       json.dump([r.__dict__ for r in calendar], f) ## uses a JSON writer to write the data to file.
-
-    with open('DATA/intervals.json','w') as f:
-      json.dump([r.__dict__ for r in intervals], f) ## uses a JSON writer to write the data to file.
 
     await asyncio.sleep(2.5)

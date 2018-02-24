@@ -14,11 +14,3 @@ class Reminder():
 
   def __lt__(self, comparison):
     return self.time < comparison.time
-
-  '''def __dict__(self):
-    return {
-      'time' : self.time,
-      'interval' : self.interval,
-      'message' : self.message,
-      'channel' : self.channel
-    }'''
