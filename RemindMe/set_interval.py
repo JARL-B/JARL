@@ -3,7 +3,7 @@ import asyncio
 import time
 
 from RemindMe.format_time import format_time
-from RemindMe.globalvars import calendar
+from RemindMe.globalvars import reminders
 from RemindMe.Reminder import Reminder
 
 from globalvars import restrictions
@@ -85,6 +85,10 @@ async def set_interval(message, client):
     await message.channel.send(embed=discord.Embed(description='Interval message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 400 ($5 tier)'.format(len(msg_text))))
     return
 
+  if len(msg_text) >= 400:
+    await message.channel.send(embed=discord.Embed(description='Discord restrictions mean we can\'t send reminders 400+ characters. Sorry'))
+    return
+
   if pref == '#':
     if not message.author.guild_permissions.administrator:
       if scope not in restrictions.keys():
@@ -96,7 +100,7 @@ async def set_interval(message, client):
         await message.channel.send(embed=discord.Embed(description='You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
         return
 
-  calendar.append(Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text))
+  reminders.put(Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text))
 
   await message.channel.send(embed=discord.Embed(description='New interval registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'.format(pref, scope, round(msg_time - time.time()))))
   print('Registered a new interval for {}'.format(message.guild.name))

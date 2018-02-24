@@ -3,6 +3,8 @@ import json
 from RemindMe.globalvars import *
 from TheManagement.globalvars import *
 
+print('Initializing main::globalvars.py')
+
 client = discord.Client() ## defined the client
 
 prefix = {}

@@ -2,8 +2,8 @@ import discord
 from datetime import datetime
 
 from RemindMe.globalvars import *
-
 from globalvars import restrictions
+
 
 async def del_reminders(message, client):
   if not isinstance(message.channel, discord.DMChannel):
@@ -26,12 +26,6 @@ async def del_reminders(message, client):
   n = 1
   remli = []
 
-  for inv in intervals:
-    if inv.channel in li:
-      remli.append(inv)
-      await message.channel.send('  **' + str(n) + '**: \'' + inv.message + '\' (' + datetime.fromtimestamp(inv.time).strftime('%Y-%m-%d %H:%M:%S') + ')')
-      n += 1
-
   for rem in calendar:
     if rem.channel in li:
       remli.append(rem)
@@ -41,7 +35,7 @@ async def del_reminders(message, client):
   await message.channel.send('List (1,2,3...) the reminders you wish to delete')
 
   num = await client.wait_for('message', check=lambda m: m.author == message.author and m.channel == message.channel)
-  nums = num.content.split(',')
+  nums = [n.strip() for n in num.content.split(',')]
 
   dels = 0
   for i in nums:
@@ -50,15 +44,9 @@ async def del_reminders(message, client):
       if i < 0:
         continue
       item = remli[i]
-      if item in intervals:
-        intervals.remove(remli[i])
-        print('Deleted interval')
-        dels += 1
-
-      else:
-        calendar.remove(remli[i])
-        print('Deleted reminder')
-        dels += 1
+      reminders.queue.remove(remli[i])
+      print('Deleted reminder')
+      dels += 1
 
     except ValueError:
       continue

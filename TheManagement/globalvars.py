@@ -1,6 +1,8 @@
 import discord
 import json
 
+print('Initializing TheManagement::globalvars.py')
+
 autoclears = {}
 users = {}
 warnings = {}
