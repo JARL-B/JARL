@@ -21,13 +21,6 @@ except FileNotFoundError:
   print('created calendar file')
 
 try:
-  with open('DATA/intervals.json', 'r') as f:
-    intervals = json.load(f)
-
-except FileNotFoundError:
-  pass # LEGACY FILE: no need to create; delete after pushing to VPS
-
-try:
   with open('DATA/todos.json','r') as f:
     todos = json.load(f)
 
@@ -50,17 +43,8 @@ except FileNotFoundError:
   print('created timezones file')
 
 
-if len(calendar) > 0 and isinstance(calendar[0], list):
-  calendar = [Reminder(dictv={'time' : x, 'channel' : int(y), 'message' : z, 'interval' : None}) for x, y, z in calendar] # NOT NECESSARY PAST FIRST RELAUNCH: convert list of lists to dictionary
-  intervals = [Reminder(dictv={'time' : x, 'interval' : y, 'channel' : int(z), 'message' : a}) for x, y, z, a in intervals]
-
-  calendar += intervals
-
-else:
-  calendar = [Reminder(dictv=r) for r in calendar]
+calendar = [Reminder(dictv=r) for r in calendar]
 
 print('Creating reminder queue')
 reminders = queue.PriorityQueue()
 [reminders.put(r) for r in calendar]
-
-del intervals # MORE LEGACY CODE: delete me after pushing to VPS
