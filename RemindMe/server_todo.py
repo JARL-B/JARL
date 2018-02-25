@@ -18,11 +18,11 @@ async def server_todo(message, client):
     if len(splits) == 1:
         msg = ['\n{}: {}'.format(i+1,todo[i]) for i in range(len(todo))]
         if len(msg) == 0:
-            msg.append('*Do `$todo add <message>` to add an item to your TODO, or type `$todo help` for more commands!*')
+            msg.append('*Do `$todos add <message>` to add an item to your TODO, or type `$todos help` for more commands!*')
         await message.channel.send(embed=Embed(title='{}\'s TODO'.format(message.guild.name), description=''.join(msg)))
 
     elif len(splits) > 2:
-        if splits[1] in ['add','a','append','push']:
+        if splits[1] in ['add', 'a']:
             a = ' '.join(splits[2:])
             if len(a) > 40:
                 await message.channel.send('Sorry, but TODO message sizes are limited to 40 characters. Keep it concise :)')
@@ -35,23 +35,25 @@ async def server_todo(message, client):
             todos[message.guild.id].append(a)
             await message.channel.send('Added \'{}\' to todo!'.format(a))
 
-        elif splits[1] in ['remove','r','del','rm']:
+        elif splits[1] in ['remove', 'r']:
             try:
                 a = todos[message.guild.id].pop(int(splits[2])-1)
                 await message.channel.send('Removed \'{}\' from todo!'.format(a))
 
             except ValueError:
-                await message.channel.send('Removal item must be a number. View the numbered TODOs using `$todo`')
+                await message.channel.send('Removal item must be a number. View the numbered TODOs using `$todos`')
+            except IndexError:
+                await message.channel.send('Couldn\'t find item by that number. Are you in the correct todo list?')
 
         else:
-            await message.channel.send('To use the TODO commands, do `$todo add <message>`, `$todo remove <number>`, `$todo clear` and `$todo` to add to, remove from, clear or view your todo list.')
+            await message.channel.send('To use the TODO commands, do `$todos add <message>`, `$todos remove <number>`, `$todos clear` and `$todos` to add to, remove from, clear or view your todo list.')
 
-    elif splits[1] in ['remove*','r*','del*','rm*', 'clear', 'clr']:
+    elif splits[1] in ['remove*', 'r*', 'clear', 'clr']:
         todos[message.guild.id] = []
         await message.channel.send('Cleared todo list!')
 
     else:
-        await message.channel.send('To use the TODO commands, do `$todo add <message>`, `$todo remove <number>`, `$todo clear` and `$todo` to add to, remove from, clear or view your todo list.')
+        await message.channel.send('To use the TODO commands, do `$todos add <message>`, `$todos remove <number>`, `$todos clear` and `$todos` to add to, remove from, clear or view your todo list.')
 
     with open('DATA/todos.json','w') as f:
         json.dump(todos, f)
