@@ -11,14 +11,12 @@ from RemindMe.set_reminder import set_reminder
 from RemindMe.set_interval import set_interval
 from RemindMe.del_reminders import del_reminders
 from RemindMe.todo import todo
-from RemindMe.server_todo import server_todo
 from RemindMe.timezone import timezone
 
 from TheManagement.autoclear import autoclear
 from TheManagement.clear_by import clear_by
 from TheManagement.spamfilter import spamfilter
-from TheManagement.serverjoin import serverjoin
-from TheManagement.serverleave import serverleave
+from TheManagement.servermsg import servermsg
 from TheManagement.tag import tag
 
 from check_reminders import check_reminders
@@ -50,8 +48,8 @@ command_map = {
     'clear' : clear_by,
     'autoclear' : autoclear,
     'spam' : spamfilter,
-    'joinmsg' : serverjoin,
-    'leavemsg' : serverleave,
+    'joinmsg' : servermsg,
+    'leavemsg' : servermsg,
     'todo' : todo,
     'todos' : todo,
     'ping' : ping,
