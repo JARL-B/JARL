@@ -53,7 +53,7 @@ command_map = {
     'joinmsg' : serverjoin,
     'leavemsg' : serverleave,
     'todo' : todo,
-    'todos' : server_todo,
+    'todos' : todo,
     'ping' : ping,
     'restrict' : restrict,
     'timezone' : timezone,
