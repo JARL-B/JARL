@@ -26,7 +26,7 @@ async def del_reminders(message, client):
     n = 1
     remli = []
 
-    for rem in calendar:
+    for rem in reminders.queue:
         if rem.channel in li:
             remli.append(rem)
             await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.fromtimestamp(rem.time).strftime('%Y-%m-%d %H:%M:%S') + ')')
