@@ -90,7 +90,7 @@ async def set_interval(message, client):
         return
 
     if pref == '#':
-        if not message.author.guild_permissions.administrator:
+        if not message.author.guild_permissions.manage_messages:
             if scope not in restrictions.keys():
                 restrictions[scope] = []
             for role in message.author.roles:
