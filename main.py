@@ -190,7 +190,7 @@ async def on_guild_remove(guild):
 
 @client.event
 async def on_message(message): ## when a message arrives at the bot ##
-    if time.time() - last_loop > 15:
+    if time.time() - last_loop[0] > 15:
         print('ERROR LOOP TAKING TOO LONG TO RUN: {}'.format(last_loop))
 
     skip_command = False

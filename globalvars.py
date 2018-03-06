@@ -12,7 +12,7 @@ prefix = {}
 restrictions = {}
 channel_blacklist = []
 
-last_loop = time.time()
+last_loop = [time.time()]
 
 try:
     with open('DATA/prefix.json','r') as f:
