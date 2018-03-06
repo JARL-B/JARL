@@ -12,6 +12,7 @@ from get_patrons import get_patrons
 async def check_reminders():
     await client.wait_until_ready()
     while not client.is_closed():
+        last_loop = time.time()
 
         while reminders.queue[0].time <= time.time():
             print('Looping for reminder(s)...')
@@ -78,6 +79,8 @@ async def check_reminders():
                         intervals.remove(reminder)
 
                     while reminder.time < time.time():
+                        if reminder.interval < 8:
+                            continue
                         reminder.time += reminder.interval ## change the time for the next interval
                     reminders.put(reminder) # Requeue the interval with modified time
 
