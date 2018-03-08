@@ -5,6 +5,7 @@ import time
 import json
 from itertools import chain
 import random
+import datetime
 
 from get_patrons import get_patrons
 
@@ -14,10 +15,12 @@ async def check_reminders():
     while not client.is_closed():
         last_loop[0] = time.time()
 
-        while reminders.queue[0].time <= time.time():
+        reminders.sort(key=lambda x: x.time)
+
+        while len(reminders) and reminders[0].time <= time.time():
             print('Looping for reminder(s)...')
 
-            reminder = reminders.get()
+            reminder = reminders.pop(0)
 
             users = client.get_all_members()
             channels = client.get_all_channels()
@@ -73,19 +76,19 @@ async def check_reminders():
                         print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
                     else:
                         await recipient.send('There appears to be no patrons on your server, so the interval has been removed.')
-                        intervals.remove(reminder)
+                        return
 
                     while reminder.time < time.time():
                         if reminder.interval < 8:
                             continue
                         reminder.time += reminder.interval ## change the time for the next interval
-                    reminders.put(reminder) # Requeue the interval with modified time
+                    reminders.append(reminder) # Requeue the interval with modified time
 
             except Exception as e:
                 print(e)
                 print('Couldn\'t find required channel. Skipping a reminder')
 
         with open('DATA/calendar.json', 'w') as f:
-            json.dump([r.__dict__ for r in reminders.queue], f) ## uses a JSON writer to write the data to file.
+            json.dump([r.__dict__ for r in reminders], f) ## uses a JSON writer to write the data to file.
 
         await asyncio.sleep(2.5)

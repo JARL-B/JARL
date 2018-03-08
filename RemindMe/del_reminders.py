@@ -27,7 +27,7 @@ async def del_reminders(message, client):
     n = 1
     remli = []
 
-    for rem in reminders.queue:
+    for rem in reminders:
         if rem.channel in li:
             remli.append(rem)
             await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.fromtimestamp(rem.time).strftime('%Y-%m-%d %H:%M:%S') + ')')
@@ -45,7 +45,7 @@ async def del_reminders(message, client):
             if i < 0:
                 continue
             item = remli[i]
-            reminders.queue.remove(remli[i])
+            reminders.remove(remli[i])
             print('Deleted reminder')
             dels += 1
 

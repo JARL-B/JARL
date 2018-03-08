@@ -21,13 +21,10 @@ for variable in variables:
 
     except FileNotFoundError:
         with open('DATA/{}.json'.format(variable), 'w') as f:
-            exec('json.dump({})'.format(variable))
+            exec('json.dump({}, f)'.format(variable))
         print('created {} file'.format(variable))
 
 todos = {int(x) : y for x, y in todos.items()}
 
-calendar = [Reminder(dictv=r) for r in calendar]
-
-print('Creating reminder queue')
-reminders = queue.PriorityQueue()
-[reminders.put(r) for r in calendar]
+reminders = [Reminder(dictv=r) for r in calendar]
+reminders.sort(key=lambda x: x.time)
