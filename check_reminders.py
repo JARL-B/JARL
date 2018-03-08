@@ -19,9 +19,6 @@ async def check_reminders():
 
             reminder = reminders.get()
 
-            if reminder.interval != None and int(reminder.interval) < 8:
-                raise 'Interval had time lower than 8 seconds'
-
             users = client.get_all_members()
             channels = client.get_all_channels()
 
@@ -73,7 +70,7 @@ async def check_reminders():
 
                         else:
                             await recipient.send(reminder.message)
-                        print('Administered interval to {}'.format(recipient.name))
+                        print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
                     else:
                         await recipient.send('There appears to be no patrons on your server, so the interval has been removed.')
                         intervals.remove(reminder)
@@ -87,7 +84,6 @@ async def check_reminders():
             except Exception as e:
                 print(e)
                 print('Couldn\'t find required channel. Skipping a reminder')
-
 
         with open('DATA/calendar.json', 'w') as f:
             json.dump([r.__dict__ for r in reminders.queue], f) ## uses a JSON writer to write the data to file.
