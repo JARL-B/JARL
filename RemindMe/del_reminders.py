@@ -7,7 +7,8 @@ from globalvars import restrictions
 
 async def del_reminders(message, client):
     if not isinstance(message.channel, discord.DMChannel):
-        if not message.author.guild_permissions.administrator:
+        if not message.author.guild_permissions.manage_messages:
+            scope = message.channel.id
             if scope not in restrictions.keys():
                 restrictions[scope] = []
             for role in message.author.roles:
