@@ -36,6 +36,8 @@ async def blacklist_msg(message):
     await asyncio.sleep(2)
     await msg.delete()
 
+async def log(message, client):
+    await message.channel.send(embed=discord.Embed(description='\n'.join(['{}: {}'.format(x, y) for x, y in command_log.items()])))
 
 command_map = {
     'help' : get_help,
@@ -56,8 +58,39 @@ command_map = {
     'restrict' : restrict,
     'timezone' : timezone,
     'tag' : tag,
-    'ffs' : ffs
+    'ffs' : ffs,
+    'log' : log
 }
+
+command_log = {
+    'help' : 0,
+    'info' : 0,
+    'remind' : 0,
+    'blacklist' : 0,
+    'interval' : 0,
+    'del' : 0,
+    'donate' : 0,
+    'clear' : 0,
+    'autoclear' : 0,
+    'spam' : 0,
+    'joinmsg' : 0,
+    'leavemsg' : 0,
+    'todo' : 0,
+    'todos' : 0,
+    'ping' : 0,
+    'restrict' : 0,
+    'timezone' : 0,
+    'tag' : 0,
+    'ffs' : 0,
+    'log' : 0
+}
+
+try:
+    with open('DATA/log.json', 'r') as f:
+        command_log = json.load(f)
+except FileNotFoundError:
+    with open('DATA/log.json', 'w') as f:
+        json.dump(command_log, f)
 
 async def validate_cmd(message): ## method for doing the commands
     if message.guild != None and message.guild.id in prefix.keys():
@@ -83,7 +116,10 @@ async def validate_cmd(message): ## method for doing the commands
             return
 
         else:
-            await command_map[cmd](message,client)
+            command_log[cmd] += 1
+            await command_map[cmd](message, client)
+            with open('DATA/log.json', 'w') as f:
+                json.dump(command_log, f)
             return
 
 
@@ -115,15 +151,6 @@ async def watch_spam(message):
     else:
         print('registered user for auto-muting')
         users[message.author.id] = time.time()
-
-try: ## discordbots token grabbing code
-    with open('dbl_token','r') as dbl_token_f:
-        dbl_token = dbl_token_f.read().strip('\n')
-except FileNotFoundError:
-    print('Discord bots token file not found, please remember to create a file called \'dbl_token\' with your discord bots token in there.')
-else:
-    if dbl_token == "":
-        print('Discord bots token file is empty, please put your token in there')
 
 async def send():
     if not dbl_token:

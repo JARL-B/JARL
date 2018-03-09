@@ -22,7 +22,7 @@ async def info(message, client):
     Find me on https://discord.gg/WQVaYmT and on https://github.com/JellyWX :)
 
     Framework: `discord.py`
-    Total SLOC: {sloc} (100% Python)
+    Total SᵒᵘʳᶜᵉLᶦⁿᵉˢOᶠCᵒᵈᵉ: {sloc} (100% Python)
     Hosting provider: OVH
 
     My other bot (Patron only):
