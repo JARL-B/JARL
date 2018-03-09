@@ -1,6 +1,7 @@
 import discord
 
 from globalvars import prefix
+from sloccount import sloccount_py
 
 async def info(message, client):
     if message.guild != None and message.guild.id in prefix.keys():
@@ -9,10 +10,10 @@ async def info(message, client):
         pref = '$'
 
     em = discord.Embed(title='**INFO**',description=
-    '''
+    '''\u200B
     Default prefix: `$`
     Reset prefix: `mbprefix $`
-    Help: `{}help`
+    Help: `{p}help`
 
     **Welcome to RemindMe!**
     Developer: <@203532103185465344>
@@ -21,7 +22,7 @@ async def info(message, client):
     Find me on https://discord.gg/WQVaYmT and on https://github.com/JellyWX :)
 
     Framework: `discord.py`
-    Total SLOC: 1122 (100% Python) (stats generated using David A. Wheeler's 'SLOCCount')
+    Total SLOC: {sloc} (100% Python)
     Hosting provider: OVH
 
     My other bot (Patron only):
@@ -32,7 +33,7 @@ async def info(message, client):
 
     **Check out this bot too, if you need some eye bleach :)**
     https://discordapp.com/api/oauth2/authorize?client_id=399237341652320278&permissions=0&scope=bot
-    '''.format(pref)
+    '''.format(p=pref, sloc=sloccount_py('.'))
     )
 
     await message.channel.send(embed=em)
