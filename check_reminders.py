@@ -2,10 +2,10 @@ import discord
 import asyncio
 from globalvars import *
 import time
-import json
 from itertools import chain
 import random
 import datetime
+import sqlite3
 
 from get_patrons import get_patrons
 
@@ -92,7 +92,18 @@ async def check_reminders():
             except Exception as e:
                 print(e)
 
-        with open('DATA/calendar.json', 'w') as f:
-            json.dump([r.__dict__ for r in reminders.queue if not r.delete], f) ## uses a JSON writer to write the data to file.
+        cursor.execute('DELETE FROM reminders')
+        cursor.execute('VACUUM')
+
+        for d in map(lambda x: x.__dict__, reminders.queue):
+            if d['delete']:
+                continue
+
+            command = '''INSERT INTO reminders (interval, time, channel, message)
+            VALUES (?, ?, ?, ?)'''
+
+            cursor.execute(command, (d['interval'], d['time'], d['channel'], d['message']))
+
+        connection.commit()
 
         await asyncio.sleep(2.5)

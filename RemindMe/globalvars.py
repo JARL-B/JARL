@@ -1,15 +1,14 @@
 import json
+import sqlite3
 import queue
 from RemindMe.Reminder import Reminder
 
 print('Initializing RemindMe::globalvars.py')
 
-calendar = []
 todos = {}
 timezones = {}
 
 variables = [
-    'calendar',
     'todos',
     'timezones'
 ]
@@ -27,4 +26,11 @@ for variable in variables:
 todos = {int(x) : y for x, y in todos.items()}
 
 reminders = queue.PriorityQueue()
-[reminders.put(Reminder(dictv=r)) for r in calendar]
+
+connection = sqlite3.connect('DATA/calendar.db') #open SQL db
+cursor = connection.cursor() #place cursor
+cursor.row_factory = sqlite3.Row #set row to read as SQLite Rows
+
+cursor.execute('SELECT * FROM reminders') #select all rows
+for reminder in cursor.fetchall(): #for all rows...
+    reminders.put(Reminder(dictv=dict(reminder))) #place each in the queue
