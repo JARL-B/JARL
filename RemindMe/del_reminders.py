@@ -44,8 +44,8 @@ async def del_reminders(message, client):
             i = int(i) - 1
             if i < 0:
                 continue
-            item = remli[i]
-            reminders.remove(remli[i])
+            remli[i].delete = True
+            remli[i].time = 0
             print('Deleted reminder')
             dels += 1
 

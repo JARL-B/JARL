@@ -18,5 +18,7 @@ class Reminder():
             self.message = str(message)
             self.channel = int(channel)
 
+        self.delete = False
+
     def __lt__(self, comparison):
         return self.time < comparison.time

@@ -22,6 +22,10 @@ async def check_reminders():
 
             reminder = reminders.pop(0)
 
+            if reminder.delete:
+                print('{}: Deleted reminder'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
+                continue
+
             users = client.get_all_members()
             channels = client.get_all_channels()
 
@@ -32,7 +36,7 @@ async def check_reminders():
             try:
                 if reminder.interval == None:
                     await recipient.send(reminder.message)
-                    print('Administered reminder to ' + recipient.name)
+                    print('{}: Administered reminder to {}'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name))
 
                 else:
                     server_members = recipient.guild.members
