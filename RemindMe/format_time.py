@@ -5,7 +5,7 @@ from RemindMe.globalvars import timezones
 
 def format_time(text, guildid):
     if '/' in text or ':' in text:
-        date = datetime.now()
+        date = datetime.utcnow()
 
         year = date.year
         month = date.month

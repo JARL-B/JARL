@@ -69,7 +69,6 @@ async def check_reminders():
                             get_from = [s for s in recipient.guild.channels if s.id == channel_id]
                             if not get_from:
                                 print('getfrom call failed')
-                                intervals.remove(reminder)
                                 continue
 
                             a = []
