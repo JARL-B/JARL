@@ -8,6 +8,7 @@ class Reminder():
             self.time = int(dictv['time'])
             self.message = str(dictv['message'])
             self.channel = int(dictv['channel'])
+            self.delete = dictv['delete']
 
         else:
             if interval == None:
@@ -18,7 +19,7 @@ class Reminder():
             self.message = str(message)
             self.channel = int(channel)
 
-        self.delete = False
+            self.delete = False
 
     def __lt__(self, comparison):
         return self.time < comparison.time

@@ -26,5 +26,7 @@ for variable in variables:
 
 todos = {int(x) : y for x, y in todos.items()}
 
-reminders = [Reminder(dictv=r) for r in calendar]
-reminders.sort(key=lambda x: x.time)
+c = [Reminder(dictv=r) for r in calendar]
+reminders = queue.PriorityQueue()
+
+[reminders.put(i) for i in c]

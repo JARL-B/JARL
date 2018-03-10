@@ -3,7 +3,7 @@ from datetime import datetime
 
 from RemindMe.globalvars import timezones
 
-def format_time(text, guildid):
+def format_time(text, guildid=None):
     if '/' in text or ':' in text:
         date = datetime.utcnow()
 
@@ -43,7 +43,7 @@ def format_time(text, guildid):
         comp = '{}/{}/{}-{}:{}:{}'.format(day, month, year, hour, minute, second)
         try:
             t = datetime.strptime(comp, "%d/%m/%Y-%H:%M:%S").timestamp()
-            if guildid in timezones.keys():
+            if guildid != None and guildid in timezones.keys():
                 t -= timezones[guildid]
         except Exception as e:
             t = None

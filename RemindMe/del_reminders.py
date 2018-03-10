@@ -22,13 +22,13 @@ async def del_reminders(message, client):
     else:
         li = [message.author.id]
 
-    await message.channel.send('Listing reminders on this server... (be patient, this might take some time)\nAlso, please note the times are done relative to UK time. Thanks.')
+    await message.channel.send('Listing reminders on this server... (there may be a small delay, please wait for the "List (1,2,3...)" message)\nAlso, please note the times are done relative to UTC time. Thanks.')
 
     n = 1
     remli = []
 
-    for rem in reminders:
-        if rem.channel in li:
+    for rem in reminders.queue:
+        if rem.channel in li and not rem.delete:
             remli.append(rem)
             await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.fromtimestamp(rem.time).strftime('%Y-%m-%d %H:%M:%S') + ')')
             n += 1
@@ -45,8 +45,7 @@ async def del_reminders(message, client):
             if i < 0:
                 continue
             remli[i].delete = True
-            remli[i].time = 0
-            print('Deleted reminder')
+            print('Queued: delete reminder')
             dels += 1
 
         except ValueError:

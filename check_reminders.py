@@ -15,12 +15,10 @@ async def check_reminders():
     while not client.is_closed():
         last_loop[0] = time.time()
 
-        reminders.sort(key=lambda x: x.time)
-
-        while len(reminders) and reminders[0].time <= time.time():
+        while len(reminders.queue) and reminders.queue[0].time <= time.time():
             print('Looping for reminder(s)...')
 
-            reminder = reminders.pop(0)
+            reminder = reminders.get()
 
             if reminder.delete:
                 print('{}: Deleted reminder'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
@@ -89,12 +87,12 @@ async def check_reminders():
                         if reminder.interval < 8:
                             continue
                         reminder.time += reminder.interval ## change the time for the next interval
-                    reminders.append(reminder) # Requeue the interval with modified time
+                    reminders.put(reminder) # Requeue the interval with modified time
 
             except Exception as e:
                 print(e)
 
         with open('DATA/calendar.json', 'w') as f:
-            json.dump([r.__dict__ for r in reminders], f) ## uses a JSON writer to write the data to file.
+            json.dump([r.__dict__ for r in reminders.queue if not r.delete], f) ## uses a JSON writer to write the data to file.
 
         await asyncio.sleep(2.5)
