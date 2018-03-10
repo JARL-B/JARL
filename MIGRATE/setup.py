@@ -7,10 +7,13 @@ except FileExistsError:
     pass
 
 files = ['autoclears', 'blacklist', 'join_messages', 'leave_messages', 'log', 'prefix', 'restrictions', 'spamfilter', 'tags', 'timezones', 'todos']
-contents = ['[]', '[]', '{}', '{}', '{}', '{}', '{}', '[]', '{}', '{}', '{}']
+contents = ['{}', '[]', '{}', '{}', '{}', '{}', '{}', '[]', '{}', '{}', '{}']
 
 for fn, content in zip(files, contents):
-    f = open('../DATA' + fn + '.json', 'w')
+    if fn + '.json' in os.listdir('../DATA/'):
+        continue
+
+    f = open('../DATA/' + fn + '.json', 'w')
     f.write(content)
     f.close()
 
@@ -21,8 +24,7 @@ command = '''CREATE TABLE reminders (
 interval INTEGER,
 time INTEGER,
 message VARCHAR(400),
-channel INTEGER,
-deleted BOOLEAN
+channel INTEGER
 );'''
 
 cursor.execute(command)
