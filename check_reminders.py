@@ -33,6 +33,10 @@ async def check_reminders():
 
             recipient = discord.utils.get(msg_points, id=reminder.channel)
 
+            if recipient == None:
+                print('{}: Failed to locate channel'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
+                continue
+
             try:
                 if reminder.interval == None:
                     await recipient.send(reminder.message)
@@ -80,7 +84,7 @@ async def check_reminders():
                         print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
                     else:
                         await recipient.send('There appears to be no patrons on your server, so the interval has been removed.')
-                        return
+                        continue
 
                     while reminder.time < time.time():
                         if reminder.interval < 8:
@@ -90,7 +94,6 @@ async def check_reminders():
 
             except Exception as e:
                 print(e)
-                print('Couldn\'t find required channel. Skipping a reminder')
 
         with open('DATA/calendar.json', 'w') as f:
             json.dump([r.__dict__ for r in reminders], f) ## uses a JSON writer to write the data to file.
