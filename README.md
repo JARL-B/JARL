@@ -3,4 +3,9 @@
 
 [![Discord Bots](https://discordbots.org/api/widget/349920059549941761.svg)](https://discordbots.org/bot/349920059549941761)
 
-Please note, if you're trying to run this yourself, you must manually disable the premium checker. This is as simple as changing the `get_patrons.py/get_patrons` method to return every discord user the bot can see (may be slow), or going through and removing all the checks yourself. Have fun!
+## To Run
+* Make sure you have deps: Python 3.5, Discord.py, SQLite3
+* Download using `git clone` or as a zip.
+* Run `MIGRATE/setup.py` in Python 3.5
+* Open `config.ini` and enter your token, DBL token and other details
+* Run `main.py` in Python 3.5
