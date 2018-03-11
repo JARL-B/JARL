@@ -13,7 +13,11 @@ prefix = {}
 restrictions = {}
 channel_blacklist = []
 
-last_loop = [time.time()]
+times = {
+    'last_loop' : time.time(),
+    'start' : 0,
+    'loops' : 0
+}
 
 try:
     with open('DATA/prefix.json','r') as f:

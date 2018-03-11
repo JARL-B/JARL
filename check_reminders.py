@@ -12,8 +12,11 @@ from get_patrons import get_patrons
 
 async def check_reminders():
     await client.wait_until_ready()
+
+    times['start'] = time.time()
     while not client.is_closed():
-        last_loop[0] = time.time()
+        times['last_loop'] = time.time()
+        times['loops'] += 1
 
         while len(reminders.queue) and reminders.queue[0].time <= time.time():
             print('Looping for reminder(s)...')

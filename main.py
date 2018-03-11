@@ -39,6 +39,9 @@ async def blacklist_msg(message):
 async def log(message, client):
     await message.channel.send(embed=discord.Embed(description='\n'.join(['{}: {}'.format(x, y) for x, y in command_log.items()])))
 
+async def timeit(message, client):
+    await message.channel.send(embed=discord.Embed(title='timeit', description='Average time over {} loops: {}ms'.format(times['loops'], ((time.time() - times['start'])/times['loops']) * 1000)))
+
 command_map = {
     'help' : get_help,
     'info' : info,
@@ -59,7 +62,8 @@ command_map = {
     'timezone' : timezone,
     'tag' : tag,
     'ffs' : ffs,
-    'log' : log
+    'log' : log,
+    'timeit' : timeit
 }
 
 command_log = {
@@ -82,7 +86,8 @@ command_log = {
     'timezone' : 0,
     'tag' : 0,
     'ffs' : 0,
-    'log' : 0
+    'log' : 0,
+    'timeit' : 0
 }
 
 try:
@@ -116,7 +121,11 @@ async def validate_cmd(message): ## method for doing the commands
             return
 
         else:
-            command_log[cmd] += 1
+            try:
+                command_log[cmd] += 1
+            except KeyError:
+                command_log[cmd] = 1
+
             await command_map[cmd](message, client)
             with open('DATA/log.json', 'w') as f:
                 json.dump(command_log, f)
@@ -217,8 +226,8 @@ async def on_guild_remove(guild):
 
 @client.event
 async def on_message(message): ## when a message arrives at the bot ##
-    if time.time() - last_loop[0] > 15:
-        print('ERROR LOOP TAKING TOO LONG TO RUN: {}'.format(last_loop))
+    if time.time() - times['last_loop'] > 15:
+        print('ERROR LOOP TAKING TOO LONG TO RUN')
 
     skip_command = False
 
