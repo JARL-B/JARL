@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import configparser
 
 try:
     os.mkdir('../DATA')
@@ -17,16 +18,30 @@ for fn, content in zip(files, contents):
     f.write(content)
     f.close()
 
-connection = sqlite3.connect('../DATA/calendar.db')
-cursor = connection.cursor()
+try:
+    connection = sqlite3.connect('../DATA/calendar.db')
+    cursor = connection.cursor()
 
-command = '''CREATE TABLE reminders (
-interval INTEGER,
-time INTEGER,
-message VARCHAR(400),
-channel INTEGER
-);'''
+    command = '''CREATE TABLE reminders (
+    interval INTEGER,
+    time INTEGER,
+    message VARCHAR(400),
+    channel INTEGER
+    );'''
 
-cursor.execute(command)
-connection.commit()
-connection.close()
+    cursor.execute(command)
+    connection.commit()
+    connection.close()
+except sqlite3.OperationalError:
+    print('Skipping table generation')
+
+config = configparser.ConfigParser()
+config['DEFAULT'] = {
+    'token' : 'token',
+    'dbl_token' : 'discordbotslist token',
+    'patreon_server' : 'serverid',
+    'patreon_enabled' : 'yes'
+}
+
+with open('../config.ini', 'w') as f:
+    config.write(f)

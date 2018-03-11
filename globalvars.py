@@ -1,5 +1,6 @@
 import time
 import json
+import configparser
 
 from RemindMe.globalvars import *
 from TheManagement.globalvars import *
@@ -49,3 +50,12 @@ except FileNotFoundError:
     with open('DATA/restrictions.json', 'w') as f:
         f.write("{}")
     print('created restrictions file')
+
+config = configparser.SafeConfigParser()
+config.read('config.ini')
+dbl_token = config.get('DEFAULT', 'dbl_token')
+patreon = config.get('DEFAULT', 'patreon_enabled') == 'yes'
+patreonserver = int(config.get('DEFAULT', 'patreon_server'))
+
+if patreon:
+    print('Patreon is enabled. Will look for server {}'.format(patreonserver))

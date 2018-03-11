@@ -268,27 +268,12 @@ async def on_member_remove(member):
         except:
             print('Issue encountered administering member leave message.')
 
-try: ## token grabbing code
-    with open('token','r') as token_f:
-        token = token_f.read().strip('\n')
-
-except FileNotFoundError:
-    if len(sys.argv) < 2:
-        print('Please remember you need to enter a token for the bot as an argument, or create a file called \'token\' and enter your token into it.')
-    else:
-        token = sys.argv[1]
-
-try: ## discordbots token grabbing code
-    with open('dbl_token','r') as dbl_token_f:
-        dbl_token = dbl_token_f.read().strip('\n')
-except FileNotFoundError:
-    print('Discord bots token file not found, please remember to create a file called \'dbl_token\' with your discord bots token in there.')
-
 try:
     client.loop.create_task(check_reminders())
-    client.run(token)
-except:
+    client.run(config.get('DEFAULT', 'token'))
+except Exception as e:
     print('Error detected. Restarting in 15 seconds.')
+    print(e)
     time.sleep(15)
 
     os.execl(sys.executable, sys.executable, *sys.argv)
