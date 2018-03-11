@@ -14,10 +14,10 @@ async def donate(message, client):
     With your new rank, you'll be able to:
     : chat on the Patron-only chat
     : use Patron-only commands like `interval`
-    : set more reminders
-    : set longer reminders
+    : set more reminders (unlimited)
+    : set longer reminders (400 chars)
     : set more/longer tags
-    : use the Patron-only `TrackerBot` to track your game time through Discord
+    : use the Patron-only `TrackerBot` with your server to track your game time through Discord
 
     Anyone who is a Patron, thank you :D You make this bot sustainable
 
