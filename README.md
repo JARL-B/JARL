@@ -1,7 +1,7 @@
 # Reminder Bot
 ## Cool beans
 
-## All code written in this repository is not allowed for commercial purposes unless specifically stated by me OR the date supasses 2020/03/13
+### All code written in this repository is not allowed for commercial purposes unless specifically stated by me OR the date supasses 2020/03/13 (liable to change) This file should not be modified but may be renamed or moved.
 
 [![Discord Bots](https://discordbots.org/api/widget/349920059549941761.svg)](https://discordbots.org/bot/349920059549941761)
 
