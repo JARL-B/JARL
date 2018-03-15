@@ -23,3 +23,8 @@
 * Run `MIGRATE/setup.py` in Python 3.5
 * Open `config.ini` and enter your token, DBL token and other details
 * Run `main.py` in Python 3.5
+
+## What's upcoming?
+* Client/web client to allow better editing of reminders
+* UX improvements, including ignoring spaces between parameters
+* DM support
