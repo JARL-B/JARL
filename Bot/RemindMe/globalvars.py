@@ -29,6 +29,7 @@ reminders = queue.PriorityQueue()
 
 connection = sqlite3.connect('DATA/calendar.db') #open SQL db
 cursor = connection.cursor() #place cursor
+cursor.execute('PRAGMA journal_mode=WAL;')
 cursor.row_factory = sqlite3.Row #set row to read as SQLite Rows
 
 cursor.execute('SELECT * FROM reminders') #select all rows
