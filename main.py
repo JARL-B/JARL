@@ -28,6 +28,7 @@ from info import info
 from ping import ping
 from restrict import restrict
 from ffs import ffs
+from link import link
 
 
 async def blacklist_msg(message):
@@ -63,7 +64,8 @@ command_map = {
     'tag' : tag,
     'ffs' : ffs,
     'log' : log,
-    'timeit' : timeit
+    'timeit' : timeit,
+    'link' : link
 }
 
 command_log = {

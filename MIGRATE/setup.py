@@ -35,13 +35,29 @@ try:
 except sqlite3.OperationalError:
     print('Skipping table generation')
 
-config = configparser.ConfigParser()
-config['DEFAULT'] = {
-    'token' : 'token',
-    'dbl_token' : 'discordbotslist token',
-    'patreon_server' : 'serverid',
-    'patreon_enabled' : 'yes'
-}
+try:
+    connection = sqlite3.connect('../DATA/calendar.db')
+    cursor = connection.cursor()
 
-with open('../config.ini', 'w') as f:
-    config.write(f)
+    command = '''CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    token VARCHAR(32)
+    );'''
+
+    cursor.execute(command)
+    connection.commit()
+    connection.close()
+except sqlite3.OperationalError:
+    print('Skipping user table generation')
+
+if 'config.ini' not in os.listdir('..'):
+    config = configparser.ConfigParser()
+    config['DEFAULT'] = {
+        'token' : 'token',
+        'dbl_token' : 'discordbotslist token',
+        'patreon_server' : 'serverid',
+        'patreon_enabled' : 'yes'
+    }
+
+    with open('../config.ini', 'w') as f:
+        config.write(f)
