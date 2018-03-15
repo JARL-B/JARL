@@ -1,13 +1,14 @@
 import socket
 import select
 import json
+import zlib
 
 class Server():
     def __init__(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # TCP sock
 
         self.server.setblocking(0)
-        server_addr('localhost', 44139)
+        server_addr = ('localhost', 44139)
 
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.bind(server_addr)
@@ -15,6 +16,9 @@ class Server():
         self.server.listen(128)
         self.server.settimeout(5)
         self.socks = [self.server]
+
+        while True:
+            self.listen()
 
     def listen(self):
         r, w, e = select.select(self.socks, [], [], 0)
@@ -27,7 +31,7 @@ class Server():
 
             else:
                 try:
-                    data = s.recv(4096).decode()
+                    data = zlib.decompress(s.recv(4096)).decode()
                 except ConnectionResetError:
                     print('Connection terminated')
                     if s in self.socks:
@@ -43,7 +47,7 @@ class Server():
                             self.socks.remove(s)
                         s.close()
 
-                    if request['']
+                    print(request)
 
 
         for s in e:
@@ -51,3 +55,5 @@ class Server():
             if s in self.socks:
                 self.socks.remove(s)
             s.close()
+
+Server()
