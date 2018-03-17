@@ -2,20 +2,32 @@ import asyncio
 import zlib
 import json
 
+auths = {}
+
 async def handle_inbound(reader, writer):
-    data = await reader.read(4096)
-    data = zlib.decompress(data).decode()
-    print('Received {} from {}'.format(data, writer.get_extra_info('peername')))
+    while True:
+        data = await reader.read(4096)
 
-#loop = asyncio.get_event_loop()
-#coro = asyncio.start_server(handle_inbound, 'localhost', 44139, loop=loop)
-#server = loop.run_until_complete(coro)
+        try:
+            data = zlib.decompress(data).decode()
+        except zlib.error:
+            print('Connection terminated')
+            writer.close()
+        else:
+            if data:
+                try:
+                    request = json.loads(data)
+                except json.decoder.JSONDecodeError:
+                    print('Connection sent bad data and has been terminated')
+                    writer.close()
 
-#try:
-#    loop.run_forever()
-#except KeyboardInterrupt:
-#    pass
+                else:
+                    connection_name = '{}:{}'.format(*writer.get_extra_info('peername'))
 
-#server.close()
-#loop.run_until_complete(server.wait_closed())
-#loop.close()
+                    if connection_name not in auths.keys():
+                        if 'token' not in request.keys():
+                            writer.write()
+
+                        self.auths[connection_name] = request['token']
+            else:
+                writer.close()
