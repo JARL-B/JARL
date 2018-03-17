@@ -5,7 +5,7 @@ import zlib
 import sys
 
 class Client():
-    def __init__(self, screen):
+    def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.settimeout(2)
 
@@ -27,4 +27,12 @@ class Client():
 
         f = open('input', 'r')
         for line in f:
-            if line.endswith('\n')
+            if line:
+                self.client.send(zlib.compress(json.dumps({'content' : line}).encode()))
+                open('input', 'w').close()
+        f.close()
+
+c = Client()
+
+while True:
+    c.get_response()

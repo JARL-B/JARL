@@ -30,6 +30,8 @@ from restrict import restrict
 from ffs import ffs
 from link import link
 
+from server.main import Server
+
 
 async def blacklist_msg(message):
     msg = await message.channel.send(embed=discord.Embed(description=':x: This text channel has been blacklisted :x:'))
@@ -281,6 +283,7 @@ async def on_member_remove(member):
 
 try:
     client.loop.create_task(check_reminders())
+    client.loop.create_task()
     client.run(config.get('DEFAULT', 'token'))
 except Exception as e:
     print('Error detected. Restarting in 15 seconds.')

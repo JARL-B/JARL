@@ -17,6 +17,8 @@ class Server():
         self.server.settimeout(5)
         self.socks = [self.server]
 
+        self.authorizations = {}
+
         while True:
             self.listen()
 
@@ -34,26 +36,34 @@ class Server():
                     data = zlib.decompress(s.recv(4096)).decode()
                 except ConnectionResetError:
                     print('Connection terminated')
-                    if s in self.socks:
-                        self.socks.remove(s)
-                    s.close()
+                    self.kill(s)
+                except zlib.error:
+                    print('Connection terminated')
+                    self.kill(s)
 
-                if data:
-                    try:
-                        request = json.loads(data)
-                    except json.decoder.JSONDecodeError:
-                        print('Connection sent bad data and has been terminated')
-                        if s in self.socks:
-                            self.socks.remove(s)
-                        s.close()
+                else:
+                    if data:
+                        try:
+                            request = json.loads(data)
+                        except json.decoder.JSONDecodeError:
+                            print('Connection sent bad data and has been terminated')
+                            self.kill(s)
 
-                    print(request)
+                        if s not in self.authorizations.keys():
+                            if 'token' not in request.keys():
+                                self.kill(s, 'UNAUTHORIZED')
+
+                            self.authorization[s] = request['token']
 
 
         for s in e:
             print('Connection terminated')
-            if s in self.socks:
-                self.socks.remove(s)
-            s.close()
+            self.kill(s)
 
-Server()
+    def kill(socket, error=None):
+        if error:
+            socket.send(zlib.compress(json.dumps({'err' : error}).encode()))
+
+        if socket in self.socks:
+            self.socks.remove(socket)
+        socket.close()
