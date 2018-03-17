@@ -30,7 +30,7 @@ from restrict import restrict
 from ffs import ffs
 from link import link
 
-from server.main import Server
+import server
 
 
 async def blacklist_msg(message):
@@ -283,7 +283,10 @@ async def on_member_remove(member):
 
 try:
     client.loop.create_task(check_reminders())
-    client.loop.create_task()
+
+    coro = asyncio.start_server(server.handle_inbound, 'localhost', 44139, loop=client.loop)
+    server = client.loop.run_until_complete(coro)
+
     client.run(config.get('DEFAULT', 'token'))
 except Exception as e:
     print('Error detected. Restarting in 15 seconds.')
