@@ -1,6 +1,6 @@
 import sqlite3
 import discord
-import uuid
+import random
 
 from globalvars import cursor, connection
 
@@ -10,7 +10,7 @@ async def link(message, client):
 
     command = '''SELECT * FROM users WHERE id = ?'''
 
-    token = uuid.uuid1()
+    token = ''.join([random.choice('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789)!"£$%^&*(-=_+[]}{@;:.<,>') for _ in range(32)])
     entry = cursor.execute(command, (message.author.id,))
     if dict(entry):
         command = '''DELETE FROM users WHERE id = ?'''
@@ -19,7 +19,7 @@ async def link(message, client):
     command = '''INSERT INTO users (id, token)
     VALUES (?, ?)'''
 
-    cursor.execute(command, (message.author.id, token.hex.replace('-', '')))
+    cursor.execute(command, (message.author.id, token))
     connection.commit()
 
     await message.channel.send('Your new access token is `{}`. Use `$link` to reset it if necessary.'.format(token))

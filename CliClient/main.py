@@ -14,11 +14,21 @@ class Client():
         except:
             sys.exit()
 
+        self.token = input('Please enter your token now > ')
+        self.authorized = False
+
+        self.client.send(zlib.compress(json.dumps({'token' : self.token}).encode()))
+
     def get_response(self):
         r, w, e = select.select([self.client], [], [], 0)
 
         if self.client in r:
-            data = zlib.decompress(self.client.recv(4096)).decode()
+            try:
+                data = zlib.decompress(self.client.recv(4096)).decode()
+            except zlib.error:
+                print('Connection terminated')
+                sys.exit()
+                
             if not data:
                 print('Connection terminated')
                 sys.exit()
