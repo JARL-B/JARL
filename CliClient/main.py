@@ -28,17 +28,21 @@ class Client():
             except zlib.error:
                 print('Connection terminated')
                 sys.exit()
-                
+
             if not data:
                 print('Connection terminated')
                 sys.exit()
+
+            data = json.loads(data)
+            if 'err' in data.keys():
+                print('Server reports ' + data['err'] + '. Connection has been closed.')
 
             print(data)
 
         f = open('input', 'r')
         for line in f:
             if line:
-                self.client.send(zlib.compress(json.dumps({'content' : line}).encode()))
+                self.client.send(zlib.compress(line.encode()))
                 open('input', 'w').close()
         f.close()
 

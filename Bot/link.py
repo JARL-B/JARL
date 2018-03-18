@@ -11,7 +11,7 @@ async def link(message, client):
     command = '''DELETE FROM users WHERE id = ?'''
     cursor.execute(command, (message.author.id,))
 
-    token = ''.join([random.choice('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789)!"£$%^&*(-=_+[]}{@;:.<,>') for _ in range(32)])
+    token = ''.join([random.choice('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789)!"£$%^&*(-=_+[]}{@;:.<,>?/#~') for _ in range(32)])
 
     command = '''INSERT INTO users (id, token)
     VALUES (?, ?)'''
