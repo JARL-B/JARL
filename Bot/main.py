@@ -28,7 +28,9 @@ from info import info
 from ping import ping
 from restrict import restrict
 from ffs import ffs
+
 from link import link
+from unlink import unlink
 
 import server
 
@@ -67,7 +69,8 @@ command_map = {
     'ffs' : ffs,
     'log' : log,
     'timeit' : timeit,
-    'link' : link
+    'link' : link,
+    'unlink' : unlink
 }
 
 command_log = {
@@ -192,7 +195,7 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-    await client.change_presence(game=discord.Game(name='$info ¬ mbprefix <p>'))
+    await client.change_presence(activity=discord.Game(name='$info ¬ mbprefix <p>'))
 
     del_queue = []
     for channel in autoclears.keys():
