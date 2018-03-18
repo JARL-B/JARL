@@ -14,8 +14,11 @@ class Client():
         except:
             sys.exit()
 
-        self.token = input('Please enter your token now > ')
-        self.authorized = False
+        try:
+            with open('token', 'r') as f:
+                self.token = f.read().strip()
+        except FileNotFoundError:
+            self.token = input('Please enter your token now > ')
 
         self.client.send(zlib.compress(json.dumps({'token' : self.token}).encode()))
 
@@ -35,9 +38,9 @@ class Client():
 
             data = json.loads(data)
             if 'err' in data.keys():
-                print('Server reports ' + data['err'] + '. Connection has been closed.')
+                print('Error: Server reports ' + data['err'])
 
-            print(data)
+            print('incoming > ' + str(data))
 
         f = open('input', 'r')
         for line in f:

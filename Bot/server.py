@@ -2,7 +2,7 @@ import asyncio
 import zlib
 import json
 
-from globalvars import client, cursor
+from globalvars import client, cursor, reminders
 
 auths = {}
 users = {}
@@ -70,14 +70,29 @@ async def handle_inbound(reader, writer):
 
                         if 'do' not in request.keys():
                             writer.write(pack_data({'err' : 'BAD PACKAGE'}))
-                            writer.close()
-                            close(connection_name)
-                            return
 
                         if request['do'] == 'grab_servers':
                             shared_servers = [guild for guild in client.guilds if guild.get_member(users[connection_name]) is not None and guild.get_member(users[connection_name]).guild_permissions.manage_messages]
 
                             writer.write(pack_data({'servers' : [[s.name, s.id] for s in shared_servers]}))
+
+                        elif request['do'] == 'grab_reminders':
+                            if 'params' in request.keys() and len(request['params']) == 1:
+                                shared_servers = [guild for guild in client.guilds if guild.get_member(users[connection_name]) is not None and guild.get_member(users[connection_name]).guild_permissions.manage_messages]
+
+                                if request['params'][0] in map(lambda x: x.id, shared_servers):
+                                    selected_guild = client.get_guild(request['params'][0])
+
+                                    available = [r.__dict__ for r in reminders.queue if not r.delete and r.channel in map(lambda x: x.id, selected_guild.channels)]
+
+                                    writer.write(pack_data({'content' : available}))
+
+                                else:
+                                    writer.write(pack_data({'err' : 'BAD REQUEST'}))
+
+                            else:
+                                writer.write(pack_data({'err' : 'BAD PACKAGE'}))
+
 
                         elif request['do'] == 'put':
                             pass
