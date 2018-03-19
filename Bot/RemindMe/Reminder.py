@@ -1,7 +1,5 @@
 class Reminder():
     def __init__(self, *, dictv=None, interval=None, time=0, message="", channel=None):
-        self.delete = False
-
         if dictv != None:
             if dictv['interval'] == None:
                 self.interval = dictv['interval']

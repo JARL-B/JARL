@@ -23,10 +23,6 @@ async def check_reminders():
 
             reminder = reminders.pop()
 
-            if reminder.delete:
-                print('{}: Deleted reminder'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
-                continue
-
             users = client.get_all_members()
             channels = client.get_all_channels()
 
@@ -101,8 +97,6 @@ async def check_reminders():
         cursor.execute('VACUUM')
 
         for d in map(lambda x: x.__dict__, reminders):
-            if d['delete']:
-                continue
 
             command = '''INSERT INTO reminders (interval, time, channel, message)
             VALUES (?, ?, ?, ?)'''
