@@ -44,8 +44,8 @@ async def del_reminders(message, client):
             i = int(i) - 1
             if i < 0:
                 continue
-            remli[i].delete = True
-            print('Queued: delete reminder')
+            reminders.remove(remli[i])
+            print('Deleted reminder')
             dels += 1
 
         except ValueError:
