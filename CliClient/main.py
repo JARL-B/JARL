@@ -10,7 +10,7 @@ class Client():
         self.client.settimeout(2)
 
         try:
-            self.client.connect(('localhost', 44139))
+            self.client.connect(('54.37.19.136', 44139))
         except:
             sys.exit()
 

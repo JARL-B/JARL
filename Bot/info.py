@@ -30,9 +30,6 @@ async def info(message, client):
 
     *If you have enquiries about new features, please send to the discord server*
     *If you have enquiries about bot development for you or your server, please DM me*
-
-    **Check out this bot too, if you need some eye bleach :)**
-    https://discordapp.com/api/oauth2/authorize?client_id=399237341652320278&permissions=0&scope=bot
     '''.format(p=pref, sloc=sloccount_py('.'))
     )
 
