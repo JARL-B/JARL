@@ -3,14 +3,18 @@ import select
 import json
 import zlib
 import sys
+import requests
 
 class Client():
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.settimeout(2)
 
+        request = requests.get('https://gist.github.com/JellyWX/fe22b9e726f22de8e03f8d5b4b044013/raw')
+        connection_info = json.loads(request.text)
+
         try:
-            self.client.connect(('54.37.19.136', 44139))
+            self.client.connect((connection_info['ip'], connection_info['port']))
         except:
             sys.exit()
 
