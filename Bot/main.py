@@ -287,7 +287,7 @@ async def on_member_remove(member):
 try:
     client.loop.create_task(check_reminders())
 
-    coro = asyncio.start_server(server.handle_inbound, 'localhost', 44139, loop=client.loop)
+    coro = asyncio.start_server(server.handle_inbound, '0.0.0.0', 44139, loop=client.loop)
     server = client.loop.run_until_complete(coro)
 
     client.run(config.get('DEFAULT', 'token'))
