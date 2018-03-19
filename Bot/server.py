@@ -83,7 +83,7 @@ async def handle_inbound(reader, writer):
                                 if request['params'][0] in map(lambda x: x.id, shared_servers):
                                     selected_guild = client.get_guild(request['params'][0])
 
-                                    available = [r.__dict__ for r in reminders.queue if not r.delete and r.channel in map(lambda x: x.id, selected_guild.channels)]
+                                    available = [r.__dict__ for r in reminders if not r.delete and r.channel in map(lambda x: x.id, selected_guild.channels)]
 
                                     writer.write(pack_data({'content' : available}))
 

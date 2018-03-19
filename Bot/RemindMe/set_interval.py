@@ -100,7 +100,8 @@ async def set_interval(message, client):
                 await message.channel.send(embed=discord.Embed(description='You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
                 return
 
-    reminders.put(Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text))
+    reminders.append(Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text))
+    reminders.sort(key=lambda x: x.time)
 
     await message.channel.send(embed=discord.Embed(description='New interval registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'.format(pref, scope, round(msg_time - time.time()))))
     print('Registered a new interval for {}'.format(message.guild.name))

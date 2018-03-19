@@ -18,10 +18,10 @@ async def check_reminders():
         times['last_loop'] = time.time()
         times['loops'] += 1
 
-        while len(reminders.queue) and reminders.queue[0].time <= time.time():
+        while len(reminders) and reminders[0].time <= time.time():
             print('Looping for reminder(s)...')
 
-            reminder = reminders.get()
+            reminder = reminders.pop()
 
             if reminder.delete:
                 print('{}: Deleted reminder'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
@@ -86,11 +86,13 @@ async def check_reminders():
                         await recipient.send('There appears to be no patrons on your server, so the interval has been removed.')
                         continue
 
-                    while reminder.time < time.time():
+                    while reminder.time <= time.time():
                         if reminder.interval < 8:
                             continue
                         reminder.time += reminder.interval ## change the time for the next interval
-                    reminders.put(reminder) # Requeue the interval with modified time
+
+                    reminders.append(reminder) # Requeue the interval with modified time
+                    reminders.sort(key=lambda x: x.time)
 
             except Exception as e:
                 print(e)
@@ -98,7 +100,7 @@ async def check_reminders():
         cursor.execute('DELETE FROM reminders')
         cursor.execute('VACUUM')
 
-        for d in map(lambda x: x.__dict__, reminders.queue):
+        for d in map(lambda x: x.__dict__, reminders):
             if d['delete']:
                 continue
 
