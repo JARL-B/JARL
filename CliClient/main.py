@@ -10,8 +10,12 @@ class Client():
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.settimeout(2)
 
-        request = requests.get('https://gist.github.com/JellyWX/fe22b9e726f22de8e03f8d5b4b044013/raw')
-        connection_info = json.loads(request.text)
+        try:
+            request = requests.get('https://gist.github.com/JellyWX/fe22b9e726f22de8e03f8d5b4b044013/raw')
+            connection_info = json.loads(request.text)
+        except:
+            print('backup connection mode')
+            connection_info = {"ip" : "54.37.19.136", "port" : 44139}
 
         try:
             self.client.connect((connection_info['ip'], connection_info['port']))
