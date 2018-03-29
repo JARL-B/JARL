@@ -21,7 +21,10 @@ async def check_reminders():
         while len(reminders) and reminders[0].time <= time.time():
             print('Looping for reminder(s)...')
 
-            reminder = reminders.pop()
+            reminder = reminders.pop(0)
+
+            if reminder.interval is not None and reminder.interval < 8:
+                continue
 
             users = client.get_all_members()
             channels = client.get_all_channels()
@@ -77,14 +80,13 @@ async def check_reminders():
 
                         else:
                             await recipient.send(reminder.message)
+
                         print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
                     else:
                         await recipient.send('There appears to be no patrons on your server, so the interval has been removed.')
                         continue
 
                     while reminder.time <= time.time():
-                        if reminder.interval < 8:
-                            continue
                         reminder.time += reminder.interval ## change the time for the next interval
 
                     reminders.append(reminder) # Requeue the interval with modified time
