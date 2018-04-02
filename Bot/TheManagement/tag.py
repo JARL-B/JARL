@@ -1,6 +1,7 @@
 import discord
 import json
 from TheManagement.globalvars import tags
+from get_patrons import get_patrons
 
 async def tag(message, client):
     not_done = True
