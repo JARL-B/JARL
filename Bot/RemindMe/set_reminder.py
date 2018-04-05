@@ -69,7 +69,7 @@ async def set_reminder(message, client):
         return
 
     if len(msg_text) > 150 and message.author not in get_patrons('Patrons'):
-        await message.channel.send(embed=discord.Embed(description='Reminder message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 400 ($5 tier)'.format(len(msg_text))))
+        await message.channel.send(embed=discord.Embed(description='Reminder message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 1900 ($5 tier)'.format(len(msg_text))))
         return
 
     if len(msg_text) >= 1900:
