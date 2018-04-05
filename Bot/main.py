@@ -15,8 +15,6 @@ from RemindMe.timezone import timezone
 
 from TheManagement.autoclear import autoclear
 from TheManagement.clear_by import clear_by
-from TheManagement.spamfilter import spamfilter
-from TheManagement.servermsg import servermsg
 from TheManagement.tag import tag
 
 from check_reminders import check_reminders
@@ -57,9 +55,6 @@ command_map = {
     'donate' : donate,
     'clear' : clear_by,
     'autoclear' : autoclear,
-    'spam' : spamfilter,
-    'joinmsg' : servermsg,
-    'leavemsg' : servermsg,
     'todo' : todo,
     'todos' : todo,
     'ping' : ping,
@@ -83,9 +78,6 @@ command_log = {
     'donate' : 0,
     'clear' : 0,
     'autoclear' : 0,
-    'spam' : 0,
-    'joinmsg' : 0,
-    'leavemsg' : 0,
     'todo' : 0,
     'todos' : 0,
     'ping' : 0,
@@ -103,6 +95,7 @@ try:
 except FileNotFoundError:
     with open('DATA/log.json', 'w') as f:
         json.dump(command_log, f)
+
 
 async def validate_cmd(message): ## method for doing the commands
     if message.guild != None and message.guild.id in prefix.keys():
@@ -139,35 +132,6 @@ async def validate_cmd(message): ## method for doing the commands
             return
 
 
-async def watch_spam(message):
-    if message.author.id in users.keys(): ## all the stuff to do with spam filtering
-        if time.time() - users[message.author.id] < 2:
-
-            if message.author.id in warnings.keys():
-
-                warnings[message.author.id] += 1
-                if warnings[message.author.id] == 4:
-                    await message.channel.send('Please slow down {}'.format(message.author.mention))
-
-                elif warnings[message.author.id] == 6:
-
-                    await message.channel.set_permissions(message.author, send_messages=False)
-                    await message.channel.send('{}, you\'ve been muted for spam. Please contact an admin to review your status.'.format(message.author.mention))
-
-            else:
-                print('user added to warning list')
-                warnings[message.author.id] = 1
-
-            users[message.author.id] = time.time()
-
-        else:
-            users[message.author.id] = time.time()
-            warnings[message.author.id] = 0
-
-    else:
-        print('registered user for auto-muting')
-        users[message.author.id] = time.time()
-
 async def send():
     if not dbl_token:
         return
@@ -187,6 +151,7 @@ async def send():
         print('returned {0.status} for {1}'.format(resp, dump))
 
     session.close()
+
 
 @client.event ## print some stuff to console when the bot is activated
 async def on_ready():
@@ -216,6 +181,7 @@ async def on_ready():
     for i in del_queue:
         channel_blacklist.remove(i)
 
+
 @client.event
 async def on_guild_join(guild):
     await send()
@@ -227,9 +193,11 @@ async def on_guild_join(guild):
     except IndexError:
         pass
 
+
 @client.event
 async def on_guild_remove(guild):
     await send()
+
 
 @client.event
 async def on_message(message): ## when a message arrives at the bot ##
@@ -268,21 +236,6 @@ async def on_message(message): ## when a message arrives at the bot ##
             except discord.errors.Forbidden:
                 pass
 
-@client.event
-async def on_member_join(member):
-    if member.guild.id in join_messages.keys():
-        try:
-            await client.get_channel(join_messages[member.guild.id][1]).send(join_messages[member.guild.id][0].format(member.name))
-        except:
-            print('Issue encountered administering member join message.')
-
-@client.event
-async def on_member_remove(member):
-    if member.guild.id in leave_messages.keys():
-        try:
-            await client.get_channel(leave_messages[member.guild.id][1]).send(leave_messages[member.guild.id][0].format(member.name))
-        except:
-            print('Issue encountered administering member leave message.')
 
 try:
     client.loop.create_task(check_reminders())
