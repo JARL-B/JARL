@@ -25,7 +25,7 @@ try:
     command = '''CREATE TABLE reminders (
     interval INTEGER,
     time INTEGER,
-    message VARCHAR(400),
+    message VARCHAR(1900),
     channel INTEGER
     );'''
 

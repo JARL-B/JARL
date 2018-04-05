@@ -85,8 +85,8 @@ async def set_interval(message, client):
         await message.channel.send(embed=discord.Embed(description='Interval message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 400 ($5 tier)'.format(len(msg_text))))
         return
 
-    if len(msg_text) >= 400:
-        await message.channel.send(embed=discord.Embed(description='Discord restrictions mean we can\'t send reminders 400+ characters. Sorry'))
+    if len(msg_text) >= 1900:
+        await message.channel.send(embed=discord.Embed(description='Discord restrictions mean we can\'t send reminders 2000+ characters. Sorry'))
         return
 
     if pref == '#':
