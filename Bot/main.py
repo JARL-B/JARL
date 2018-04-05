@@ -25,7 +25,6 @@ from get_help import get_help
 from info import info
 from ping import ping
 from restrict import restrict
-from ffs import ffs
 
 from link import link
 from unlink import unlink
@@ -61,7 +60,6 @@ command_map = {
     'restrict' : restrict,
     'timezone' : timezone,
     'tag' : tag,
-    'ffs' : ffs,
     'log' : log,
     'timeit' : timeit,
     'link' : link,
@@ -84,7 +82,6 @@ command_log = {
     'restrict' : 0,
     'timezone' : 0,
     'tag' : 0,
-    'ffs' : 0,
     'log' : 0,
     'timeit' : 0
 }
