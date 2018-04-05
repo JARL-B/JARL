@@ -218,11 +218,7 @@ async def on_message(message): ## when a message arrives at the bot ##
 
         ## run stuff here if there is no command ##
         if message.channel.id in autoclears.keys(): ## autoclearing
-            await asyncio.sleep(autoclears[message.channel.id])
-            try:
-                await message.delete()
-            except discord.errors.NotFound:
-                pass
+            process_deletes[message.id] = {'time' : autoclears[message.channel.id], 'channel' : message.channel.id}
 
         if message.channel.id in spam_filter:
             await watch_spam(message)
