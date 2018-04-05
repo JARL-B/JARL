@@ -35,12 +35,12 @@ async def todo(message,client):
     elif len(splits) > 2:
         if splits[1] in ['add', 'a']:
             a = ' '.join(splits[2:])
-            if len(a) > 40:
-                await message.channel.send('Sorry, but TODO message sizes are limited to 40 characters. Keep it concise :)')
+            if len(a) > 80:
+                await message.channel.send('Sorry, but TODO message sizes are limited to 80 characters. Keep it concise :)')
                 return
 
-            elif len(''.join(todo)) > 400:
-                await message.channel.send('Sorry, but TODO lists are capped at 400 characters. Maybe, get some things done?')
+            elif len(''.join(todo)) > 800:
+                await message.channel.send('Sorry, but TODO lists are capped at 800 characters. Maybe, get some things done?')
                 return
 
             todos[location].append(a)
