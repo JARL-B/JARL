@@ -1,6 +1,7 @@
 import time
 import json
 import configparser
+import msgpack
 
 from RemindMe.globalvars import *
 from TheManagement.globalvars import *
@@ -12,6 +13,7 @@ client = discord.Client() ## defined the client
 prefix = {}
 restrictions = {}
 channel_blacklist = []
+process_deletes = {}
 
 times = {
     'last_loop' : time.time(),
@@ -54,6 +56,13 @@ except FileNotFoundError:
     with open('DATA/restrictions.json', 'w') as f:
         f.write("{}")
     print('created restrictions file')
+
+try:
+    with open('DATA/process_deletes.mp', 'rb') as f:
+        process_deletes = msgpack.load(f, encoding='utf8')
+
+except FileNotFoundError:
+    print('no process_deletes file found')
 
 config = configparser.SafeConfigParser()
 config.read('config.ini')

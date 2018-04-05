@@ -6,6 +6,7 @@ from itertools import chain
 import random
 import datetime
 import sqlite3
+import msgpack
 
 from get_patrons import get_patrons
 
@@ -49,11 +50,27 @@ async def check_reminders():
                     if any([m in patrons for m in server_members]):
                         if reminder.message.startswith('-del_on_send'):
                             try:
-                                await recipient.purge(check=lambda m: m.content == reminder.message[12:].strip() and time.time() - m.created_at.timestamp() < 1209600 and m.author == client.user)
+                                await recipient.purge(check=lambda m: m.content == reminder.message[len('-del_on_send'):].strip() and time.time() - m.created_at.timestamp() < 1209600 and m.author == client.user)
                             except Exception as e:
                                 print(e)
 
-                            await recipient.send(reminder.message[12:])
+                            await recipient.send(reminder.message[len('-del_on_send'):])
+
+                        elif reminder.message.startswith('-del_after_'):
+
+                            chars = ''
+
+                            for char in reminder.message[len('-del_after_'):]:
+                                if char in '0123456789':
+                                    chars += char
+                                else:
+                                    break
+
+                            wait_time = int(chars)
+
+                            message = await recipient.send(reminder.message[len('-del_after_{}'.format(chars)):])
+
+                            process_deletes[message.id] = {'time' : time.time() + wait_time, 'channel' : message.channel.id}
 
                         elif reminder.message.startswith('getfrom['):
                             id_started = False
@@ -106,5 +123,23 @@ async def check_reminders():
             cursor.execute(command, (d['interval'], d['time'], d['channel'], d['message']))
 
         connection.commit()
+
+        for message, info in process_deletes.copy().items():
+            if info['time'] <= time.time():
+                del process_deletes[message]
+
+                message = await client.get_channel(info['channel']).get_message(message)
+
+                if message is None:
+                    pass
+                else:
+                    print('{}: Attempting to auto-delete a message...'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
+                    try:
+                        await message.delete()
+                    except Exception as e:
+                        print(e)
+
+        with open('DATA/process_deletes.mp', 'wb') as f:
+            msgpack.dump(process_deletes, f)
 
         await asyncio.sleep(2.5)
