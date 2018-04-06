@@ -236,7 +236,7 @@ try:
     client.run(config.get('DEFAULT', 'token'))
 except Exception as e:
     print('Error detected. Restarting in 15 seconds.')
-    print(e)
+    print(sys.exc_info()[0])
     time.sleep(15)
 
     os.execl(sys.executable, sys.executable, *sys.argv)
