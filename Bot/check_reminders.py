@@ -124,20 +124,23 @@ async def check_reminders():
 
         connection.commit()
 
-        for message, info in process_deletes.copy().items():
-            if info['time'] <= time.time():
-                del process_deletes[message]
+        try:
+            for message, info in process_deletes.copy().items():
+                if info['time'] <= time.time():
+                    del process_deletes[message]
 
-                message = await client.get_channel(info['channel']).get_message(message)
+                    message = await client.get_channel(info['channel']).get_message(message)
 
-                if message is None or message.pinned:
-                    pass
-                else:
-                    print('{}: Attempting to auto-delete a message...'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
-                    try:
-                        await message.delete()
-                    except Exception as e:
-                        print(e)
+                    if message is None or message.pinned:
+                        pass
+                    else:
+                        print('{}: Attempting to auto-delete a message...'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
+                        try:
+                            await message.delete()
+                        except Exception as e:
+                            print(e)
+        except Exception as e:
+            print('Error in deletion loop: {}'.format(e))
 
         with open('DATA/process_deletes.mp', 'wb') as f:
             msgpack.dump(process_deletes, f)
