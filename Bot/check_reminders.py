@@ -130,7 +130,7 @@ async def check_reminders():
 
                 message = await client.get_channel(info['channel']).get_message(message)
 
-                if message is None:
+                if message is None or message.pinned:
                     pass
                 else:
                     print('{}: Attempting to auto-delete a message...'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
