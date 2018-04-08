@@ -18,7 +18,7 @@
 * Put a hosted clone of this bot on discordbots.org or other advertisement site without explicit permission.
 
 ## To Run
-* Make sure you have deps: Python 3.5, Discord.py, SQLite3
+* Make sure you have deps: Python 3.5, Discord.py, SQLite3, pytz, Msgpack
 * Download using `git clone` or as a zip.
 * Run `MIGRATE/setup.py` in Python 3.5
 * Open `config.ini` and enter your token, DBL token and other details
