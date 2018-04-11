@@ -1,4 +1,6 @@
 {
+    'admin_required' : 'You need to be an admin to run this command',
+
     'help' : '''
 __Reminder Commands__
 > `$del` - delete reminders and intervals on your server.
@@ -105,6 +107,30 @@ Current timezone: {timezone}''',
         'no_timezone' : '''Timezone not recognized. A list is available at https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568''',
 
         'success' : '''Timezone has been set to {timezone}. Your current time should be {time}'''
+    },
+
+    'restrict' : {
+
+        'disabled' : '''Disabled channel reminder permissions for roles.''',
+
+        'enabled' : '''Enabled channel reminder permissions for roles.''',
+
+        'allowed' : 'Allowed roles: {}'
+    },
+
+    'clear' : {
+
+        'no_argument' : '''Please mention users you wish to remove messages of.'''
+
+    },
+
+    'remind' : {
+        'no_argument' : '''
+Usage:
+    ```$remind [channel mention or user mention] <time to or time at> <message>```
+Example:
+    ```$remind #general 10s Hello world```
+    ```$remind 10:30 It\'s now 10:30```'''
     },
 
 }
