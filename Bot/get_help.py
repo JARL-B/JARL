@@ -1,5 +1,3 @@
-## PORTED ##
-
 import discord
 import asyncio
 

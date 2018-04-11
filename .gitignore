@@ -107,3 +107,4 @@ dbl_token
 DATA/
 config.ini
 terminal.glue
+data.msgpack.zlib
