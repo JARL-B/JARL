@@ -90,6 +90,7 @@ class BotClient(discord.Client):
         try:
             with open('DATA/todos.json', 'r') as f:
                 self.todos = json.load(f)
+                self.todos = {int(x) : y for x, y in self.todos.items()}
         except FileNotFoundError:
             print('No todos file found')
             self.todos = {}
@@ -494,17 +495,18 @@ class BotClient(discord.Client):
 
         splits = stripped.split(' ')
 
+
         todo = self.todos[location]
 
         if len(splits) == 1:
             msg = ['\n{}: {}'.format(i+1, todo[i]) for i in range(len(todo))]
             if len(msg) == 0:
                 msg.append('*Do `${0} add <message>` to add an item to your TODO, or type `${0} help` for more commands!*'.format(command))
-            await message.channel.send(embed=Embed(title='{}\'s TODO'.format(name), description=''.join(msg)))
+            await message.channel.send(embed=discord.Embed(title='{}\'s TODO'.format(name), description=''.join(msg)))
 
-        elif len(splits) > 2:
-            if splits[1] in ['add', 'a']:
-                a = ' '.join(splits[2:])
+        elif len(splits) >= 2:
+            if splits[0] in ['add', 'a']:
+                a = ' '.join(splits[1:])
                 if len(a) > 80:
                     await message.channel.send('Sorry, but TODO message sizes are limited to 80 characters. Keep it concise :)')
                     return
@@ -516,9 +518,9 @@ class BotClient(discord.Client):
                 self.todos[location].append(a)
                 await message.channel.send('Added \'{}\' to todo!'.format(a))
 
-            elif splits[1] in ['remove', 'r']:
+            elif splits[0] in ['remove', 'r']:
                 try:
-                    a = self.todos[location].pop(int(splits[2])-1)
+                    a = self.todos[location].pop(int(splits[1])-1)
                     await message.channel.send('Removed \'{}\' from todo!'.format(a))
 
                 except ValueError:
@@ -526,12 +528,12 @@ class BotClient(discord.Client):
                 except IndexError:
                     await message.channel.send('Couldn\'t find item by that number. Are you in the correct todo list?')
 
+            elif splits[0] in ['remove*', 'r*', 'clear', 'clr']:
+                self.todos[location] = []
+                await message.channel.send('Cleared todo list!')
+
             else:
                 await message.channel.send('To use the TODO commands, do `${0} add <message>`, `${0} remove <number>`, `${0} clear` and `${0}` to add to, remove from, clear or view your todo list.'.format(command))
-
-        elif splits[1] in ['remove*', 'r*', 'clear', 'clr']:
-            self.todos[location] = []
-            await message.channel.send('Cleared todo list!')
 
         else:
             await message.channel.send('To use the TODO commands, do `${0} add <message>`, `${0} remove <number>`, `${0} clear` and `${0}` to add to, remove from, clear or view your todo list.'.format(command))
