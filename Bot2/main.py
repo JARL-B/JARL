@@ -12,6 +12,7 @@ import time
 import sys
 import os
 import configparser
+import sqlite3
 
 class BotClient(discord.Client):
     def __init__(self, *args, **kwargs):
@@ -29,7 +30,9 @@ class BotClient(discord.Client):
 
             'prefix' : self.change_prefix,
 
-            'timezone' : self.timezone
+            'timezone' : self.timezone,
+
+            'remind' : self.remind
         }
 
         self.strings = {
@@ -53,11 +56,11 @@ class BotClient(discord.Client):
         except FileNotFoundError:
             pass
 
-        config = configparser.SafeConfigParser()
-        config.read('config.ini')
-        self.dbl_token = config.get('DEFAULT', 'dbl_token')
-        self.patreon = config.get('DEFAULT', 'patreon_enabled') == 'yes'
-        self.patreonserver = int(config.get('DEFAULT', 'patreon_server'))
+        self.config = configparser.SafeConfigParser()
+        self.config.read('config.ini')
+        self.dbl_token = self.config.get('DEFAULT', 'dbl_token')
+        self.patreon = self.config.get('DEFAULT', 'patreon_enabled') == 'yes'
+        self.patreonserver = int(self.config.get('DEFAULT', 'patreon_server'))
 
         if self.patreon:
             print('Patreon is enabled. Will look for server {}'.format(patreonserver))
@@ -75,7 +78,7 @@ class BotClient(discord.Client):
         self.reminders.sort(key=lambda x: x.time)
 
         try:
-            open('strings.py', 'r').close()
+            open('EXT/strings.py', 'r').close()
         except FileNotFoundError:
             print('Strings file not present. Exiting...')
             sys.exit()
@@ -186,7 +189,7 @@ class BotClient(discord.Client):
 
             self.data.append(s)
 
-        with open('strings.py', 'r') as f:
+        with open('EXT/strings.py', 'r') as f:
             self.strings = eval(f.read())
 
         if await self.get_cmd(message):
@@ -272,7 +275,7 @@ class BotClient(discord.Client):
                 try:
                     tag = int(args[0][2:-1])
                 except ValueError:
-                    await message.channel.send(embed=discord.Embed(description='Please ensure your tag links directly to a user or channel, not a role.'))
+                    await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_tag']))
                     return
 
             if args[0][1] == '@': # if the scope is a user
@@ -284,7 +287,7 @@ class BotClient(discord.Client):
                 scope = message.guild.get_channel(tag)
 
             if scope is None:
-                await message.channel.send(embed=discord.Embed(description='Couldn\'t find a location by your tag present.'))
+                await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_tag']))
                 return
 
             else:
@@ -295,7 +298,7 @@ class BotClient(discord.Client):
         msg_time = format_time(args[0], server)
 
         if msg_time is None:
-            await message.channel.send(embed=discord.Embed(description='Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. or `day/month/year-hour:minute:second`.'))
+            await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_time']))
             return
 
         args.pop(0)
@@ -303,15 +306,15 @@ class BotClient(discord.Client):
         msg_text = ' '.join(args)
 
         if self.count_reminders(scope) > 5 and message.author not in self.get_patrons('Patrons'):
-            await message.channel.send(embed=discord.Embed(description='Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($5 tier)'))
+            await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_count']))
             return
 
         if len(msg_text) > 150 and message.author not in self.get_patrons('Patrons'):
-            await message.channel.send(embed=discord.Embed(description='Reminder message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 1900 ($5 tier)'.format(len(msg_text))))
+            await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_chars'].format(len(msg_text))))
             return
 
         if len(msg_text) >= 1900:
-            await message.channel.send(embed=discord.Embed(description='Discord restrictions mean we can\'t send reminders 2000+ characters. Sorry'))
+            await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_chars_2000']))
             return
 
         if pref == '#':
@@ -322,23 +325,61 @@ class BotClient(discord.Client):
                     if role.id in server.restrictions[scope]:
                         break
                 else:
-                    await message.channel.send(embed=discord.Embed(description='You must be either admin or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.'))
+                    await message.channel.send(embed=discord.Embed(description=self.strings['remind']['no_perms']))
                     return
 
         self.reminders.append(Reminder(time=msg_time, channel=scope, message=msg_text))
         self.reminders.sort(key=lambda x: x.time)
 
-        await message.channel.send(embed=discord.Embed(description='New reminder registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'.format(pref, scope, round(msg_time - time.time()))))
+        await message.channel.send(embed=discord.Embed(description=self.strings['remind']['success'].format(pref, scope, round(msg_time - time.time()))))
         print('Registered a new reminder for {}'.format(message.guild.name))
 
 
     async def interval(self, message, stripped, server):
+        pass
 
 
     async def autoclear(self, message, stripped, server):
+        if not message.author.guild_permissions.administrator:
+            await message.channel.send(embed=discord.Embed(description=self.strings['admin_required']))
+            return
+
+        seconds = 10
+
+        for item in stripped.split(' '): # determin a seconds argument
+            try:
+                seconds = float(item)
+                break
+            except ValueError:
+                continue
+
+        if len(message.channel_mentions) == 0:
+            if message.channel.id in server.autoclears.keys():
+                del server.autoclears[message.channel.id]
+                await message.channel.send(embed=discord.Embed(description=self.strings['autoclear']['disable'].format(message.channel.mention)))
+            else:
+                server.autoclears[message.channel.id] = seconds
+                await message.channel.send(embed=discord.Embed(description=self.strings['autoclear']['enable'].format(seconds, message.channel.mention)))
+
+        else:
+            disable_all = True
+            for i in message.channel_mentions:
+                if i.id not in server.autoclears.keys():
+                    disable_all = False
+                server.autoclears[i.id] = seconds
+
+
+            if disable_all:
+                for i in message.channel_mentions:
+                    del server.autoclears[i.id]
+
+                await message.channel.send(embed=discord.Embed(description=self.strings['autoclear']['disable'].format(', '.join(map(lambda x: x.name, message.channel_mentions)))))
+            else:
+                await message.channel.send(embed=discord.Embed(description=self.strings['autoclear']['enable'].format(seconds)))
 
 
     async def blacklist(self, message, stripped, server):
+        pass
 
 
     async def clear(self, message, stripped, server):
@@ -391,22 +432,16 @@ class BotClient(discord.Client):
 
 
     async def tag(self, message, stripped, server):
+        pass
 
 
     async def todo(self, message, stripped, server):
+        pass
 
 
     async def delete(self, message, stripped, server):
+        pass
 
-
-
-try: ## token grabbing code
-    with open('token','r') as token_f:
-        token = token_f.read().strip('\n')
-
-except:
-    print('no token provided')
-    sys.exit(-1)
 
 client = BotClient()
 client.run(client.config.get('DEFAULT', 'token'))

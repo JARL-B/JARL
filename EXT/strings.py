@@ -130,7 +130,27 @@ Usage:
     ```$remind [channel mention or user mention] <time to or time at> <message>```
 Example:
     ```$remind #general 10s Hello world```
-    ```$remind 10:30 It\'s now 10:30```'''
+    ```$remind 10:30 It\'s now 10:30```''',
+
+        'invalid_tag' : '''Couldn't find a location by your tag present''',
+
+        'invalid_time' : '''Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. or `day/month/year-hour:minute:second`.''',
+
+        'invaid_count' : '''Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($5 tier)''',
+
+        'invalid_chars' : '''Reminder message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 1900 ($5 tier)''',
+
+        'invalid_chars_2000' : '''Discord restrictions mean we can\'t send reminders 2000+ characters. Sorry''',
+
+        'no_perms' : '''You must have `Manage Messages` or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.''',
+
+        'success' : '''New reminder registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'''
     },
+
+    'autoclear' : {
+        'disable' : '''Autoclearing disabled on {}''',
+
+        'enable' : '''{} second autoclearing enabled''',
+    }
 
 }
