@@ -29,10 +29,19 @@ class BotClient(discord.Client):
             'donate' : self.donate,
 
             'prefix' : self.change_prefix,
+            'blacklist' : self.blacklist,
 
             'timezone' : self.timezone,
 
-            'remind' : self.remind
+            'remind' : self.remind,
+            'interval' : self.interval,
+            'delete' : self.delete,
+
+            'todo' : self.todo,
+            'tag' : self.tag,
+
+            'autoclear' : self.autoclear,
+            'clear' : self.clear,
         }
 
         self.strings = {
