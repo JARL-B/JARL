@@ -180,10 +180,10 @@ class BotClient(discord.Client):
 
     async def on_message(self, message):
 
-        if isinstance(message.channel, discord.DMChannel) or message.author.bot or message.content == None:
+        if message.author.bot or message.content == None:
             return
 
-        if len([d for d in self.data if d.id == message.guild.id]) == 0:
+        if message.guild is not None and len([d for d in self.data if d.id == message.guild.id]) == 0:
             s = ServerData(**self.template)
             s.id = message.guild.id
 
@@ -199,8 +199,8 @@ class BotClient(discord.Client):
 
     async def get_cmd(self, message):
 
-        server = self.get_server(message.guild)
-        prefix = server.prefix
+        server = None if message.guild is None else self.get_server(message.guild)
+        prefix = '$' if server is None else server.prefix
 
         if message.content[0:len(prefix)] == prefix:
             command = (message.content + ' ')[len(prefix):message.content.find(' ')]
@@ -219,6 +219,9 @@ class BotClient(discord.Client):
 
 
     async def change_prefix(self, message, stripped, server):
+        if server is None:
+            return
+
         if stripped:
             stripped += ' '
             server.prefix = stripped[:stripped.find(' ')]
@@ -244,6 +247,9 @@ class BotClient(discord.Client):
 
 
     async def timezone(self, message, stripped, server):
+        if server is None:
+            return
+
         if stripped == '':
             await message.channel.send(embed=discord.Embed(description=self.strings['timezone']['no_argument'].format(prefix=server.prefix, timezone=server.timezone)))
 
@@ -258,6 +264,9 @@ class BotClient(discord.Client):
 
 
     async def remind(self, message, stripped, server):
+        if server is None:
+            return
+
         args = stripped.split(' ')
 
         if len(args) < 2:
@@ -344,6 +353,9 @@ class BotClient(discord.Client):
 
 
     async def autoclear(self, message, stripped, server):
+        if server is None:
+            return
+
         if not message.author.guild_permissions.administrator:
             await message.channel.send(embed=discord.Embed(description=self.strings['admin_required']))
             return
@@ -387,6 +399,9 @@ class BotClient(discord.Client):
 
 
     async def clear(self, message, stripped, server):
+        if server is None:
+            return
+
         if not message.author.guild_permissions.administrator:
             await message.channel.send(embed=discord.Embed(description=self.strings['admin_required']))
             return
@@ -408,6 +423,9 @@ class BotClient(discord.Client):
 
 
     async def restrict(self, message, stripped, server):
+        if server is None:
+            return
+
         if not message.author.guild_permissions.administrator:
             await message.channel.send(embed=discord.Embed(description=self.strings['admin_required']))
 
@@ -444,8 +462,54 @@ class BotClient(discord.Client):
 
 
     async def delete(self, message, stripped, server):
-        pass
+        if server is not None:
+            if not message.author.guild_permissions.manage_messages:
+                scope = message.channel.id
+                if scope not in restrictions.keys():
+                    server.restrictions[scope] = []
+                for role in message.author.roles:
+                    if role.id in server.restrictions[scope]:
+                        break
+                else:
+                    await message.channel.send(embed=discord.Embed(description=self.strings['remind']['no_perms']))
+                    return
 
+            li = [ch.id for ch in message.guild.channels] ## get all channels and their ids in the current server
+        else:
+            li = [message.author.id]
+
+        await message.channel.send('Listing reminders on this server... (there may be a small delay, please wait for the "List (1,2,3...)" message)')
+
+        n = 1
+        remli = []
+
+        for rem in self.reminders:
+            if rem.channel in li:
+                remli.append(rem)
+                await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ')')
+                n += 1
+
+        await message.channel.send('List (1,2,3...) the reminders you wish to delete, or type anything else to cancel.')
+
+        num = await client.wait_for('message', check=lambda m: m.author == message.author and m.channel == message.channel)
+        nums = [n.strip() for n in num.content.split(',')]
+
+        dels = 0
+        for i in nums:
+            try:
+                i = int(i) - 1
+                if i < 0:
+                    continue
+                self.reminders.remove(remli[i])
+                print('Deleted reminder')
+                dels += 1
+
+            except ValueError:
+                continue
+            except IndexError:
+                continue
+
+        await message.channel.send('Deleted {} reminders!'.format(dels))
 
 client = BotClient()
 client.run(client.config.get('DEFAULT', 'token'))
