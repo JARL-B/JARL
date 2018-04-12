@@ -43,7 +43,7 @@ class BotClient(discord.Client):
             'id' : 0,
             'prefix' : self.DEFAULT_PREFIX,
             'timezone' : 'UTC',
-            'autoclear' : {},
+            'autoclears' : {},
             'blacklist' : [],
             'restrictions' : {}
         }
@@ -112,21 +112,21 @@ class BotClient(discord.Client):
                 if '/' in clump:
                     a = clump.split('/')
                     if len(a) == 2:
-                        date.replace(month=a[1], day=a[0])
+                        date = date.replace(month=int(a[1]), day=int(a[0]))
                     elif len(a) == 3:
-                        date.replace(year=a[2], month=a[1], day=a[0])
+                        date = date.replace(year=int(a[2]), month=int(a[1]), day=int(a[0]))
 
                 elif ':' in clump:
                     a = clump.split(':')
                     if len(a) == 2:
-                        date.replace(hour=a[0], minute=a[1])
+                        date = date.replace(hour=int(a[0]), minute=int(a[1]))
                     elif len(a) == 3:
-                        date.replace(hour=a[0], minute=a[1], second=a[2])
+                        date = date.replace(hour=int(a[0]), minute=int(a[1]), second=int(a[2]))
                     else:
                         return None
 
                 else:
-                    date.replace(day=clump)
+                    date = date.replace(day=int(clump))
 
             return date.timestamp()
 
@@ -295,7 +295,11 @@ class BotClient(discord.Client):
 
             args.pop(0)
 
-        msg_time = format_time(args[0], server)
+        try:
+            msg_time = self.format_time(args[0], server)
+        except ValueError:
+            await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_time']))
+            return
 
         if msg_time is None:
             await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_time']))
