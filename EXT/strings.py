@@ -180,7 +180,9 @@ Example:
 
         'error_index' : '''Couldn\'t find item by that number. Are you in the correct todo list?''',
 
-        'help' : '''To use the TODO commands, do `{prefix}{command} add <message>`, `{prefix}{command} remove <number>`, `{prefix}{command} clear` and `{prefix}{command}` to add to, remove from, clear or view your todo list.'''
+        'help' : '''To use the TODO commands, do `{prefix}{command} add <message>`, `{prefix}{command} remove <number>`, `{prefix}{command} clear` and `{prefix}{command}` to add to, remove from, clear or view your todo list.''',
+
+        'cleared' : '''Cleared todo list!'''
     },
 
     'blacklist' : {

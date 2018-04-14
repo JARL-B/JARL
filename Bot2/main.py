@@ -39,6 +39,7 @@ class BotClient(discord.Client):
             'del' : self.delete,
 
             'todo' : self.todo,
+            'todos' : self.todo,
             'tag' : self.tag,
 
             'autoclear' : self.autoclear,
@@ -614,7 +615,7 @@ class BotClient(discord.Client):
                     return
 
                 self.todos[location].append(a)
-                await message.channel.send(self.strings['todo']['added'].format(a))
+                await message.channel.send(self.strings['todo']['added'].format(name=a))
 
             elif splits[0] in ['remove', 'r']:
                 try:
@@ -628,7 +629,7 @@ class BotClient(discord.Client):
 
             elif splits[0] in ['remove*', 'r*', 'clear', 'clr']:
                 self.todos[location] = []
-                await message.channel.send('Cleared todo list!')
+                await message.channel.send(self.strings['todo']['cleared'])
 
             else:
                 await message.channel.send(self.strings['todo']['help'].format(prefix='$' if server is None else server.prefix, command=command))
