@@ -495,7 +495,6 @@ class BotClient(discord.Client):
 
         splits = stripped.split(' ')
 
-
         todo = self.todos[location]
 
         if len(splits) == 1:
