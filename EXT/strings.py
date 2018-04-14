@@ -1,4 +1,6 @@
 {
+    'blacklisted' : ''':x: This channel is blacklisted :x:''',
+
     'admin_required' : 'You need to be an admin to run this command',
 
     'help' : '''
@@ -180,5 +182,16 @@ Example:
 
         'help' : '''To use the TODO commands, do `{prefix}{command} add <message>`, `{prefix}{command} remove <number>`, `{prefix}{command} clear` and `{prefix}{command}` to add to, remove from, clear or view your todo list.'''
     },
+
+    'blacklist' : {
+        'removed_from' : '''Removed blacklists from specified channels''',
+
+        'added_from' : '''Added specified channels to blacklist''',
+
+        'removed' : '''Removed current channel from blacklist''',
+
+        'added' : '''Added current channel to blacklist'''
+
+    }
 
 }

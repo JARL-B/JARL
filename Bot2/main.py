@@ -36,7 +36,7 @@ class BotClient(discord.Client):
 
             'remind' : self.remind,
             'interval' : self.interval,
-            'delete' : self.delete,
+            'del' : self.delete,
 
             'todo' : self.todo,
             'tag' : self.tag,
@@ -220,18 +220,22 @@ class BotClient(discord.Client):
         server = None if message.guild is None else self.get_server(message.guild)
         prefix = '$' if server is None else server.prefix
 
-        if message.content[0:len(prefix)] == prefix:
-            command = (message.content + ' ')[len(prefix):message.content.find(' ')]
-            if command in self.commands:
-                stripped = (message.content + ' ')[message.content.find(' '):].strip()
-                await self.commands[command](message, stripped, server)
-                return True
+        if server is None or message.channel.id not in server.blacklist or message.content == '{}help'.format(server.prefix):
+            if message.content[0:len(prefix)] == prefix:
+                command = (message.content + ' ')[len(prefix):message.content.find(' ')]
+                if command in self.commands:
+                    stripped = (message.content + ' ')[message.content.find(' '):].strip()
+                    await self.commands[command](message, stripped, server)
+                    return True
 
-        elif self.user.id in map(lambda x: x.id, message.mentions) and len(message.content.split(' ')) > 1:
-            if message.content.split(' ')[1] in self.commands.keys():
-                stripped = (message.content + ' ').split(' ', 2)[-1].strip()
-                await self.commands[message.content.split(' ')[1]](message, stripped, server)
-                return True
+            elif self.user.id in map(lambda x: x.id, message.mentions) and len(message.content.split(' ')) > 1:
+                if message.content.split(' ')[1] in self.commands.keys():
+                    stripped = (message.content + ' ').split(' ', 2)[-1].strip()
+                    await self.commands[message.content.split(' ')[1]](message, stripped, server)
+                    return True
+
+        else:
+            await message.channel.send(embed=discord.Embed(description=self.strings['blacklisted']))
 
         return False
 
@@ -413,7 +417,42 @@ class BotClient(discord.Client):
 
 
     async def blacklist(self, message, stripped, server):
-        pass
+        if server is None:
+            return
+
+        if not message.author.guild_permissions.administrator:
+            await message.channel.send(embed=discord.Embed(description=self.strings['admin_required']))
+            return
+
+        if len(message.channel_mentions) > 0:
+            disengage_all = True
+
+            for mention in message.channel_mentions:
+                if mention.id not in server.blacklist:
+                    disengage_all = False
+
+            if disengage_all:
+                for mention in message.channel_mentions:
+                    server.blacklist.remove(mention.id)
+
+                await message.channel.send(embed=discord.Embed(description=self.strings['blacklist']['removed_from']))
+
+            else:
+                for mention in message.channel_mentions:
+                    if mention.id not in server.blacklist:
+                        server.blacklist.append(mention.id)
+
+                await message.channel.send(embed=discord.Embed(description=self.strings['blacklist']['added_from']))
+
+        else:
+            if message.channel.id in server.blacklist:
+                server.blacklist.remove(message.channel.id)
+                await message.channel.send(embed=discord.Embed(description=self.strings['blacklist']['removed']))
+
+            else:
+                server.blacklist.append(message.channel.id)
+                await message.channel.send(embed=discord.Embed(description=self.strings['blacklist']['added']))
+
 
 
     async def clear(self, message, stripped, server):
