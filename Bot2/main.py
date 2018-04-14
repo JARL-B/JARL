@@ -361,10 +361,8 @@ class BotClient(discord.Client):
 
         if pref == '#':
             if not message.author.guild_permissions.manage_messages:
-                if scope not in server.restrictions.keys():
-                    server.restrictions[scope] = []
                 for role in message.author.roles:
-                    if role.id in server.restrictions[scope]:
+                    if role.id in server.restrictions:
                         break
                 else:
                     await message.channel.send(embed=discord.Embed(description=self.strings['remind']['no_perms']))
@@ -378,7 +376,97 @@ class BotClient(discord.Client):
 
 
     async def interval(self, message, stripped, server):
-        pass
+        if server is None:
+            return
+
+        if message.author not in self.get_patrons('Donor'):
+            await message.channel.send(embed=discord.Embed(description=self.strings['interval']['donor']))
+            return
+
+        args = message.content.split(' ')
+        args.pop(0) # remove the command item
+
+        if len(args) < 3:
+            await message.channel.send(embed=discord.Embed(description=self.strings['interval']['no_argument']))
+            return
+
+        scope = message.channel.id
+        pref = '#'
+
+        if args[0].startswith('<'): # if a scope is provided
+            if args[0][2:-1][0] == '!':
+                tag = int(args[0][3:-1])
+
+            else:
+                try:
+                    tag = int(args[0][2:-1])
+                except ValueError:
+                    await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_tag']))
+
+            if args[0][1] == '@': # if the scope is a user
+                pref = '@'
+                scope = message.guild.get_member(tag)
+
+            else:
+                pref = '#'
+                scope = message.guild.get_channel(tag)
+
+            if scope is None:
+                await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_tag']))
+                return
+
+            else:
+                scope = scope.id
+
+            args.pop(0)
+
+        msg_time = self.format_time(args[0], message.guild.id)
+
+        if msg_time == None:
+            await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_time']))
+            return
+
+        args.pop(0)
+
+        msg_interval = format_time(args[0], message.guild.id)
+
+        if msg_interval == None:
+            await message.channel.send(embed=discord.Embed(description=self.strings['interval']['invalid_interval']))
+            return
+
+        msg_interval -= time.time()
+        msg_interval = round(msg_interval)
+
+        if msg_interval < 8:
+            await message.channel.send(embed=discord.Embed(description=self.strings['interval']['8_seconds']))
+            return
+
+        args.pop(0)
+
+        msg_text = ' '.join(args)
+
+        if len(msg_text) > 150 and message.author not in self.get_patrons('Patrons'):
+            await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_chars'].format(len(msg_text))))
+            return
+
+        if len(msg_text) >= 1900:
+            await message.channel.send(embed=discord.Embed(description=self.strings['remind']['invalid_chars_2000']))
+            return
+
+        if pref == '#':
+            if not message.author.guild_permissions.manage_messages:
+                for role in message.author.roles:
+                    if role.id in server.restrictions:
+                        break
+                else:
+                    await message.channel.send(embed=discord.Embed(description=self.strings['remind']['no_perms']))
+                    return
+
+        self.reminders.append(Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text))
+        self.reminders.sort(key=lambda x: x.time)
+
+        await message.channel.send(embed=discord.Embed(description=self.strings['interval']['success'].format(pref, scope, round(msg_time - time.time()))))
+        print('Registered a new interval for {}'.format(message.guild.name))
 
 
     async def autoclear(self, message, stripped, server):

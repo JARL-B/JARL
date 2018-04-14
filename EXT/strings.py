@@ -149,6 +149,24 @@ Example:
         'success' : '''New reminder registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'''
     },
 
+    'interval' : {
+        'no_argument' : '''
+Usage:
+    ```$interval [channel mention or user mention] <time to or time at> <interval> <message>```
+Example:
+    ```$interval #general 9:30 1d Good morning!```
+    ```$interval 0s 10s This will be really irritating```''',
+
+        'invalid_interval' : '''Make sure the interval you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. with no spaces, eg. 10s for 10 seconds or 10s12m15h1d for 10 seconds, 12 minutes, 15 hours and 1 day.''',
+
+        '8_seconds' : '''Please make sure your interval timer is longer than 8 seconds.''',
+
+        'donor' : '''You need to be a Patron (donating 2$ or more) to access this command! Type `$donate` to find out more.''',
+
+        'success' : '''New interval registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'''
+
+    },
+
     'autoclear' : {
         'disable' : '''Autoclearing disabled on {}''',
 
