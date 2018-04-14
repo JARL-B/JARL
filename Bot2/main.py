@@ -31,6 +31,7 @@ class BotClient(discord.Client):
 
             'prefix' : self.change_prefix,
             'blacklist' : self.blacklist,
+            'restrict' : self.restrict,
 
             'timezone' : self.timezone,
 
@@ -56,12 +57,12 @@ class BotClient(discord.Client):
             'timezone' : 'UTC',
             'autoclears' : {},
             'blacklist' : [],
-            'restrictions' : {},
+            'restrictions' : [],
             'tags' : {}
         }
 
         try:
-            with open('data.msgpack.zlib', 'rb') as f:
+            with open('DATA/data.msgpack.zlib', 'rb') as f:
                 for d in msgpack.unpackb(zlib.decompress(f.read()), encoding='utf8'):
                     self.validate_data(d)
                     self.data.append(ServerData(**d))
@@ -213,7 +214,7 @@ class BotClient(discord.Client):
             self.strings = eval(f.read())
 
         if await self.get_cmd(message):
-            with open('data.msgpack.zlib', 'wb') as f:
+            with open('DATA/data.msgpack.zlib', 'wb') as f:
                 f.write(zlib.compress(msgpack.packb([d.__dict__ for d in self.data])))
 
 
@@ -222,7 +223,11 @@ class BotClient(discord.Client):
         server = None if message.guild is None else self.get_server(message.guild)
         prefix = '$' if server is None else server.prefix
 
-        if server is None or message.channel.id not in server.blacklist or message.content == '{}help'.format(server.prefix):
+        if message.content.startswith('mbprefix'):
+            await self.change_prefix(message, ' '.join(message.content.split(' ')[1:]), server)
+
+
+        if server is None or message.channel.id not in server.blacklist or message.content.startswith(('{}help'.format(server.prefix), '{}blacklist'.format(server.prefix))):
             if message.content[0:len(prefix)] == prefix:
                 command = (message.content + ' ')[len(prefix):message.content.find(' ')]
                 if command in self.commands:
@@ -494,14 +499,14 @@ class BotClient(discord.Client):
 
             for role in message.role_mentions:
                 args = True
-                if role.id not in server.restrictions[message.channel.id]:
+                if role.id not in server.restrictions:
                     disengage_all = False
-                server.restrictions[message.channel.id].append(role.id)
+                server.restrictions.append(role.id)
 
             if disengage_all and args:
                 for role in message.role_mentions:
-                    server.restrictions[message.channel.id].remove(role.id)
-                    server.restrictions[message.channel.id].remove(role.id)
+                    server.restrictions.remove(role.id)
+                    server.restrictions.remove(role.id)
 
                 await message.channel.send(embed=discord.Embed(description=self.strings['restrict']['disabled']))
 
@@ -509,7 +514,7 @@ class BotClient(discord.Client):
                 await message.channel.send(embed=discord.Embed(description=self.strings['restrict']['enabled']))
 
             else:
-                await message.channel.send(embed=discord.Embed(description=self.strings['restrict']['allowed'].format(' '.join(['<@&' + str(i) + '>' for i in server.restrictions[message.channel.id]]))))
+                await message.channel.send(embed=discord.Embed(description=self.strings['restrict']['allowed'].format(' '.join(['<@&' + str(i) + '>' for i in server.restrictions]))))
 
 
     async def tag(self, message, stripped, server):
@@ -520,7 +525,7 @@ class BotClient(discord.Client):
 
         splits = stripped.split(' ')
 
-        if len(splits) == 1:
+        if stripped == '':
             if len(server.tags) == 0:
                 await message.channel.send(embed=discord.Embed(title='No Tags!', description='*Use `$tag add <name>: <message>`, `$tag remove` and `$tag help` to manage your tags*'))
             else:
@@ -531,7 +536,7 @@ class BotClient(discord.Client):
         elif len(splits) > 1:
             content = ' '.join(splits[1:])
 
-            if splits[1] in ['add', 'new']:
+            if splits[0] in ['add', 'new']:
                 if len(server.tags) > 5 and message.author not in self.get_patrons('Patrons'):
                     await message.channel.send('Sorry, but for normal users tags are capped at 6. Please remove some or consider donating with `$donate` ($5 tier).')
                     return
@@ -554,7 +559,7 @@ class BotClient(discord.Client):
 
                 not_done = False
 
-            elif splits[1] in ['remove', 'del']:
+            elif splits[0] in ['remove', 'del']:
                 name = ' '.join(splits[2:])
                 if name not in server.tags.keys():
                     await message.channel.send('Couldn\'t find the tag by the name you specified.')
@@ -565,8 +570,8 @@ class BotClient(discord.Client):
 
                 not_done = False
 
-        if len(splits) > 1 and not_done:
-            name = ' '.join(splits[1:]).strip()
+        if not_done:
+            name = ' '.join(splits).strip()
 
             if name not in server.tags.keys():
                 await message.channel.send('Use `$tag add <name>: <message>` to add new tags. Use `$tag remove <name>` to delete a tag. Use `$tag <name>` to view a tag. Use `$tag` to list all tags')
