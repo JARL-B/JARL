@@ -55,7 +55,8 @@ class BotClient(discord.Client):
             'timezone' : 'UTC',
             'autoclears' : {},
             'blacklist' : [],
-            'restrictions' : {}
+            'restrictions' : {},
+            'tags' : {}
         }
 
         try:
