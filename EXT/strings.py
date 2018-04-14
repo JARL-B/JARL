@@ -115,7 +115,7 @@ Current timezone: {timezone}''',
 
         'enabled' : '''Enabled channel reminder permissions for roles.''',
 
-        'allowed' : 'Allowed roles: {}'
+        'allowed' : '''Allowed roles: {}'''
     },
 
     'clear' : {
@@ -151,6 +151,34 @@ Example:
         'disable' : '''Autoclearing disabled on {}''',
 
         'enable' : '''{} second autoclearing enabled''',
-    }
+    },
+
+    'del' : {
+        'listing' : '''Listing reminders on this server... (there may be a small delay, please wait for the "List (1,2,3...)" message)''',
+
+        'listed' : '''List (1,2,3...) the reminders you wish to delete, or type anything else to cancel.''',
+
+        'count' : '''Deleted {} reminders!'''
+    },
+
+    'todo' : {
+        'server_only' : '''Please use `$todo` for your personal TODO list. `$todos` is only for server use.''',
+
+        'add' : '''*Do `{prefix}{command} add <message>` to add an item to your TODO, or type `{prefix}{command} help` for more commands!*''',
+
+        'too_long' : '''Sorry, but TODO message sizes are limited to 80 characters. Keep it concise :)''',
+
+        'too_long2' : '''Sorry, but TODO lists are capped at 800 characters. Maybe, get some things done?''',
+
+        'added' : '''Added \'{name}\' to todo!''',
+
+        'removed' : '''Removed \'{}\' from todo!''',
+
+        'error_value' : '''Removal item must be a number. View the numbered TODOs using `{prefix}{command}`''',
+
+        'error_index' : '''Couldn\'t find item by that number. Are you in the correct todo list?''',
+
+        'help' : '''To use the TODO commands, do `{prefix}{command} add <message>`, `{prefix}{command} remove <number>`, `{prefix}{command} clear` and `{prefix}{command}` to add to, remove from, clear or view your todo list.'''
+    },
 
 }

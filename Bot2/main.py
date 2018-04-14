@@ -477,8 +477,8 @@ class BotClient(discord.Client):
 
     async def todo(self, message, stripped, server):
         if 'todos' in message.content.split(' ')[0]:
-            if isinstance(message.channel, discord.DMChannel):
-                await message.channel.send('Please use `$todo` for your personal TODO list. `$todos` is only for server use.')
+            if server is None:
+                await message.channel.send(self.strings['todo']['server_only'])
                 return
 
             location = message.guild.id
@@ -501,42 +501,42 @@ class BotClient(discord.Client):
         if len(splits) == 1:
             msg = ['\n{}: {}'.format(i+1, todo[i]) for i in range(len(todo))]
             if len(msg) == 0:
-                msg.append('*Do `${0} add <message>` to add an item to your TODO, or type `${0} help` for more commands!*'.format(command))
+                msg.append(self.strings['todo']['add'].format(prefix='$' if server is None else server.prefix, command=command))
             await message.channel.send(embed=discord.Embed(title='{}\'s TODO'.format(name), description=''.join(msg)))
 
         elif len(splits) >= 2:
             if splits[0] in ['add', 'a']:
                 a = ' '.join(splits[1:])
                 if len(a) > 80:
-                    await message.channel.send('Sorry, but TODO message sizes are limited to 80 characters. Keep it concise :)')
+                    await message.channel.send(self.strings['todo']['too_long'])
                     return
 
                 elif len(''.join(todo)) > 800:
-                    await message.channel.send('Sorry, but TODO lists are capped at 800 characters. Maybe, get some things done?')
+                    await message.channel.send(self.strings['todo']['too_long2'])
                     return
 
                 self.todos[location].append(a)
-                await message.channel.send('Added \'{}\' to todo!'.format(a))
+                await message.channel.send(self.strings['todo']['added'].format(a))
 
             elif splits[0] in ['remove', 'r']:
                 try:
                     a = self.todos[location].pop(int(splits[1])-1)
-                    await message.channel.send('Removed \'{}\' from todo!'.format(a))
+                    await message.channel.send(self.strings['todo']['removed'].format(a))
 
                 except ValueError:
-                    await message.channel.send('Removal item must be a number. View the numbered TODOs using `${}`'.format(command))
+                    await message.channel.send(self.strings['todo']['error_value'].format(prefix='$' if server is None else server.prefix, command=command))
                 except IndexError:
-                    await message.channel.send('Couldn\'t find item by that number. Are you in the correct todo list?')
+                    await message.channel.send(self.strings['todo']['error_index'])
 
             elif splits[0] in ['remove*', 'r*', 'clear', 'clr']:
                 self.todos[location] = []
                 await message.channel.send('Cleared todo list!')
 
             else:
-                await message.channel.send('To use the TODO commands, do `${0} add <message>`, `${0} remove <number>`, `${0} clear` and `${0}` to add to, remove from, clear or view your todo list.'.format(command))
+                await message.channel.send(self.strings['todo']['help'].format(prefix='$' if server is None else server.prefix, command=command))
 
         else:
-            await message.channel.send('To use the TODO commands, do `${0} add <message>`, `${0} remove <number>`, `${0} clear` and `${0}` to add to, remove from, clear or view your todo list.'.format(command))
+            await message.channel.send(self.strings['todo']['help'].format(prefix='$' if server is None else server.prefix, command=command))
 
         with open('DATA/todos.json', 'w') as f:
             json.dump(self.todos, f)
@@ -559,7 +559,7 @@ class BotClient(discord.Client):
         else:
             li = [message.author.id]
 
-        await message.channel.send('Listing reminders on this server... (there may be a small delay, please wait for the "List (1,2,3...)" message)')
+        await message.channel.send(self.strings['del']['listing'])
 
         n = 1
         remli = []
@@ -570,7 +570,7 @@ class BotClient(discord.Client):
                 await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ')')
                 n += 1
 
-        await message.channel.send('List (1,2,3...) the reminders you wish to delete, or type anything else to cancel.')
+        await message.channel.send(self.strings['del']['listed'])
 
         num = await client.wait_for('message', check=lambda m: m.author == message.author and m.channel == message.channel)
         nums = [n.strip() for n in num.content.split(',')]
@@ -590,7 +590,7 @@ class BotClient(discord.Client):
             except IndexError:
                 continue
 
-        await message.channel.send('Deleted {} reminders!'.format(dels))
+        await message.channel.send(self.strings['del']['count'].format(dels))
 
 client = BotClient()
 client.run(client.config.get('DEFAULT', 'token'))
