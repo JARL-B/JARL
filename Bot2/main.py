@@ -5,7 +5,9 @@ from Reminder import Reminder
 import discord
 import msgpack
 import pytz
+import asyncio
 
+from itertools import chain
 import zlib
 import datetime
 import time
@@ -23,6 +25,12 @@ class BotClient(discord.Client):
         self.data = []
         self.reminders = []
         self.DEFAULT_PREFIX = '$'
+
+        self.times = {
+            'last_loop' : time.time(),
+            'start' : 0,
+            'loops' : 0
+        }
 
         self.commands = {
             'help' : self.help,
@@ -81,7 +89,7 @@ class BotClient(discord.Client):
         self.reminders = []
 
         self.connection = sqlite3.connect('DATA/calendar.db') #open SQL db
-        self.cursor = connection.cursor() #place cursor
+        self.cursor = self.connection.cursor() #place cursor
         self.cursor.row_factory = sqlite3.Row #set row to read as SQLite Rows
 
         self.cursor.execute('SELECT * FROM reminders') #select all rows
@@ -102,7 +110,7 @@ class BotClient(discord.Client):
             with open('DATA/process_deletes.mp', 'rb') as f:
                 self.process_deletes = msgpack.unpack(f)
         except FileNotFoundError:
-            print('No todos file found')
+            print('No deletes file found')
             self.process_deletes = {}
 
         try:
@@ -207,15 +215,18 @@ class BotClient(discord.Client):
 
 
     async def on_message(self, message):
-
-        if message.author.bot or message.content == None:
-            return
-
         if message.guild is not None and len([d for d in self.data if d.id == message.guild.id]) == 0:
             s = ServerData(**self.template)
             s.id = message.guild.id
 
             self.data.append(s)
+
+        server = None if message.guild is None else self.get_server(message.guild)
+        if server is not None and message.channel.id in server.autoclears.keys():
+            self.process_deletes[message.id] = {'time' : time.time() + server.autoclears[message.channel.id], 'channel' : message.channel.id}
+
+        if message.author.bot or message.content == None:
+            return
 
         with open('EXT/strings.py', 'r') as f:
             self.strings = eval(f.read())
@@ -435,7 +446,7 @@ class BotClient(discord.Client):
 
         args.pop(0)
 
-        msg_interval = format_time(args[0], message.guild.id)
+        msg_interval = self.format_time(args[0], message.guild.id)
 
         if msg_interval == None:
             await message.channel.send(embed=discord.Embed(description=self.strings['interval']['invalid_interval']))
@@ -792,7 +803,7 @@ class BotClient(discord.Client):
         await message.channel.send(self.strings['del']['count'].format(dels))
 
 
-    async def check_reminders():
+    async def check_reminders(self):
         await self.wait_until_ready()
 
         self.times['start'] = time.time()
@@ -896,7 +907,7 @@ class BotClient(discord.Client):
             self.cursor.execute('DELETE FROM reminders')
             self.cursor.execute('VACUUM')
 
-            for d in map(lambda x: x.__dict__, reminders):
+            for d in map(lambda x: x.__dict__, self.reminders):
 
                 command = '''INSERT INTO reminders (interval, time, channel, message)
                 VALUES (?, ?, ?, ?)'''
@@ -920,6 +931,7 @@ class BotClient(discord.Client):
                                 await message.delete()
                             except Exception as e:
                                 print(e)
+
             except Exception as e:
                 print('Error in deletion loop: {}'.format(e))
 
@@ -931,12 +943,12 @@ class BotClient(discord.Client):
 client = BotClient()
 
 try:
-    client.loop.create_task(check_reminders())
+    client.loop.create_task(client.check_reminders())
 
     #coro = asyncio.start_server(server.handle_inbound, '0.0.0.0', 44139, loop=client.loop)
     #server = client.loop.run_until_complete(coro)
 
-    client.run(config.get('DEFAULT', 'token'))
+    client.run(client.config.get('DEFAULT', 'token'))
 except Exception as e:
     print('Error detected. Restarting in 15 seconds.')
     print(sys.exc_info()[0])
