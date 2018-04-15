@@ -80,12 +80,12 @@ class BotClient(discord.Client):
 
         self.reminders = []
 
-        connection = sqlite3.connect('DATA/calendar.db') #open SQL db
-        cursor = connection.cursor() #place cursor
-        cursor.row_factory = sqlite3.Row #set row to read as SQLite Rows
+        self.connection = sqlite3.connect('DATA/calendar.db') #open SQL db
+        self.cursor = connection.cursor() #place cursor
+        self.cursor.row_factory = sqlite3.Row #set row to read as SQLite Rows
 
-        cursor.execute('SELECT * FROM reminders') #select all rows
-        for reminder in cursor.fetchall(): #for all rows...
+        self.cursor.execute('SELECT * FROM reminders') #select all rows
+        for reminder in self.cursor.fetchall(): #for all rows...
             self.reminders.append(Reminder(dictv=dict(reminder))) #place each in the list
 
         self.reminders.sort(key=lambda x: x.time)
@@ -97,6 +97,13 @@ class BotClient(discord.Client):
         except FileNotFoundError:
             print('No todos file found')
             self.todos = {}
+
+        try:
+            with open('DATA/process_deletes.mp', 'rb') as f:
+                self.process_deletes = msgpack.unpack(f)
+        except FileNotFoundError:
+            print('No todos file found')
+            self.process_deletes = {}
 
         try:
             open('EXT/strings.py', 'r').close()
@@ -784,5 +791,155 @@ class BotClient(discord.Client):
 
         await message.channel.send(self.strings['del']['count'].format(dels))
 
+
+    async def check_reminders():
+        await self.wait_until_ready()
+
+        self.times['start'] = time.time()
+        while not self.is_closed():
+            self.times['last_loop'] = time.time()
+            self.times['loops'] += 1
+
+            while len(self.reminders) and self.reminders[0].time <= time.time():
+                print('Looping for reminder(s)...')
+
+                reminder = self.reminders.pop(0)
+
+                if reminder.interval is not None and reminder.interval < 8:
+                    continue
+
+                users = self.get_all_members()
+                channels = self.get_all_channels()
+
+                msg_points = chain(users, channels)
+
+                recipient = discord.utils.get(msg_points, id=reminder.channel)
+
+                if recipient == None:
+                    print('{}: Failed to locate channel'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
+                    continue
+
+                try:
+                    if reminder.interval == None:
+                        await recipient.send(reminder.message)
+                        print('{}: Administered reminder to {}'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name))
+
+                    else:
+                        server_members = recipient.guild.members
+                        patrons = self.get_patrons('Donor')
+
+                        if any([m in patrons for m in server_members]):
+                            if reminder.message.startswith('-del_on_send'):
+                                try:
+                                    await recipient.purge(check=lambda m: m.content == reminder.message[len('-del_on_send'):].strip() and time.time() - m.created_at.timestamp() < 1209600 and m.author == client.user)
+                                except Exception as e:
+                                    print(e)
+
+                                await recipient.send(reminder.message[len('-del_on_send'):])
+
+                            elif reminder.message.startswith('-del_after_'):
+
+                                chars = ''
+
+                                for char in reminder.message[len('-del_after_'):]:
+                                    if char in '0123456789':
+                                        chars += char
+                                    else:
+                                        break
+
+                                wait_time = int(chars)
+
+                                message = await recipient.send(reminder.message[len('-del_after_{}'.format(chars)):])
+
+                                self.process_deletes[message.id] = {'time' : time.time() + wait_time, 'channel' : message.channel.id}
+
+                            elif reminder.message.startswith('getfrom['):
+                                id_started = False
+                                chars = ''
+                                for char in reminder.message[8:].strip():
+                                    if char in '0123456789':
+                                        id_started = True
+                                        chars += char
+                                    elif id_started:
+                                        break
+
+                                channel_id = int(chars)
+                                get_from = [s for s in recipient.guild.channels if s.id == channel_id]
+                                if not get_from:
+                                    print('getfrom call failed')
+                                    continue
+
+                                a = []
+                                async for item in get_from[0].history(limit=50):
+                                    a.append(item)
+                                quote = random.choice(a)
+
+                                await recipient.send(quote.content)
+
+                            else:
+                                await recipient.send(reminder.message)
+
+                            print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
+                        else:
+                            await recipient.send('There appears to be no patrons on your server, so the interval has been removed.')
+                            continue
+
+                        while reminder.time <= time.time():
+                            reminder.time += reminder.interval ## change the time for the next interval
+
+                        self.reminders.append(reminder) # Requeue the interval with modified time
+                        self.reminders.sort(key=lambda x: x.time)
+
+                except Exception as e:
+                    print(e)
+
+            self.cursor.execute('DELETE FROM reminders')
+            self.cursor.execute('VACUUM')
+
+            for d in map(lambda x: x.__dict__, reminders):
+
+                command = '''INSERT INTO reminders (interval, time, channel, message)
+                VALUES (?, ?, ?, ?)'''
+
+                self.cursor.execute(command, (d['interval'], d['time'], d['channel'], d['message']))
+
+            self.connection.commit()
+
+            try:
+                for message, info in self.process_deletes.copy().items():
+                    if info['time'] <= time.time():
+                        del self.process_deletes[message]
+
+                        message = await self.get_channel(info['channel']).get_message(message)
+
+                        if message is None or message.pinned:
+                            pass
+                        else:
+                            print('{}: Attempting to auto-delete a message...'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
+                            try:
+                                await message.delete()
+                            except Exception as e:
+                                print(e)
+            except Exception as e:
+                print('Error in deletion loop: {}'.format(e))
+
+            with open('DATA/process_deletes.mp', 'wb') as f:
+                msgpack.dump(self.process_deletes, f)
+
+            await asyncio.sleep(2.5)
+
 client = BotClient()
-client.run(client.config.get('DEFAULT', 'token'))
+
+try:
+    client.loop.create_task(check_reminders())
+
+    #coro = asyncio.start_server(server.handle_inbound, '0.0.0.0', 44139, loop=client.loop)
+    #server = client.loop.run_until_complete(coro)
+
+    client.run(config.get('DEFAULT', 'token'))
+except Exception as e:
+    print('Error detected. Restarting in 15 seconds.')
+    print(sys.exc_info()[0])
+    time.sleep(15)
+
+    os.execl(sys.executable, sys.executable, *sys.argv)
