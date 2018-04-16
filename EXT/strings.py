@@ -163,7 +163,9 @@ Example:
 
         'donor' : '''You need to be a Patron (donating 2$ or more) to access this command! Type `$donate` to find out more.''',
 
-        'success' : '''New interval registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'''
+        'success' : '''New interval registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.''',
+
+        'removed' : '''There appears to be no patrons on your server, so the interval has been removed.'''
 
     },
 
@@ -201,6 +203,25 @@ Example:
         'help' : '''To use the TODO commands, do `{prefix}{command} add <message>`, `{prefix}{command} remove <number>`, `{prefix}{command} clear` and `{prefix}{command}` to add to, remove from, clear or view your todo list.''',
 
         'cleared' : '''Cleared todo list!'''
+    },
+
+    'tags' : {
+
+        'deleted' : '''Deleted tag {}''',
+
+        'added' : '''Added tag {}''',
+
+        'invalid_count' : '''Sorry, but for normal users tags are capped at 6. Please remove some or consider donating with `$donate` ($5 tier).''',
+
+        'invalid_chars' : '''Tags are capped at 80 characters. Keep it concise!''',
+
+        'colon' : '''Please add a colon to split the name of the tag from the body.''',
+
+        'illegal' : '''Please don\'t use keywords `add, new, remove, del` in the names of your tags.''',
+
+        'unfound' : '''Couldn\'t find the tag by the name you specified.''',
+
+        'help' : '''Use `$tag add <name>: <message>` to add new tags. Use `$tag remove <name>` to delete a tag. Use `$tag <name>` to view a tag. Use `$tag` to list all tags'''
     },
 
     'blacklist' : {

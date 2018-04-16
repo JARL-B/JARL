@@ -633,7 +633,7 @@ class BotClient(discord.Client):
 
         if stripped == '':
             if len(server.tags) == 0:
-                await message.channel.send(embed=discord.Embed(title='No Tags!', description='*Use `$tag add <name>: <message>`, `$tag remove` and `$tag help` to manage your tags*'))
+                await message.channel.send(embed=discord.Embed(title='No Tags!', description=self.strings['tags']['help']))
             else:
                 await message.channel.send(embed=discord.Embed(title='Tags', description='\n'.join(server.tags.keys())))
 
@@ -644,35 +644,35 @@ class BotClient(discord.Client):
 
             if splits[0] in ['add', 'new']:
                 if len(server.tags) > 5 and message.author not in self.get_patrons('Patrons'):
-                    await message.channel.send('Sorry, but for normal users tags are capped at 6. Please remove some or consider donating with `$donate` ($5 tier).')
+                    await message.channel.send(self.strings['tags']['invalid_count'])
                     return
 
                 elif len(content) > 80 and message.author not in self.get_patrons('Patrons'):
-                    await message.channel.send('Tags are capped at 80 characters. Keep it concise!')
+                    await message.channel.send(self.strings['tags']['invalid_chars'])
                     return
 
                 content = content.split(':')
                 if len(content) == 1:
-                    await message.channel.send('Please add a colon to split the name of the tag from the body.')
+                    await message.channel.send(self.strings['tags']['colon'])
 
                 else:
                     if content[0].startswith(('add', 'new', 'remove', 'del')):
-                        await message.channel.send('Please don\'t use keywords `add, new, remove, del` in the names of your tags.')
+                        await message.channel.send(self.strings['tags']['illegal'])
                         return
 
                     server.tags[content[0]] = ':'.join(content[1:]).strip()
-                    await message.channel.send('Added tag {}'.format(content[0]))
+                    await message.channel.send(self.strings['tags']['added'].format(content[0]))
 
                 not_done = False
 
             elif splits[0] in ['remove', 'del']:
                 name = ' '.join(splits[2:])
                 if name not in server.tags.keys():
-                    await message.channel.send('Couldn\'t find the tag by the name you specified.')
+                    await message.channel.send(self.strings['tags']['unfound'])
                     return
 
                 del server.tags[name]
-                await message.channel.send('Deleted tag {}'.format(name))
+                await message.channel.send(self.strings['tags']['deleted'].format(name))
 
                 not_done = False
 
@@ -680,7 +680,7 @@ class BotClient(discord.Client):
             name = ' '.join(splits).strip()
 
             if name not in server.tags.keys():
-                await message.channel.send('Use `$tag add <name>: <message>` to add new tags. Use `$tag remove <name>` to delete a tag. Use `$tag <name>` to view a tag. Use `$tag` to list all tags')
+                await message.channel.send(self.strings['tags']['help'])
                 return
 
             await message.channel.send(server.tags[name])
@@ -892,7 +892,7 @@ class BotClient(discord.Client):
 
                             print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
                         else:
-                            await recipient.send('There appears to be no patrons on your server, so the interval has been removed.')
+                            await recipient.send(self.strings['interval']['removed'])
                             continue
 
                         while reminder.time <= time.time():
