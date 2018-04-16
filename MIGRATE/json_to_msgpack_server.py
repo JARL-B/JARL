@@ -23,7 +23,7 @@ async def on_ready():
         'timezone' : 'UTC',
         'autoclears' : {},
         'blacklist' : [],
-        'restrictions' : {},
+        'restrictions' : [],
         'tags' : {}
     }
 
@@ -47,5 +47,28 @@ async def on_ready():
         else:
             continue
 
+    for channel, time in variables[1].items():
+        obj = client.get_channel(int(channel))
+
+        if obj is None:
+            continue
+
+        if list(filter(lambda x: x['id'] == obj.guild.id, data)):
+            list(filter(lambda x: x['id'] == obj.guild.id, data))[0]['autoclears'][obj.id] = time
+
+        else:
+            continue
+
+    for channel, roles in variables[1].items():
+        obj = client.get_channel(int(channel))
+
+        if obj is None:
+            continue
+
+        if list(filter(lambda x: x['id'] == obj.guild.id, data)):
+            list(filter(lambda x: x['id'] == obj.guild.id, data))[0]['autoclears'][obj.id] = time
+
+        else:
+            continue
 
 client.run('token')
