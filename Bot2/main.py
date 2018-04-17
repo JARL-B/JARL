@@ -66,7 +66,8 @@ class BotClient(discord.Client):
             'autoclears' : {},
             'blacklist' : [],
             'restrictions' : [],
-            'tags' : {}
+            'tags' : {},
+            'language' : 'EN'
         }
 
         try:
@@ -114,7 +115,7 @@ class BotClient(discord.Client):
             self.process_deletes = {}
 
         try:
-            open('EXT/strings.py', 'r').close()
+            open('EXT/strings_EN.py', 'r').close()
         except FileNotFoundError:
             print('Strings file not present. Exiting...')
             sys.exit()
@@ -228,7 +229,7 @@ class BotClient(discord.Client):
         if message.author.bot or message.content == None:
             return
 
-        with open('EXT/strings.py', 'r') as f:
+        with open('EXT/strings_{}.py'.format('EN' if server is None else server.language), 'r') as f:
             self.strings = eval(f.read())
 
         if await self.get_cmd(message):
@@ -944,9 +945,6 @@ client = BotClient()
 
 try:
     client.loop.create_task(client.check_reminders())
-
-    #coro = asyncio.start_server(server.handle_inbound, '0.0.0.0', 44139, loop=client.loop)
-    #server = client.loop.run_until_complete(coro)
 
     client.run(client.config.get('DEFAULT', 'token'))
 except Exception as e:

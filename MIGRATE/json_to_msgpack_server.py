@@ -24,7 +24,8 @@ async def on_ready():
         'autoclears' : {},
         'blacklist' : [],
         'restrictions' : [],
-        'tags' : {}
+        'tags' : {},
+        'language' : 'EN'
     }
 
     data = []
@@ -59,16 +60,31 @@ async def on_ready():
         else:
             continue
 
-    for channel, roles in variables[1].items():
+    for channel, roles in variables[2].items():
         obj = client.get_channel(int(channel))
 
         if obj is None:
             continue
 
         if list(filter(lambda x: x['id'] == obj.guild.id, data)):
-            list(filter(lambda x: x['id'] == obj.guild.id, data))[0]['autoclears'][obj.id] = time
+            list(filter(lambda x: x['id'] == obj.guild.id, data))[0]['restrictions'] += roles
 
         else:
             continue
+
+    for guild, tags in variables[3].items():
+        obj = client.get_guild(int(guild))
+
+        if list(filter(lambda x: x['id'] == obj.id, data)):
+            list(filter(lambda x: x['id'] == obj.guild.id, data))[0]['tags'] = tags
+
+    for guild, prefix in variables[3].items():
+        obj = client.get_guild(int(guild))
+
+        if list(filter(lambda x: x['id'] == obj.id, data)):
+            list(filter(lambda x: x['id'] == obj.guild.id, data))[0]['prefix'] = prefix
+
+    print(data)
+
 
 client.run('token')
