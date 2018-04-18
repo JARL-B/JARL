@@ -224,7 +224,16 @@ class BotClient(discord.Client):
 
     async def on_message(self, message):
         if message.guild is not None and len([d for d in self.data if d.id == message.guild.id]) == 0:
-            s = ServerData(**self.template)
+            s = ServerData(**{
+                'id' : 0,
+                'prefix' : self.DEFAULT_PREFIX,
+                'timezone' : 'UTC',
+                'autoclears' : {},
+                'blacklist' : [],
+                'restrictions' : [],
+                'tags' : {},
+                'language' : 'EN'
+            })
             s.id = message.guild.id
 
             self.data.append(s)
