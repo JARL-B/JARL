@@ -17,7 +17,7 @@ __Reminder Commands__
 
 > `$timezone` - configura la zona horaria del servidor, para facilitar los recordatorios basados en tiempo
 
-__TheManagement Commands__
+__Other Commands__
 > `$autoclear [veces] [canales]` - activa/desactiva la limpieza automática de mensajes, donde los mensajes enviados al canal (por defecto el canal en el que estás) serán eliminados automáticamente luego de un tiempo (por defecto 10 segundos)
 
 > `$clear <usuarios>` - elimina mensajes enviados por los usuarios mencionados
@@ -28,15 +28,14 @@ __TheManagement Commands__
 
 > `$blacklist [canal]` - bloquea o desbloquea un canal de enviar comandos.
 
-__Other Commands__
 > `$donate` - muestra información sobre donaciones.
 
 > `mbprefix <prefijo>` - cambia el prefijo "$". ¡Este comando no utiliza un prefijo!
 
 > `$info` - obtén información sobre el bot.
 
-> una palabra rodeada por `<` `>` es un argumento obligatorio
-> una palabra rodeada por `[` `]` es un argumento opcional
+> `$lang <nombre>` - cambia el idioma.
+
 > ¡no coloques los paréntesis al escribir un comando! Por ejemplo, `mbprefix !`, no `mbprefix <!>`
 
 Por favor dirígete a nuestro servidor de Discord si necesitas más ayuda

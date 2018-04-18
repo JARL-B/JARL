@@ -35,6 +35,8 @@ __Other Commands__
 
 > `$info` - get info on the bot.
 
+> `$lang <name>` - change the language.
+
 > a word surrounded by `<` `>` is a required argument
 > a word surrounded by `[` `]` is an optional argument
 > do not type the brackets when you type out the command! For example, `mbprefix !`, not `mbprefix <!>`
