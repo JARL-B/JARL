@@ -233,6 +233,13 @@ Example:
 
         'added' : '''Added current channel to blacklist'''
 
+    },
+
+    'lang' : {
+
+        'invalid' : '''Languages:
+English (EN)
+Spanish (ES)'''
     }
 
 }

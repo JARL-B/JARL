@@ -42,6 +42,7 @@ class BotClient(discord.Client):
             'restrict' : self.restrict,
 
             'timezone' : self.timezone,
+            'lang' : self.language,
 
             'remind' : self.remind,
             'interval' : self.interval,
@@ -57,6 +58,11 @@ class BotClient(discord.Client):
 
         self.strings = {
             'help' : 'NULL'
+        }
+
+        self.languages = {
+            'english' : 'EN',
+            'spanish' : 'ES'
         }
 
         self.template = {
@@ -310,6 +316,19 @@ class BotClient(discord.Client):
 
                 await message.channel.send(embed=discord.Embed(description=self.strings['timezone']['success'].format(timezone=server.timezone, time=d.strftime('%H:%M:%S'))))
 
+
+    async def language(self, message, stripped, server):
+        if server is None:
+            return
+
+        if stripped.lower() in self.languages.keys():
+            server.language = self.languages[stripped.lower()]
+
+        elif stripped.upper() in self.languages.values():
+            server.language = stripped.upper()
+
+        else:
+            await message.channel.send(embed=discord.Embed(description=self.strings['lang']['invalid']))
 
     async def remind(self, message, stripped, server):
         if server is None:
