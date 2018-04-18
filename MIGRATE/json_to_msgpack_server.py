@@ -46,11 +46,8 @@ async def on_ready():
         if obj is None:
             continue
 
-        if list(filter(lambda x: x['id'] == obj.guild.id, data)):
-            list(filter(lambda x: x['id'] == obj.guild.id, data))[0]['blacklist'].append(obj.id)
-
-        else:
-            continue
+        if obj.guild.id in [x['id'] for x in data]:
+            [x for x in data if x['id'] == obj.guild.id][0]['blacklist'].append(obj.id)
 
     for channel, time in variables[1].items():
         obj = client.get_channel(int(channel))
