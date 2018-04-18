@@ -1,5 +1,6 @@
 import discord
 import json
+import configparser
 
 files = ['blacklist.json', 'autoclears.json', 'restrictions.json', 'tags.json', 'prefix.json']
 directory = 'DATA'
@@ -86,5 +87,7 @@ async def on_ready():
 
     print(data)
 
+config = configparser.SafeConfigParser()
+config.read('config.ini')
 
-client.run('token')
+client.run(config.get('DEFAULT', 'token'))
