@@ -35,7 +35,16 @@ async def on_ready():
     data = []
 
     for g in client.guilds:
-        new = template.copy()
+        new = {
+            'id' : 0,
+            'prefix' : default_prefix,
+            'timezone' : 'UTC',
+            'autoclears' : {},
+            'blacklist' : [],
+            'restrictions' : [],
+            'tags' : {},
+            'language' : 'EN'
+        }
 
         new['id'] = g.id
         data.append(new)
