@@ -97,6 +97,7 @@ class BotClient(discord.Client):
 
         self.connection = sqlite3.connect('DATA/calendar.db') #open SQL db
         self.cursor = self.connection.cursor() #place cursor
+        self.cursor.execute('''PRAGMA journal_mode=DELETE;''')
         self.cursor.row_factory = sqlite3.Row #set row to read as SQLite Rows
 
         self.cursor.execute('SELECT * FROM reminders') #select all rows
@@ -115,7 +116,7 @@ class BotClient(discord.Client):
 
         try:
             with open('DATA/process_deletes.mp', 'rb') as f:
-                self.process_deletes = msgpack.unpack(f)
+                self.process_deletes = msgpack.unpack(f, encoding='utf8')
         except FileNotFoundError:
             print('No deletes file found')
             self.process_deletes = {}

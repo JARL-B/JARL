@@ -1,6 +1,9 @@
 import discord
 import json
 import configparser
+import msgpack
+import zlib
+import sys
 
 files = ['blacklist.json', 'autoclears.json', 'restrictions.json', 'tags.json', 'prefix.json']
 directory = 'DATA'
@@ -77,15 +80,20 @@ async def on_ready():
         obj = client.get_guild(int(guild))
 
         if list(filter(lambda x: x['id'] == obj.id, data)):
-            list(filter(lambda x: x['id'] == obj.guild.id, data))[0]['tags'] = tags
+            list(filter(lambda x: x['id'] == obj.id, data))[0]['tags'] = tags
 
-    for guild, prefix in variables[3].items():
+    for guild, prefix in variables[4].items():
         obj = client.get_guild(int(guild))
 
         if list(filter(lambda x: x['id'] == obj.id, data)):
-            list(filter(lambda x: x['id'] == obj.guild.id, data))[0]['prefix'] = prefix
+            list(filter(lambda x: x['id'] == obj.id, data))[0]['prefix'] = prefix
 
     print(data)
+
+    with open('{}/data.msgpack.zlib'.format(directory), 'wb') as f:
+        f.write(zlib.compress(msgpack.packb(data)))
+
+    sys.exit()
 
 config = configparser.SafeConfigParser()
 config.read('config.ini')
