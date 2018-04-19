@@ -91,7 +91,7 @@ class BotClient(discord.Client):
         self.patreonserver = int(self.config.get('DEFAULT', 'patreon_server'))
 
         if self.patreon:
-            print('Patreon is enabled. Will look for server {}'.format(patreonserver))
+            print('Patreon is enabled. Will look for server {}'.format(self.patreonserver))
 
         self.reminders = []
 
