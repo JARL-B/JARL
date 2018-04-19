@@ -262,22 +262,27 @@ class BotClient(discord.Client):
             await self.change_prefix(message, ' '.join(message.content.split(' ')[1:]), server)
 
 
-        if server is None or message.channel.id not in server.blacklist or message.content.startswith(('{}help'.format(server.prefix), '{}blacklist'.format(server.prefix))):
+        if server is None or message.content.startswith(('{}help'.format(server.prefix), '{}blacklist'.format(server.prefix))):
             if message.content[0:len(prefix)] == prefix:
                 command = (message.content + ' ')[len(prefix):message.content.find(' ')]
                 if command in self.commands:
+                    if message.channel.id in server.blacklist:
+                        await message.channel.send(embed=discord.Embed(description=self.strings['blacklisted']))
+                        return False
+
                     stripped = (message.content + ' ')[message.content.find(' '):].strip()
                     await self.commands[command](message, stripped, server)
                     return True
 
             elif self.user.id in map(lambda x: x.id, message.mentions) and len(message.content.split(' ')) > 1:
                 if message.content.split(' ')[1] in self.commands.keys():
+                    if message.channel.id in server.blacklist:
+                        await message.channel.send(embed=discord.Embed(description=self.strings['blacklisted']))
+                        return False
+
                     stripped = (message.content + ' ').split(' ', 2)[-1].strip()
                     await self.commands[message.content.split(' ')[1]](message, stripped, server)
                     return True
-
-        else:
-            await message.channel.send(embed=discord.Embed(description=self.strings['blacklisted']))
 
         return False
 
