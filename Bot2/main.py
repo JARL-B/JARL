@@ -253,7 +253,7 @@ class BotClient(discord.Client):
                 with open('DATA/data.msgpack.zlib', 'wb') as f:
                     f.write(zlib.compress(msgpack.packb([d.__dict__ for d in self.data])))
         except discord.errors.Forbidden:
-            pass
+            print('FORBIDDEN')
 
 
     async def get_cmd(self, message):
