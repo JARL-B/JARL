@@ -248,9 +248,12 @@ class BotClient(discord.Client):
         with open('EXT/strings_{}.py'.format('EN' if server is None else server.language), 'r') as f:
             self.strings = eval(f.read())
 
-        if await self.get_cmd(message):
-            with open('DATA/data.msgpack.zlib', 'wb') as f:
-                f.write(zlib.compress(msgpack.packb([d.__dict__ for d in self.data])))
+        try:
+            if await self.get_cmd(message):
+                with open('DATA/data.msgpack.zlib', 'wb') as f:
+                    f.write(zlib.compress(msgpack.packb([d.__dict__ for d in self.data])))
+        except discord.errors.Forbidden:
+            pass
 
 
     async def get_cmd(self, message):
