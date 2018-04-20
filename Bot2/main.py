@@ -255,8 +255,10 @@ class BotClient(discord.Client):
                 with open('DATA/data.msgpack.zlib', 'wb') as f:
                     f.write(zlib.compress(msgpack.packb([d.__dict__ for d in self.data])))
         except discord.errors.Forbidden:
-            print('FORBIDDEN')
-
+            try:
+                await message.channel.send('Action forbidden. Please ensure I have the correct permissions.')
+            except discord.errors.Forbidden:
+                print('Twice Forbidden')
 
     async def get_cmd(self, message):
 
