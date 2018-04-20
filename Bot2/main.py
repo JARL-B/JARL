@@ -23,7 +23,6 @@ class BotClient(discord.Client):
         self.get_server = lambda x: [d for d in self.data if d.id == x.id][0]
 
         self.data = []
-        self.reminders = []
         self.DEFAULT_PREFIX = '$'
 
         self.times = {
@@ -102,8 +101,6 @@ class BotClient(discord.Client):
         if self.patreon:
             print('Patreon is enabled. Will look for server {}'.format(self.patreonserver))
 
-        self.reminders = []
-
         self.connection = sqlite3.connect('DATA/calendar.db') #open SQL db
         self.cursor = self.connection.cursor() #place cursor
         self.cursor.execute('''PRAGMA journal_mode=DELETE;''')
@@ -138,7 +135,8 @@ class BotClient(discord.Client):
 
 
     def count_reminders(self, loc):
-        return len([r for r in self.reminders if r.channel == loc and r.interval == None])
+        self.cursor.execute('SELECT * FROM reminders WHERE channel = ?', (loc,))
+        return len([r for r in self.cursor.fetchall() if dict(r)['interval'] == None])
 
 
     def get_patrons(self, level='Patrons'):
