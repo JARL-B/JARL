@@ -1,3 +1,5 @@
+#: spanish
+
 {
     'blacklisted' : ''':x: Este canal está en la blacklist :x:''',
 
@@ -237,8 +239,7 @@ Ejemplo:
     'lang' : {
 
         'invalid' : '''Idiomas:
-English (EN)
-Spanish (ES)'''
+{}'''
     }
 
 }

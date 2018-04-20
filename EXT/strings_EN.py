@@ -1,3 +1,5 @@
+#: english
+
 {
     'blacklisted' : ''':x: This channel is blacklisted :x:''',
 
@@ -240,8 +242,7 @@ Example:
     'lang' : {
 
         'invalid' : '''Languages:
-English (EN)
-Spanish (ES)'''
+{}'''
     }
 
 }

@@ -60,15 +60,19 @@ class BotClient(discord.Client):
 
         }
 
+        self.languages = {
+
+        }
+
         for fn in os.listdir('EXT'):
             if fn.startswith('strings_'):
                 with open('EXT/' + fn, 'r') as f:
-                    self.strings[fn[8:10]] = eval(f.read())
+                    a = f.read()
+                    self.strings[fn[8:10]] = eval(a)
+                    self.languages[a.split('\n')[0].strip('#:\n ')] = fn[8:10]
 
-        self.languages = {
-            'english' : 'EN',
-            'spanish' : 'ES'
-        }
+        print(self.languages)
+
 
         self.template = {
             'id' : 0,
@@ -349,7 +353,7 @@ class BotClient(discord.Client):
             server.language = stripped.upper()
 
         else:
-            await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['lang']['invalid']))
+            await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['lang']['invalid'].format('\n'.join(['{} ({})'.format(x.title(), y.upper()) for x, y in self.languages.items()]))))
 
     async def remind(self, message, stripped, server):
         if server is None:
