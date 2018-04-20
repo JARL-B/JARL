@@ -1,4 +1,4 @@
-#: spanish
+#: español
 
 {
     'blacklisted' : ''':x: Este canal está en la blacklist :x:''',
