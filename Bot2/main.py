@@ -109,12 +109,6 @@ class BotClient(discord.Client):
         self.cursor.execute('''PRAGMA journal_mode=DELETE;''')
         self.cursor.row_factory = sqlite3.Row #set row to read as SQLite Rows
 
-        self.cursor.execute('SELECT * FROM reminders') #select all rows
-        for reminder in self.cursor.fetchall(): #for all rows...
-            self.reminders.append(Reminder(dictv=dict(reminder))) #place each in the list
-
-        self.reminders.sort(key=lambda x: x.time)
-
         try:
             with open('DATA/todos.json', 'r') as f:
                 self.todos = json.load(f)
@@ -431,8 +425,12 @@ class BotClient(discord.Client):
                     await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['no_perms']))
                     return
 
-        self.reminders.append(Reminder(time=msg_time, channel=scope, message=msg_text))
-        self.reminders.sort(key=lambda x: x.time)
+        reminder = Reminder(time=msg_time, channel=scope, message=msg_text)
+
+        command = '''INSERT INTO reminders (interval, time, channel, message)
+        VALUES (?, ?, ?, ?)'''
+
+        self.cursor.execute(command, (reminder.interval, reminder.time, reminder.channel, reminder.message))
 
         await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['success'].format(pref, scope, round(msg_time - time.time()))))
         print('Registered a new reminder for {}'.format(message.guild.name))
@@ -525,8 +523,12 @@ class BotClient(discord.Client):
                     await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['no_perms']))
                     return
 
-        self.reminders.append(Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text))
-        self.reminders.sort(key=lambda x: x.time)
+        reminder = Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text)
+
+        command = '''INSERT INTO reminders (interval, time, channel, message)
+        VALUES (?, ?, ?, ?)'''
+
+        self.cursor.execute(command, (reminder.interval, reminder.time, reminder.channel, reminder.message))
 
         await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['interval']['success'].format(pref, scope, round(msg_time - time.time()))))
         print('Registered a new interval for {}'.format(message.guild.name))
@@ -801,8 +803,6 @@ class BotClient(discord.Client):
         if server is not None:
             if not message.author.guild_permissions.manage_messages:
                 scope = message.channel.id
-                if scope not in restrictions.keys():
-                    server.restrictions[scope] = []
                 for role in message.author.roles:
                     if role.id in server.restrictions[scope]:
                         break
@@ -819,7 +819,15 @@ class BotClient(discord.Client):
         n = 1
         remli = []
 
-        for rem in self.reminders:
+        command = '''SELECT *
+        FROM reminders
+        WHERE channel IN ({})
+        '''.format(', '.join([str(c.id) for c in message.guild.channels]))
+
+        self.cursor.execute(command)
+
+        for r in self.cursor.fetchall():
+            rem = Reminder(dictv=dict(r))
             if rem.channel in li:
                 remli.append(rem)
                 await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ')')
@@ -836,7 +844,12 @@ class BotClient(discord.Client):
                 i = int(i) - 1
                 if i < 0:
                     continue
-                self.reminders.remove(remli[i])
+
+                if remli[i].interval is None:
+                    self.cursor.execute('DELETE FROM reminders WHERE time = ? and channel = ? and message = ?', (remli[i].time, remli[i].channel, remli[i].message))
+                else:
+                    self.cursor.execute('DELETE FROM reminders WHERE interval = ? and channel = ? and message = ?', (remli[i].interval, remli[i].channel, remli[i].message))
+
                 print('Deleted reminder')
                 dels += 1
 
@@ -856,10 +869,22 @@ class BotClient(discord.Client):
             self.times['last_loop'] = time.time()
             self.times['loops'] += 1
 
-            while len(self.reminders) and self.reminders[0].time <= time.time():
-                print('Looping for reminder(s)...')
+            command = '''
+            SELECT *
+            FROM reminders
+            WHERE time < ?;
+            '''
+            self.cursor.execute(command, (time.time(),))
 
-                reminder = self.reminders.pop(0)
+            for r in self.cursor.fetchall():
+                print('Looping for reminder(s)...')
+                reminder = Reminder(dictv=dict(r))
+
+                command = '''DELETE
+                FROM reminders
+                WHERE time = ? AND channel = ? AND message = ?;
+                '''
+                self.cursor.execute(command, (reminder.time, reminder.channel, reminder.message))
 
                 if reminder.interval is not None and reminder.interval < 8:
                     continue
@@ -943,23 +968,14 @@ class BotClient(discord.Client):
                         while reminder.time <= time.time():
                             reminder.time += reminder.interval ## change the time for the next interval
 
-                        self.reminders.append(reminder) # Requeue the interval with modified time
-                        self.reminders.sort(key=lambda x: x.time)
+                        command = '''INSERT INTO reminders (interval, time, channel, message)
+                        VALUES (?, ?, ?, ?)'''
+
+                        self.cursor.execute(command, (reminder.interval, reminder.time, reminder.channel, reminder.message))
+
 
                 except Exception as e:
                     print(e)
-
-            self.cursor.execute('DELETE FROM reminders')
-            self.cursor.execute('VACUUM')
-
-            for d in map(lambda x: x.__dict__, self.reminders):
-
-                command = '''INSERT INTO reminders (interval, time, channel, message)
-                VALUES (?, ?, ?, ?)'''
-
-                self.cursor.execute(command, (d['interval'], d['time'], d['channel'], d['message']))
-
-            self.connection.commit()
 
             try:
                 for message, info in self.process_deletes.copy().items():
@@ -983,6 +999,7 @@ class BotClient(discord.Client):
             with open('DATA/process_deletes.mp', 'wb') as f:
                 msgpack.dump(self.process_deletes, f)
 
+            self.connection.commit()
             await asyncio.sleep(2.5)
 
 client = BotClient()
