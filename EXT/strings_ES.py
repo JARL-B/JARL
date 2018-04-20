@@ -139,7 +139,7 @@ Ejemplo:
 
         'invalid_time' : '''Asegúrate que la hora que colocaste es en el formato [num][s/m/h/d][num][s/m/h/d] etc. o `día/mes/año-hora:minuto:segundo`.''',
 
-        'invaid_count' : '''¡Demasiados recordatorios en el canal especificado! Utiliza `$del` para eliminar algunos, o utiliza `$donate` para aumentar el límite (tier de $5)''',
+        'invalid_count' : '''¡Demasiados recordatorios en el canal especificado! Utiliza `$del` para eliminar algunos, o utiliza `$donate` para aumentar el límite (tier de $5)''',
 
         'invalid_chars' : '''¡Recordatorio demasiado largo! (máx. 150, usaste {}). Utiliza `$donate` para aumentar el límite a 1900 caracteres (tier de $5)''',
 
