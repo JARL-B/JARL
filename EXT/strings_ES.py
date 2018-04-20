@@ -177,7 +177,7 @@ Ejemplo:
     },
 
     'del' : {
-        'listing' : '''Listando recordatorios en este servidor... (puede haber un peque;o retraso, espera que el mensaje "Selecciona (1,2,3...)" aparezca)''',
+        'listing' : '''Listando recordatorios en este servidor... (puede haber un pequeño retraso, espera que el mensaje "Selecciona (1,2,3...)" aparezca)''',
 
         'listed' : '''Selecciona (1,2,3...) el recordaorio que quieres eliminar, o escribe cualquier otra cosa para cancelar.''',
 
