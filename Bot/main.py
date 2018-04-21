@@ -16,6 +16,7 @@ import os
 import configparser
 import sqlite3
 import json
+import random
 
 class BotClient(discord.Client):
     def __init__(self, *args, **kwargs):
