@@ -18,6 +18,7 @@ import sqlite3
 import json
 import random
 
+
 class BotClient(discord.Client):
     def __init__(self, *args, **kwargs):
         super(BotClient, self).__init__(*args, **kwargs)
@@ -149,6 +150,51 @@ class BotClient(discord.Client):
             return premiums
         else:
             return client.get_all_members()
+
+    def parse_mention(self, message, text, server):
+        if text[2:-1][0] == '!':
+            tag = int(text[3:-1])
+
+        else:
+            try:
+                tag = int(text[2:-1])
+            except ValueError:
+                return None, None
+
+        if text[1] == '@': # if the scope is a user
+            pref = '@'
+            scope = message.guild.get_member(tag)
+
+        else:
+            pref = '#'
+            scope = message.guild.get_channel(tag)
+
+        if scope is None:
+            return None, None
+
+        else:
+            return scope.id, pref
+
+    def perm_check(self, message, server):
+        if not message.author.guild_permissions.manage_messages:
+            for role in message.author.roles:
+                if role.id in server.restrictions:
+                    return True
+            else:
+                return False
+
+        else:
+            return True
+
+    def length_check(self, message, text):
+        if len(text) > 150 and message.author not in self.get_patrons('Patrons'):
+            return '150'
+
+        if len(text) >= 1900:
+            return '2000'
+
+        else:
+            return True
 
     def format_time(self, text, server):
         if '/' in text or ':' in text:
@@ -362,30 +408,11 @@ class BotClient(discord.Client):
         pref = '#'
 
         if args[0].startswith('<'): # if a scope is provided
-            if args[0][2:-1][0] == '!':
-                tag = int(args[0][3:-1])
 
-            else:
-                try:
-                    tag = int(args[0][2:-1])
-                except ValueError:
-                    await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_tag']))
-                    return
-
-            if args[0][1] == '@': # if the scope is a user
-                pref = '@'
-                scope = message.guild.get_member(tag)
-
-            else:
-                pref = '#'
-                scope = message.guild.get_channel(tag)
-
+            scope, pref = self.parse_mention(message, args[0], server)
             if scope is None:
                 await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_tag']))
                 return
-
-            else:
-                scope = scope.id
 
             args.pop(0)
 
@@ -407,22 +434,19 @@ class BotClient(discord.Client):
             await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_count']))
             return
 
-        if len(msg_text) > 150 and message.author not in self.get_patrons('Patrons'):
-            await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_chars'].format(len(msg_text))))
-            return
+        if self.length_check(message, msg_text) is not True:
+            if self.length_check(message, msg_text) == '150':
+                await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_chars'].format(len(msg_text))))
 
-        if len(msg_text) >= 1900:
-            await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_chars_2000']))
+            elif self.length_check(message, msg_text) == '2000':
+                await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_chars_2000']))
+
             return
 
         if pref == '#':
-            if not message.author.guild_permissions.manage_messages:
-                for role in message.author.roles:
-                    if role.id in server.restrictions:
-                        break
-                else:
-                    await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['no_perms']))
-                    return
+            if not self.perm_check(message, server):
+                await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['no_perms']))
+                return
 
         reminder = Reminder(time=msg_time, channel=scope, message=msg_text)
 
@@ -454,29 +478,11 @@ class BotClient(discord.Client):
         pref = '#'
 
         if args[0].startswith('<'): # if a scope is provided
-            if args[0][2:-1][0] == '!':
-                tag = int(args[0][3:-1])
 
-            else:
-                try:
-                    tag = int(args[0][2:-1])
-                except ValueError:
-                    await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_tag']))
-
-            if args[0][1] == '@': # if the scope is a user
-                pref = '@'
-                scope = message.guild.get_member(tag)
-
-            else:
-                pref = '#'
-                scope = message.guild.get_channel(tag)
-
+            scope, pref = self.parse_mention(message, args[0], server)
             if scope is None:
                 await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_tag']))
                 return
-
-            else:
-                scope = scope.id
 
             args.pop(0)
 
@@ -505,22 +511,20 @@ class BotClient(discord.Client):
 
         msg_text = ' '.join(args)
 
-        if len(msg_text) > 150 and message.author not in self.get_patrons('Patrons'):
-            await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_chars'].format(len(msg_text))))
-            return
+        if self.length_check(message, msg_text) is not True:
+            if self.length_check(message, msg_text) == '150':
+                await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_chars'].format(len(msg_text))))
 
-        if len(msg_text) >= 1900:
-            await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_chars_2000']))
+            elif self.length_check(message, msg_text) == '2000':
+                await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_chars_2000']))
+
             return
 
         if pref == '#':
-            if not message.author.guild_permissions.manage_messages:
-                for role in message.author.roles:
-                    if role.id in server.restrictions:
-                        break
-                else:
-                    await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['no_perms']))
-                    return
+            if not self.perm_check(message, server):
+                await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['no_perms']))
+                return
+
 
         reminder = Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text)
 
