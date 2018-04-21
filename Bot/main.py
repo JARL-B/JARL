@@ -479,7 +479,7 @@ class BotClient(discord.Client):
 
             args.pop(0)
 
-        msg_time = self.format_time(args[0], message.guild.id)
+        msg_time = self.format_time(args[0], server)
 
         if msg_time == None:
             await message.channel.send(embed=discord.Embed(description=self.strings['EN' if server is None else server.language]['remind']['invalid_time']))
