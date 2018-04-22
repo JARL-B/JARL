@@ -242,7 +242,13 @@ Example:
     'lang' : {
 
         'invalid' : '''Languages:
-{}'''
+{}''',
+
+        'set' : '''Language set to English''',
+    },
+
+    'clock' : {
+        'time' : '''Current time is {}''',
     }
 
 }

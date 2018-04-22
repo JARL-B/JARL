@@ -43,6 +43,7 @@ class BotClient(discord.Client):
             'restrict' : self.restrict,
 
             'timezone' : self.timezone,
+            'clock' : self.clock,
             'lang' : self.language,
 
             'remind' : self.remind,
@@ -403,6 +404,16 @@ class BotClient(discord.Client):
 
         else:
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['lang']['invalid'].format('\n'.join(['{} ({})'.format(x.title(), y.upper()) for x, y in self.languages.items()]))))
+
+
+    async def clock(self, message, stripped, server):
+        if server is None:
+            return
+
+        t = datetime.datetime.now(pytz.timezone(server.timezone))
+
+        await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['clock']['time'].format(t.strftime('%H:%M:%S'))))
+
 
     async def remind(self, message, stripped, server):
         if server is None:
@@ -835,7 +846,7 @@ class BotClient(discord.Client):
         command = '''SELECT *
         FROM reminders
         WHERE channel IN ({})
-        '''.format(', '.join([str(c.id) for c in message.guild.channels]))
+        '''.format(', '.join([str(x) for x in li]))
 
         self.cursor.execute(command)
 
