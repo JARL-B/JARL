@@ -6,6 +6,7 @@ import discord
 import msgpack
 import pytz
 import asyncio
+import aiohttp
 
 from itertools import chain
 import zlib
