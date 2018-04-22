@@ -432,9 +432,11 @@ class BotClient(discord.Client):
 
         if stripped.lower() in self.languages.keys():
             server.language = self.languages[stripped.lower()]
+            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['lang']['set']))
 
         elif stripped.upper() in self.languages.values():
             server.language = stripped.upper()
+            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['lang']['set']))
 
         else:
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['lang']['invalid'].format('\n'.join(['{} ({})'.format(x.title(), y.upper()) for x, y in self.languages.items()]))))

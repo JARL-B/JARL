@@ -242,11 +242,11 @@ Ejemplo:
 {}''',
 
         'set' : '''Idioma cambiado a Español''',
-    }, ##### Line added in english (full line needs translating, including the word 'english')
+    },
 
     'clock' : {
 
         'time' : '''La hora actual es {}''',
-    } ###### section adeded in english
+    }
 
 }
