@@ -241,12 +241,12 @@ Ejemplo:
         'invalid' : '''Idiomas:
 {}''',
 
-        'set' : '''Language set to English''',
+        'set' : '''Idioma cambiado a Inglés''',
     }, ##### Line added in english (full line needs translating, including the word 'english')
 
     'clock' : {
 
-        'time' : '''Current time is {}''',
+        'time' : '''La hora actual es {}''',
     } ###### section adeded in english
 
 }
