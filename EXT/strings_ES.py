@@ -241,7 +241,7 @@ Ejemplo:
         'invalid' : '''Idiomas:
 {}''',
 
-        'set' : '''Idioma cambiado a Inglés''',
+        'set' : '''Idioma cambiado a Español''',
     }, ##### Line added in english (full line needs translating, including the word 'english')
 
     'clock' : {
