@@ -279,6 +279,39 @@ class BotClient(discord.Client):
 
     async def on_guild_remove(self, guild):
         self.data = [d for d in self.data if d.id != guild.id]
+        await send()
+        
+
+    async def on_guild_join(self, guild):
+        await send()
+
+
+    async def send(self):
+        guild_count = len(self.guilds)
+        member_count = len(self.get_all_members())
+
+        if not dbl_token:
+            return
+
+        session = aiohttp.ClientSession()
+        dump = json.dumps({
+            'server_count': len(client.guilds)
+        })
+
+        head = {
+            'authorization': dbl_token,
+            'content-type' : 'application/json'
+        }
+
+        url = 'https://discordbots.org/api/bots/stats'
+        async with session.post(url, data=dump, headers=head) as resp:
+            print('returned {0.status} for {1}'.format(resp, dump))
+
+        session.close()
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post('https://jellywx.co.uk/{}/'.format(self.user.id), data={'token' : 'WxxjHtXWk0-JphXi', 'guilds' : guilds, 'members' : members}) as resp:
+                print('returned {0.status} from jellywx.co.uk'.format(resp))
 
 
     async def on_message(self, message):
