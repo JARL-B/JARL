@@ -279,11 +279,11 @@ class BotClient(discord.Client):
 
     async def on_guild_remove(self, guild):
         self.data = [d for d in self.data if d.id != guild.id]
-        await send()
-        
+        await self.send()
+
 
     async def on_guild_join(self, guild):
-        await send()
+        await self.send()
 
 
     async def send(self):
