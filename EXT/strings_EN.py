@@ -39,8 +39,8 @@ __Other Commands__
 
 > `$lang <name>` - change the language.
 
-> a word surrounded by `<` `>` is a required argument
-> a word surrounded by `[` `]` is an optional argument
+> `$clock` - get the current time.
+
 > do not type the brackets when you type out the command! For example, `mbprefix !`, not `mbprefix <!>`
 
 Please join our Discord server if you need more help

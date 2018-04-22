@@ -6,7 +6,6 @@
     'admin_required' : 'Necesitas permisos de administrador para usar este comando',
 
     'help' : '''
-__Reminder Commands__
 > `$del` - elimina recordatorios e intervalos en tu servidor.
 
 > `$remind [usuario/canal] <tiempo-para-recordatorio> <mensaje>` - coloca un recordatorio. El tiempo debe ponerse como [num][s/m/h/d], por ejemplo 10s para 10 segundos o 2s10m para 2 segundos 10 minutos. Un tiempo exacto puede ser colocado como `día`/`mes`/`año`-`hora`:`minuto`:`segundo`.
@@ -19,7 +18,6 @@ __Reminder Commands__
 
 > `$timezone` - configura la zona horaria del servidor, para facilitar los recordatorios basados en tiempo
 
-__Other Commands__
 > `$autoclear [veces] [canales]` - activa/desactiva la limpieza automática de mensajes, donde los mensajes enviados al canal (por defecto el canal en el que estás) serán eliminados automáticamente luego de un tiempo (por defecto 10 segundos)
 
 > `$clear <usuarios>` - elimina mensajes enviados por los usuarios mencionados
@@ -38,12 +36,14 @@ __Other Commands__
 
 > `$lang <nombre>` - cambia el idioma.
 
+> `$clock` - get the current time.
+
 > ¡no coloques los paréntesis al escribir un comando! Por ejemplo, `mbprefix !`, no `mbprefix <!>`
 
 Por favor dirígete a nuestro servidor de Discord si necesitas más ayuda
 
 https://discord.gg/WQVaYmT
-''',
+''', #### Line added in english
 
     'info' : '''
 Prefijo por defecto: `$`
@@ -242,11 +242,11 @@ Ejemplo:
 {}''',
 
         'set' : '''Language set to English''',
-    },
+    }, ##### Line added in english (full line needs translating, including the word 'english')
 
     'clock' : {
 
         'time' : '''Current time is {}''',
-    }
+    } ###### section adeded in english
 
 }
