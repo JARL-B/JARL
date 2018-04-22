@@ -288,7 +288,7 @@ class BotClient(discord.Client):
 
     async def send(self):
         guild_count = len(self.guilds)
-        member_count = len(self.get_all_members())
+        member_count = len([x for x in self.get_all_members()])
 
         if not dbl_token:
             return
