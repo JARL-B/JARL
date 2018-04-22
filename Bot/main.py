@@ -290,7 +290,7 @@ class BotClient(discord.Client):
         guild_count = len(self.guilds)
         member_count = len([x for x in self.get_all_members()])
 
-        if not dbl_token:
+        if not self.dbl_token:
             return
 
         session = aiohttp.ClientSession()
@@ -299,7 +299,7 @@ class BotClient(discord.Client):
         })
 
         head = {
-            'authorization': dbl_token,
+            'authorization': self.dbl_token,
             'content-type' : 'application/json'
         }
 
