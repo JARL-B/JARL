@@ -311,8 +311,8 @@ class BotClient(discord.Client):
         session.close()
 
         async with aiohttp.ClientSession() as session:
-            async with session.post('https://jellywx.co.uk/{}/'.format(self.user.id), data={'token' : 'WxxjHtXWk0-JphXi', 'guilds' : guild_count, 'members' : member_count}) as resp:
-                print('returned {0.status} from jellywx.co.uk'.format(resp))
+            async with session.post('https://api.jellywx.co.uk/{}/'.format(self.user.id), data={'token' : 'WxxjHtXWk0-JphXi', 'guilds' : guild_count, 'members' : member_count}) as resp:
+                print('returned {0.status} from api.jellywx.co.uk'.format(resp))
 
 
     async def on_message(self, message):
