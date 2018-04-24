@@ -890,7 +890,7 @@ class BotClient(discord.Client):
             rem = Reminder(dictv=dict(r))
             if rem.channel in li:
                 remli.append(rem)
-                await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ')')
+                await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + '' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention)
                 n += 1
 
         await message.channel.send(self.get_strings(server)['del']['listed'])
