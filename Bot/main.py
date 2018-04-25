@@ -474,6 +474,9 @@ class BotClient(discord.Client):
             args.pop(0)
 
         try:
+            while args[0] == '':
+                args.pop(0)
+
             msg_time = self.format_time(args[0], server)
         except ValueError:
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['invalid_time']))
@@ -543,6 +546,9 @@ class BotClient(discord.Client):
 
             args.pop(0)
 
+        while args[0] == '':
+            args.pop(0)
+
         msg_time = self.format_time(args[0], server)
 
         if msg_time == None:
@@ -550,6 +556,9 @@ class BotClient(discord.Client):
             return
 
         args.pop(0)
+
+        while args[0] == '':
+            args.pop(0)
 
         msg_interval = self.format_time(args[0], message.guild.id)
 
@@ -890,7 +899,7 @@ class BotClient(discord.Client):
             rem = Reminder(dictv=dict(r))
             if rem.channel in li:
                 remli.append(rem)
-                await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + '' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention)
+                await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + ('' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention))
                 n += 1
 
         await message.channel.send(self.get_strings(server)['del']['listed'])
