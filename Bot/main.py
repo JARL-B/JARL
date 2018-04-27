@@ -824,7 +824,7 @@ class BotClient(discord.Client):
 
         todo = self.todos[location]
 
-        if len(splits) == 1:
+        if len(splits) == 1 and splits[0] == '':
             msg = ['\n{}: {}'.format(i+1, todo[i]) for i in range(len(todo))]
             if len(msg) == 0:
                 msg.append(self.get_strings(server)['todo']['add'].format(prefix='$' if server is None else server.prefix, command=command))
