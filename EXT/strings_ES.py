@@ -5,7 +5,7 @@
 
     'admin_required' : 'Necesitas permisos de administrador para usar este comando',
 
-    'help' : '''Please visit http://jellywx.co.uk/espanol''',
+    'help' : '''Please visit http://jellywx.co.uk/espanol.html''',
 
     'help_raw' : '''
 > `$del` - elimina recordatorios e intervalos en tu servidor.

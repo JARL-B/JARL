@@ -5,7 +5,7 @@
 
     'admin_required' : 'You need to be an admin to run this command',
 
-    'help' : '''Please visit http://jellywx.co.uk/english''',
+    'help' : '''Please visit http://jellywx.co.uk/''',
 
     'help_raw' : '''
 __Reminder Commands__
