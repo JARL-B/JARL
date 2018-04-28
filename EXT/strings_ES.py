@@ -5,7 +5,9 @@
 
     'admin_required' : 'Necesitas permisos de administrador para usar este comando',
 
-    'help' : '''
+    'help' : '''Please visit http://jellywx.co.uk/espanol''',
+
+    'help_raw' : '''
 > `$del` - elimina recordatorios e intervalos en tu servidor.
 
 > `$remind [usuario/canal] <tiempo-para-recordatorio> <mensaje>` - coloca un recordatorio. El tiempo debe ponerse como [num][s/m/h/d], por ejemplo 10s para 10 segundos o 2s10m para 2 segundos 10 minutos. Un tiempo exacto puede ser colocado como `día`/`mes`/`año`-`hora`:`minuto`:`segundo`.

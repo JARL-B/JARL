@@ -5,7 +5,9 @@
 
     'admin_required' : 'You need to be an admin to run this command',
 
-    'help' : '''
+    'help' : '''Please visit http://jellywx.co.uk/english''',
+
+    'help_raw' : '''
 __Reminder Commands__
 > `$del` - delete reminders and intervals on your server.
 
