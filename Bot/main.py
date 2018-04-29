@@ -1055,7 +1055,6 @@ class BotClient(discord.Client):
 
                         self.cursor.execute(command, (reminder.interval, reminder.time, reminder.channel, reminder.message))
 
-
                 except Exception as e:
                     print(e)
 
