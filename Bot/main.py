@@ -74,8 +74,13 @@ class BotClient(discord.Client):
                     self.strings[fn[8:10]] = eval(a)
                     self.languages[a.split('\n')[0].strip('#:\n ')] = fn[8:10]
 
-        print(self.languages)
+        print('Languages enabled: ' + str(self.languages))
 
+        self.donor_roles = {
+            1 : [353630811561394206],
+            2 : [353226278435946496],
+            3 : [353639034473676802]
+        }
 
         self.template = {
             'id' : 0,
@@ -100,10 +105,10 @@ class BotClient(discord.Client):
         self.config.read('config.ini')
         self.dbl_token = self.config.get('DEFAULT', 'dbl_token')
         self.patreon = self.config.get('DEFAULT', 'patreon_enabled') == 'yes'
-        self.patreonserver = int(self.config.get('DEFAULT', 'patreon_server'))
+        self.patreon_servers = [int(x.strip()) for x in self.config.get('DEFAULT', 'patreon_server').split(',')]
 
         if self.patreon:
-            print('Patreon is enabled. Will look for server {}'.format(self.patreonserver))
+            print('Patreon is enabled. Will look for servers {}'.format(self.patreon_servers))
 
         self.connection = sqlite3.connect('DATA/calendar.db') #open SQL db
         self.cursor = self.connection.cursor() #place cursor
@@ -128,7 +133,7 @@ class BotClient(discord.Client):
         try:
             open('EXT/strings_EN.py', 'r').close()
         except FileNotFoundError:
-            print('Strings file not present. Exiting...')
+            print('English strings file not present. Exiting...')
             sys.exit()
 
 
@@ -143,13 +148,22 @@ class BotClient(discord.Client):
         return len([r for r in self.cursor.fetchall() if dict(r)['interval'] == None])
 
 
-    def get_patrons(self, level='Patrons'):
+    def get_patrons(self, memberid, level=2):
         if self.patreon:
-            p_server = client.get_guild(self.patreonserver)
-            p_role = discord.utils.get(p_server.roles, name=level)
-            premiums = [user for user in p_server.members if p_role in user.roles]
+            p_servers = [client.get_guild(x) for x in self.patreon_servers]
+            members = []
+            for guild in p_servers:
+                for member in guild.members:
+                    if member.id == memberid:
+                        members.append(member)
 
-            return premiums
+            roles = []
+            for member in members:
+                for role in member.roles:
+                    roles.append(role.id)
+
+            return bool(set(self.donor_roles[level]) & set(roles))
+
         else:
             return client.get_all_members()
 
@@ -192,7 +206,7 @@ class BotClient(discord.Client):
 
 
     def length_check(self, message, text):
-        if len(text) > 150 and message.author not in self.get_patrons('Patrons'):
+        if len(text) > 150 and not self.get_patrons(message.author.id):
             return '150'
 
         if len(text) >= 1900:
@@ -490,7 +504,7 @@ class BotClient(discord.Client):
 
         msg_text = ' '.join(args)
 
-        if self.count_reminders(scope) > 5 and message.author not in self.get_patrons('Patrons'):
+        if self.count_reminders(scope) > 5 and not self.get_patrons(message.author.id):
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['invalid_count']))
             return
 
@@ -523,7 +537,7 @@ class BotClient(discord.Client):
         if server is None:
             return
 
-        if message.author not in self.get_patrons('Donor'):
+        if not self.get_patrons(message.author.id, level=1):
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['interval']['donor']))
             return
 
@@ -759,11 +773,11 @@ class BotClient(discord.Client):
             content = ' '.join(splits[1:])
 
             if splits[0] in ['add', 'new']:
-                if len(server.tags) > 5 and message.author not in self.get_patrons('Patrons'):
+                if len(server.tags) > 5 and not self.get_patrons(message.author.id):
                     await message.channel.send(self.get_strings(server)['tags']['invalid_count'])
                     return
 
-                elif len(content) > 80 and message.author not in self.get_patrons('Patrons'):
+                elif len(content) > 80 and not self.get_patrons(message.author.id):
                     await message.channel.send(self.get_strings(server)['tags']['invalid_chars'])
                     return
 
@@ -976,9 +990,8 @@ class BotClient(discord.Client):
 
                     else:
                         server_members = recipient.guild.members
-                        patrons = self.get_patrons('Donor')
 
-                        if any([m in patrons for m in server_members]):
+                        if any([self.get_patrons(m.id, level=1) for m in server_members]):
                             if reminder.message.startswith('-del_on_send'):
                                 try:
                                     await recipient.purge(check=lambda m: m.content == reminder.message[len('-del_on_send'):].strip() and time.time() - m.created_at.timestamp() < 1209600 and m.author == client.user)
@@ -1031,7 +1044,7 @@ class BotClient(discord.Client):
 
                             print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
                         else:
-                            await recipient.send(self.get_strings(server)['interval']['removed'])
+                            await recipient.send(self.get_strings(self.get_server(recipient.guild))['interval']['removed'])
                             continue
 
                         while reminder.time <= time.time():
