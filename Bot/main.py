@@ -79,7 +79,7 @@ class BotClient(discord.Client):
         self.donor_roles = {
             1 : [353630811561394206],
             2 : [353226278435946496],
-            3 : [353639034473676802]
+            3 : [353639034473676802, 404224194641920011]
         }
 
         self.template = {
@@ -165,7 +165,7 @@ class BotClient(discord.Client):
             return bool(set(self.donor_roles[level]) & set(roles))
 
         else:
-            return client.get_all_members()
+            return True
 
 
     def parse_mention(self, message, text, server):
