@@ -23,10 +23,6 @@ import random
 class BotClient(discord.Client):
     def __init__(self, *args, **kwargs):
         super(BotClient, self).__init__(*args, **kwargs)
-        self.get_server = lambda x: [d for d in self.data if d.id == x.id][0]
-
-        self.data = []
-        self.DEFAULT_PREFIX = '$'
 
         self.times = {
             'last_loop' : time.time(),
@@ -82,25 +78,6 @@ class BotClient(discord.Client):
             3 : [353639034473676802, 404224194641920011]
         }
 
-        self.template = {
-            'id' : 0,
-            'prefix' : self.DEFAULT_PREFIX,
-            'timezone' : 'UTC',
-            'autoclears' : {},
-            'blacklist' : [],
-            'restrictions' : [],
-            'tags' : {},
-            'language' : 'EN'
-        }
-
-        try:
-            with open('DATA/data.msgpack.zlib', 'rb') as f:
-                for d in msgpack.unpackb(zlib.decompress(f.read()), encoding='utf8'):
-                    self.validate_data(d)
-                    self.data.append(ServerData(**d))
-        except FileNotFoundError:
-            pass
-
         self.config = configparser.SafeConfigParser()
         self.config.read('config.ini')
         self.dbl_token = self.config.get('DEFAULT', 'dbl_token')
@@ -137,10 +114,37 @@ class BotClient(discord.Client):
             sys.exit()
 
 
-    def validate_data(self, d):
-        for key, default in self.template.items():
-            if key not in d.keys():
-                d[key] = default
+    def get_server(self, guild):
+        self.cursor.execute('SELECT * FROM servers WHERE id = ?', (guild.id, ))
+        d = self.cursor.fetchone()
+
+        if d is None:
+            return None
+
+        else:
+            return ServerData(**dict(d))
+
+
+    def write_server(self, data):
+        print(data)
+
+        command = '''UPDATE servers
+        SET prefix = ?, timezone = ?, language = ?, blacklist = ?, restrictions = ?, tags = ?, autoclears = ?
+        WHERE id = ?
+        '''
+
+        self.cursor.execute(command, (
+            data.prefix,
+            data.timezone,
+            data.language,
+            json.dumps(data.blacklist),
+            json.dumps(data.restrictions),
+            json.dumps(data.tags),
+            json.dumps(data.autoclears),
+            data.id
+        ))
+
+        self.connection.commit()
 
 
     def count_reminders(self, loc):
@@ -293,7 +297,6 @@ class BotClient(discord.Client):
 
 
     async def on_guild_remove(self, guild):
-        self.data = [d for d in self.data if d.id != guild.id]
         await self.send()
 
 
@@ -330,20 +333,14 @@ class BotClient(discord.Client):
 
 
     async def on_message(self, message):
-        if message.guild is not None and len([d for d in self.data if d.id == message.guild.id]) == 0:
-            s = ServerData(**{
-                'id' : 0,
-                'prefix' : self.DEFAULT_PREFIX,
-                'timezone' : 'UTC',
-                'autoclears' : {},
-                'blacklist' : [],
-                'restrictions' : [],
-                'tags' : {},
-                'language' : 'EN'
-            })
-            s.id = message.guild.id
+        if message.guild is not None and self.get_server(message.guild) is None:
+            print('forming...')
 
-            self.data.append(s)
+            command = '''INSERT INTO servers (id, prefix, timezone, language, blacklist, restrictions, tags, autoclears)
+            VALUES (?, "$", "UTC", "EN", "[]", "[]", "{}", "{}")'''
+
+            self.cursor.execute(command, (message.guild.id, ))
+            self.connection.commit()
 
         server = None if message.guild is None else self.get_server(message.guild)
         if server is not None and message.channel.id in server.autoclears.keys():
@@ -354,8 +351,8 @@ class BotClient(discord.Client):
 
         try:
             if await self.get_cmd(message):
-                with open('DATA/data.msgpack.zlib', 'wb') as f:
-                    f.write(zlib.compress(msgpack.packb([d.__dict__ for d in self.data])))
+                pass
+
         except discord.errors.Forbidden:
             try:
                 await message.channel.send('Action forbidden. Please ensure I have the correct permissions.')
@@ -395,19 +392,6 @@ class BotClient(discord.Client):
         return False
 
 
-    async def change_prefix(self, message, stripped, server):
-        if server is None:
-            return
-
-        if stripped:
-            stripped += ' '
-            server.prefix = stripped[:stripped.find(' ')]
-            await message.channel.send(self.get_strings(server)['prefix']['success'].format(prefix=server.prefix))
-
-        else:
-            await message.channel.send(self.get_strings(server)['prefix']['no_argument'].format(prefix=server.prefix))
-
-
     async def help(self, message, stripped, server):
         embed = discord.Embed(description=self.get_strings(server)['help'])
         await message.channel.send(embed=embed)
@@ -421,6 +405,21 @@ class BotClient(discord.Client):
     async def donate(self, message, stripped, server):
         embed = discord.Embed(description=self.get_strings(server)['donate'])
         await message.channel.send(embed=embed)
+
+
+    async def change_prefix(self, message, stripped, server):
+        if server is None:
+            return
+
+        if stripped:
+            stripped += ' '
+            server.prefix = stripped[:stripped.find(' ')]
+            await message.channel.send(self.get_strings(server)['prefix']['success'].format(prefix=server.prefix))
+
+        else:
+            await message.channel.send(self.get_strings(server)['prefix']['no_argument'].format(prefix=server.prefix))
+
+        self.write_server(server)
 
 
     async def timezone(self, message, stripped, server):
@@ -439,6 +438,7 @@ class BotClient(discord.Client):
 
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['timezone']['success'].format(timezone=server.timezone, time=d.strftime('%H:%M:%S'))))
 
+                self.write_server(server)
 
     async def language(self, message, stripped, server):
         if server is None:
@@ -454,6 +454,9 @@ class BotClient(discord.Client):
 
         else:
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['lang']['invalid'].format('\n'.join(['{} ({})'.format(x.title(), y.upper()) for x, y in self.languages.items()]))))
+            return
+
+        self.write_server(server)
 
 
     async def clock(self, message, stripped, server):
@@ -658,6 +661,8 @@ class BotClient(discord.Client):
             else:
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['autoclear']['enable'].format(seconds)))
 
+        self.write_server(server)
+
 
     async def blacklist(self, message, stripped, server):
         if server is None:
@@ -696,6 +701,7 @@ class BotClient(discord.Client):
                 server.blacklist.append(message.channel.id)
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['blacklist']['added']))
 
+        self.write_server(server)
 
 
     async def clear(self, message, stripped, server):
@@ -752,6 +758,7 @@ class BotClient(discord.Client):
             else:
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['restrict']['allowed'].format(' '.join(['<@&' + str(i) + '>' for i in server.restrictions]))))
 
+        self.write_server(server)
 
     async def tag(self, message, stripped, server):
         if server is None:
@@ -815,6 +822,7 @@ class BotClient(discord.Client):
 
             await message.channel.send(server.tags[name])
 
+        self.write_server(server)
 
     async def todo(self, message, stripped, server):
         if 'todos' in message.content.split(' ')[0]:

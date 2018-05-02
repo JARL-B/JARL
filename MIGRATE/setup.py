@@ -36,19 +36,25 @@ except sqlite3.OperationalError:
     print('Skipping table generation')
 
 try:
-    connection = sqlite3.connect('../DATA/calendar.db')
-    cursor = connection.cursor()
+    with sqlite3.connect('../DATA/calendar.db') as connection:
+        cursor = connection.cursor()
 
-    command = '''CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
-    token VARCHAR(32)
-    );'''
+        command = '''CREATE TABLE servers (
+        id INTEGER,
+        prefix VARCHAR,
+        timezone VARCHAR,
+        language VARCHAR,
+        blacklist VARCHAR,
+        restrictions VARCHAR,
+        tags VARCHAR,
+        autoclears VARCHAR
+        )'''
 
-    cursor.execute(command)
-    connection.commit()
-    connection.close()
+        cursor.execute(command)
+        connection.commit()
+
 except sqlite3.OperationalError:
-    print('Skipping user table generation')
+    print('Skipping server table gen')
 
 if 'config.ini' not in os.listdir('..'):
     config = configparser.ConfigParser()
