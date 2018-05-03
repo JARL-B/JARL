@@ -7,8 +7,8 @@ try:
 except FileExistsError:
     pass
 
-files = ['autoclears', 'blacklist', 'join_messages', 'leave_messages', 'prefix', 'restrictions', 'spamfilter', 'tags', 'timezones', 'todos']
-contents = ['{}', '[]', '{}', '{}', '{}', '{}', '[]', '{}', '{}', '{}']
+files = ['todos']
+contents = ['{}']
 
 for fn, content in zip(files, contents):
     if fn + '.json' in os.listdir('../DATA/'):

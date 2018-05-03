@@ -334,7 +334,6 @@ class BotClient(discord.Client):
 
     async def on_message(self, message):
         if message.guild is not None and self.get_server(message.guild) is None:
-            print('forming...')
 
             command = '''INSERT INTO servers (id, prefix, timezone, language, blacklist, restrictions, tags, autoclears)
             VALUES (?, "$", "UTC", "EN", "[]", "[]", "{}", "{}")'''
@@ -351,7 +350,7 @@ class BotClient(discord.Client):
 
         try:
             if await self.get_cmd(message):
-                pass
+                print('Command: ' + message.content)
 
         except discord.errors.Forbidden:
             try:
