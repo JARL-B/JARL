@@ -5,24 +5,24 @@
 
     'admin_required' : 'Necesitas permisos de administrador para usar este comando',
 
-    'help' : '''Please visit http://jellywx.co.uk/espanol.html''',
+    'help' : '''Por favor visita http://jellywx.co.uk/espanol.html''',
 
     'help_raw' : '''
 > `$del` - elimina recordatorios e intervalos en tu servidor.
 
 > `$remind [usuario/canal] <tiempo-para-recordatorio> <mensaje>` - coloca un recordatorio. El tiempo debe ponerse como [num][s/m/h/d], por ejemplo 10s para 10 segundos o 2s10m para 2 segundos 10 minutos. Un tiempo exacto puede ser colocado como `día`/`mes`/`año`-`hora`:`minuto`:`segundo`.
 
-> `$interval [usuario/canal] <tiempo-para-recordaorio> <intervalo> <mensaje>` - coloca un intervalo, donde el `mensaje` se enviará cada cierto `intervalo` iniciando desde el `tiempo-para-recordatorio` dado. El tiempo se coloca como dice arriba. Ej. `$interval 0s 20m ¡Hola Mundo!` enviará `¡Hola Mundo!` a tu canal cada 20 minutos.
+> `$interval [usuario/canal] <tiempo-para-recordatorio> <intervalo> <mensaje>` - coloca un intervalo, donde el `mensaje` se enviará cada cierto `intervalo` iniciando desde el `tiempo-para-recordatorio` dado. El tiempo se coloca como dice arriba. Ej. `$interval 0s 20m ¡Hola Mundo!` enviará `¡Hola Mundo!` a tu canal cada 20 minutos.
 
-> `$todo` - Comandos relacionado a la lista TODO (lista de tareas por hacer). Utiliza `$todo help` para más información.
+> `$todo` - Comandos relacionado a la lista TO-DO (lista de tareas por hacer). Utiliza `$todo help` para más información.
 
-> `$todos` - lo mismo que `$todo` pero para tareas del servidor.
+> `$todos` - lo mismo que `$todo` pero para tareas a nivel de servidor.
 
-> `$timezone` - configura la zona horaria del servidor, para facilitar los recordatorios basados en tiempo
+> `$timezone` - configura la zona horaria del servidor, para facilitar los recordatorios basados en tiempo.
 
-> `$autoclear [veces] [canales]` - activa/desactiva la limpieza automática de mensajes, donde los mensajes enviados al canal (por defecto el canal en el que estás) serán eliminados automáticamente luego de un tiempo (por defecto 10 segundos)
+> `$autoclear [veces] [canales]` - activa/desactiva la limpieza automática de mensajes, donde los mensajes enviados al canal (por defecto el canal en el que estás) serán eliminados automáticamente luego de un tiempo (por defecto 10 segundos).
 
-> `$clear <usuarios>` - elimina mensajes enviados por los usuarios mencionados
+> `$clear <usuarios>` - elimina mensajes enviados por los usuarios mencionados.
 
 > `$restrict [roles]` - añade/remueve permiso a ciertos roles mencionados para colocar recordatorios e intervalos.
 
@@ -38,9 +38,9 @@
 
 > `$lang <nombre>` - cambia el idioma.
 
-> `$clock` - get the current time.
+> `$clock` - obtén la hora actual.
 
-> ¡no coloques los paréntesis al escribir un comando! Por ejemplo, `mbprefix !`, no `mbprefix <!>`
+> ¡No coloques los paréntesis al escribir un comando! Por ejemplo, `mbprefix !`, no `mbprefix <!>`
 
 Por favor dirígete a nuestro servidor de Discord si necesitas más ayuda
 
@@ -52,7 +52,7 @@ Prefijo por defecto: `$`
 Prefijo seleccionado: `@{user} prefix $`
 Ayuda: `{prefix}help`
 
-**Welcome to RemindMe!**
+**Bienvenido a RemindMe!**
 Desarrollador: <@203532103185465344>
 Un chico cool: <@174243954487853056>
 Ícono: <@253202252821430272>
@@ -85,7 +85,7 @@ Con tu nuevo rango, podrás:
 : seleccionar más/largos tags
 : usar el exclusivo `TrackerBot` con tu servidor para rastrear tu tiempo de juego mediante Discord
 
-Para quienes estén en Patreon, muchas gracias :D Haces que este bot pueda sostenerse
+Para quienes estén en Patreon, muchas gracias :D Haces que este bot pueda sostenerse.
 
 Ten en cuenta que debes estar conectado a nuestro servidor de Discord para recibir las recompenzas de Patreon.
 ''',
