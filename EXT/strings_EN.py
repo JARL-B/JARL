@@ -19,12 +19,12 @@ __Reminder Commands__
 
 > `$todos` - same as `$todo` but for server-wide task management.
 
-> `$timezone` - set your server's timezone, for easier date-based reminders
+> `$timezone` - set your server's timezone, for easier date-based reminders.
 
 __TheManagement Commands__
-> `$autoclear [time/s] [channels]` - enables/disables autoclearing, where messages sent to the channel (default your channel) will be automatically deleted after time (default 10 seconds)
+> `$autoclear [time/s] [channels]` - enables/disables autoclearing, where messages sent to the channel (default your channel) will be automatically deleted after time (default 10 seconds).
 
-> `$clear <user mentions>` - clears messages made by a user/s
+> `$clear <user mentions>` - clears messages made by a user/s.
 
 > `$restrict [role mentions]` - add/remove roles from being allowed to send channel reminders and intervals.
 
@@ -140,19 +140,19 @@ Example:
     ```$remind #general 10s Hello world```
     ```$remind 10:30 It\'s now 10:30```''',
 
-        'invalid_tag' : '''Couldn't find a location by your tag present''',
+        'invalid_tag' : '''Couldn't find a location by your tag present.''',
 
         'invalid_time' : '''Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. or `day/month/year-hour:minute:second`.''',
 
-        'invalid_count' : '''Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($5 tier)''',
+        'invalid_count' : '''Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($5 tier).''',
 
-        'invalid_chars' : '''Reminder message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 1900 ($5 tier)''',
+        'invalid_chars' : '''Reminder message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 1900 ($5 tier).''',
 
-        'invalid_chars_2000' : '''Discord restrictions mean we can\'t send reminders 2000+ characters. Sorry''',
+        'invalid_chars_2000' : '''Discord restrictions mean we can\'t send reminders 2000+ characters. Sorry.''',
 
         'no_perms' : '''You must have `Manage Messages` or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.''',
 
-        'success' : '''New reminder registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.'''
+        'success' : '''New reminder registered for <{}{}> in {} seconds. You can\'t edit the reminder now, so you are free to delete the message.'''
     },
 
     'interval' : {
@@ -178,11 +178,11 @@ Example:
     'autoclear' : {
         'disable' : '''Autoclearing disabled on {}''',
 
-        'enable' : '''{} second autoclearing enabled''',
+        'enable' : '''{} second autoclearing enabled.''',
     },
 
     'del' : {
-        'listing' : '''Listing reminders on this server... (there may be a small delay, please wait for the "List (1,2,3...)" message)''',
+        'listing' : '''Listing reminders on this server... (there may be a small delay, please wait for the "List (1,2,3...)" message).''',
 
         'listed' : '''List (1,2,3...) the reminders you wish to delete, or type anything else to cancel.''',
 
@@ -231,13 +231,13 @@ Example:
     },
 
     'blacklist' : {
-        'removed_from' : '''Removed blacklists from specified channels''',
+        'removed_from' : '''Removed blacklists from specified channels.''',
 
-        'added_from' : '''Added specified channels to blacklist''',
+        'added_from' : '''Added specified channels to blacklist.''',
 
-        'removed' : '''Removed current channel from blacklist''',
+        'removed' : '''Removed current channel from blacklist.''',
 
-        'added' : '''Added current channel to blacklist'''
+        'added' : '''Added current channel to blacklist.'''
 
     },
 
@@ -246,7 +246,7 @@ Example:
         'invalid' : '''Languages:
 {}''',
 
-        'set' : '''Language set to English''',
+        'set' : '''Language set to English.''',
     },
 
     'clock' : {
