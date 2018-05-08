@@ -3,7 +3,7 @@
 {
     'blacklisted' : ''':x: This channel is blacklisted :x:''',
 
-    'admin_required' : 'You need to be an admin to run this command',
+    'admin_required' : 'You need to be an admin to run this command.',
 
     'help' : '''Please visit http://jellywx.co.uk/''',
 
