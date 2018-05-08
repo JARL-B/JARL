@@ -3,7 +3,7 @@
 {
     'blacklisted' : ''':x: Este canal está en la blacklist :x:''',
 
-    'admin_required' : 'Necesitas permisos de administrador para usar este comando',
+    'admin_required' : 'Necesitas permisos de administrador para usar este comando.',
 
     'help' : '''Por favor visita http://jellywx.co.uk/espanol.html''',
 
@@ -137,19 +137,19 @@ Ejemplo:
     ```$remind #general 10s Hola mundo```
     ```$remind 10:30 Son las 10:30```''',
 
-        'invalid_tag' : '''No es posible encontrar la localización de tu tag''',
+        'invalid_tag' : '''No es posible encontrar la localización de tu tag.''',
 
         'invalid_time' : '''Asegúrate que la hora que colocaste es en el formato [num][s/m/h/d][num][s/m/h/d] etc. o `día/mes/año-hora:minuto:segundo`.''',
 
-        'invalid_count' : '''¡Demasiados recordatorios en el canal especificado! Utiliza `$del` para eliminar algunos, o utiliza `$donate` para aumentar el límite (tier de $5)''',
+        'invalid_count' : '''¡Demasiados recordatorios en el canal especificado! Utiliza `$del` para eliminar algunos, o utiliza `$donate` para aumentar el límite (tier de $5).''',
 
-        'invalid_chars' : '''¡Recordatorio demasiado largo! (máx. 150, usaste {}). Utiliza `$donate` para aumentar el límite a 1900 caracteres (tier de $5)''',
+        'invalid_chars' : '''¡Recordatorio demasiado largo! (máx. 150, usaste {}). Utiliza `$donate` para aumentar el límite a 1900 caracteres (tier de $5).''',
 
-        'invalid_chars_2000' : '''Discord no permite colocar recordatorios con 2000+ caracteres. Lo siento''',
+        'invalid_chars_2000' : '''Discord no permite colocar recordatorios con 2000+ caracteres. Lo siento,''',
 
         'no_perms' : '''Necesitas `Administrar Mensajes` tener un rol con el cual puedas colocar recordaorios a ese canal. Contacta al admnistrador de tu servidor y dile que utilice el comando `$restrict` para especificar roles permitidos.''',
 
-        'success' : '''Nuevo recordatorio registrado para <{}{}> en {} segundos . Ya no puedes editarlo, así que eres libre de eliminarlo.'''
+        'success' : '''Nuevo recordatorio registrado para <{}{}> en {} segundos. Ya no puedes editarlo, así que eres libre de eliminarlo.'''
     },
 
     'interval' : {
@@ -175,11 +175,11 @@ Ejemplo:
     'autoclear' : {
         'disable' : '''Autolimpieza desactivada en {}''',
 
-        'enable' : '''Autolimpieza de {} segundos activada''',
+        'enable' : '''Autolimpieza de {} segundos activada.''',
     },
 
     'del' : {
-        'listing' : '''Listando recordatorios en este servidor... (puede haber un pequeño retraso, espera que el mensaje "Selecciona (1,2,3...)" aparezca)''',
+        'listing' : '''Listando recordatorios en este servidor... (puede haber un pequeño retraso, espera que el mensaje "Selecciona (1,2,3...)" aparezca).''',
 
         'listed' : '''Selecciona (1,2,3...) el recordaorio que quieres eliminar, o escribe cualquier otra cosa para cancelar.''',
 
@@ -228,13 +228,13 @@ Ejemplo:
     },
 
     'blacklist' : {
-        'removed_from' : '''Removidas las blacklists de los canales especificados''',
+        'removed_from' : '''Removidas las blacklists de los canales especificados.''',
 
-        'added_from' : '''Añadido los canales especificados a la blacklist''',
+        'added_from' : '''Añadido los canales especificados a la blacklist.''',
 
-        'removed' : '''Removido el canal actual de la blacklist''',
+        'removed' : '''Removido el canal actual de la blacklist.''',
 
-        'added' : '''Añadido el canal actual a la blacklist'''
+        'added' : '''Añadido el canal actual a la blacklist.'''
 
     },
 
@@ -243,12 +243,12 @@ Ejemplo:
         'invalid' : '''Idiomas:
 {}''',
 
-        'set' : '''Idioma cambiado a Español''',
+        'set' : '''Idioma cambiado a Español.''',
     },
 
     'clock' : {
 
-        'time' : '''La hora actual es {}''',
+        'time' : '''La hora actual es {}.''',
     }
 
 }
