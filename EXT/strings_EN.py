@@ -250,7 +250,7 @@ Example:
     },
 
     'clock' : {
-        'time' : '''Current time is {}''',
+        'time' : '''Current time is {}.''',
     }
 
 }
