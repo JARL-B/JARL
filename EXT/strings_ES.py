@@ -8,6 +8,7 @@
     'help' : '''Por favor visita http://jellywx.co.uk/espanol.html''',
 
     'help_raw' : '''
+__Reminder Commands__
 > `$del` - elimina recordatorios e intervalos en tu servidor.
 
 > `$remind [usuario/canal] <tiempo-para-recordatorio> <mensaje>` - coloca un recordatorio. El tiempo debe ponerse como [num][s/m/h/d], por ejemplo 10s para 10 segundos o 2s10m para 2 segundos 10 minutos. Un tiempo exacto puede ser colocado como `día`/`mes`/`año`-`hora`:`minuto`:`segundo`.
@@ -20,6 +21,8 @@
 
 > `$timezone` - configura la zona horaria del servidor, para facilitar los recordatorios basados en tiempo.
 
+
+__Management Commands__
 > `$autoclear [veces] [canales]` - activa/desactiva la limpieza automática de mensajes, donde los mensajes enviados al canal (por defecto el canal en el que estás) serán eliminados automáticamente luego de un tiempo (por defecto 10 segundos).
 
 > `$clear <usuarios>` - elimina mensajes enviados por los usuarios mencionados.
@@ -30,6 +33,8 @@
 
 > `$blacklist [canal]` - bloquea o desbloquea un canal de enviar comandos.
 
+
+__Other Commands__
 > `$donate` - muestra información sobre donaciones.
 
 > `mbprefix <prefijo>` - cambia el prefijo "$". ¡Este comando no utiliza un prefijo!
