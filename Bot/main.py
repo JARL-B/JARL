@@ -911,11 +911,18 @@ class BotClient(discord.Client):
 
         self.cursor.execute(command)
 
+        s = ''
         for r in self.cursor.fetchall():
             rem = Reminder(dictv=dict(r))
             if rem.channel in li:
                 remli.append(rem)
-                await message.channel.send('  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + ('' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention))
+                s_temp = '  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + ('' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention) + '\n'
+                if len(s) + len(s_temp) > 2000:
+                    await message.channel.send(s)
+                    s = s_temp
+                else:
+                    s += s_temp
+
                 n += 1
 
         await message.channel.send(self.get_strings(server)['del']['listed'])
