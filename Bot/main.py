@@ -623,7 +623,7 @@ class BotClient(discord.Client):
         if server is None:
             return
 
-        if not message.author.guild_permissions.administrator:
+        if not message.author.guild_permissions.manage_guild:
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['admin_required']))
             return
 
@@ -667,7 +667,7 @@ class BotClient(discord.Client):
         if server is None:
             return
 
-        if not message.author.guild_permissions.administrator:
+        if not message.author.guild_permissions.manage_guild:
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['admin_required']))
             return
 
@@ -707,7 +707,7 @@ class BotClient(discord.Client):
         if server is None:
             return
 
-        if not message.author.guild_permissions.administrator:
+        if not message.author.guild_permissions.manage_messages:
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['admin_required']))
             return
 
@@ -731,7 +731,7 @@ class BotClient(discord.Client):
         if server is None:
             return
 
-        if not message.author.guild_permissions.administrator:
+        if not message.author.guild_permissions.manage_guild:
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['admin_required']))
 
         else:
