@@ -53,6 +53,8 @@ class BotClient(discord.Client):
 
             'autoclear' : self.autoclear,
             'clear' : self.clear,
+
+            'cleanup' : self.cleanup
         }
 
         self.strings = {
@@ -288,6 +290,21 @@ class BotClient(discord.Client):
         else:
             return self.strings[server.language]
 
+
+    async def cleanup(self, *args):
+        command = '''SELECT * FROM servers'''
+
+        self.cursor.execute(command)
+        all_ids = [g.id for g in self.guilds]
+
+        for d in self.cursor.fetchall():
+            idx = dict(d)['id']
+
+            if idx not in all_ids:
+                print('Deleting server {}'.format(idx))
+                self.cursor.execute('DELETE FROM servers WHERE id = ?', (idx,))
+
+
     async def on_ready(self):
         print('Logged in as')
         print(self.user.name)
@@ -298,6 +315,8 @@ class BotClient(discord.Client):
 
     async def on_guild_remove(self, guild):
         await self.send()
+
+        await self.cleanup()
 
 
     async def on_guild_join(self, guild):
