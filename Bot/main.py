@@ -916,7 +916,7 @@ class BotClient(discord.Client):
             rem = Reminder(dictv=dict(r))
             if rem.channel in li:
                 remli.append(rem)
-                s_temp = '  **' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + ('' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention) + '\n'
+                s_temp = '**' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + ('' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention) + '\n'
                 if len(s) + len(s_temp) > 2000:
                     await message.channel.send(s)
                     s = s_temp
