@@ -67,7 +67,7 @@ Rețineți că trebuie să fiți conectat la serverul Discord pentru a primi rec
 
     'prefix' : {
         'no_argument' : '''
-Utilizați această comandă ca `{prefix}prefix <prefix>`
+Utilizați această comandă ca `mbprefix <prefix>`
 ''',
         'success' : '''
 Prefix schimbat in {prefix}

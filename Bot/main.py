@@ -54,7 +54,8 @@ class BotClient(discord.Client):
             'autoclear' : self.autoclear,
             'clear' : self.clear,
 
-            'cleanup' : self.cleanup
+            'cleanup' : self.cleanup,
+            'welcome' : self.welcome
         }
 
         self.strings = {
@@ -291,6 +292,20 @@ class BotClient(discord.Client):
             return self.strings[server.language]
 
 
+    async def welcome(self, guild, *args):
+        if isinstance(guild, discord.Message):
+            guild = guild.guild
+
+        for channel in guild.text_channels:
+            if channel.permissions_for(guild.me).send_messages and not channel.is_nsfw():
+                await channel.send('Thank you for adding reminder-bot! To begin, type `$help`, `mbprefix`, `$lang` or `$timezone` to set your timezone.')
+                break
+            else:
+                continue
+
+        print('done')
+
+
     async def cleanup(self, *args):
         command = '''SELECT * FROM servers'''
 
@@ -321,6 +336,8 @@ class BotClient(discord.Client):
 
     async def on_guild_join(self, guild):
         await self.send()
+
+        await self.welcome(guild)
 
 
     async def send(self):

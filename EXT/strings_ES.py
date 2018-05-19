@@ -97,7 +97,7 @@ Ten en cuenta que debes estar conectado a nuestro servidor de Discord para recib
 
     'prefix' : {
         'no_argument' : '''
-Por favor utiliza este comando como `{prefix}prefix <prefijo>`
+Por favor utiliza este comando como `mbprefix <prefijo>`
 ''',
         'success' : '''
 Prefijo cambiado a {prefix}

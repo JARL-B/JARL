@@ -95,7 +95,7 @@ Please note, you must be connected to the Discord server to receive Patreon rewa
 
     'prefix' : {
         'no_argument' : '''
-Please use this command as `{prefix}prefix <prefix>`
+Please use this command as `mbprefix <prefix>`
 ''',
         'success' : '''
 Prefix changed to {prefix}
