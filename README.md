@@ -12,5 +12,4 @@
 
 ## What's upcoming?
 * Client/web client to allow better editing of reminders
-* UX improvements, including ignoring spaces between parameters
 * DM support
