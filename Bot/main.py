@@ -961,6 +961,9 @@ class BotClient(discord.Client):
 
                 n += 1
 
+        if s:
+            await message.channel.send(s)
+
         await message.channel.send(self.get_strings(server)['del']['listed'])
 
         num = await client.wait_for('message', check=lambda m: m.author == message.author and m.channel == message.channel)
