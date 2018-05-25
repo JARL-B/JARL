@@ -50,17 +50,17 @@ https://discordapp.com/oauth2/authorize?client_id=411224415863570434&scope=bot&p
 * Dacă aveți întrebări despre dezvoltarea bot pentru tine sau serverul dvs., vă rugăm sa mi dati un mesaj in privat *''',
 
     'donate' : '''
-Thinking of adding a monthly contribution? Press below for my patreon and official bot server :D
+Va ganditi la contribuirea lunara? Mai jos aveti niste link-uri!
 https://www.patreon.com/jellywx
 https://discord.gg/WQVaYmT
 Mai multe informatii aici:
 Când dați, Patreon vă va clasifica automat pe serverul nostru de discuții, presupunând că ați conectat corect conturile dvs. Patreon și Discord!
 Cu noul dvs. rang, veți putea:
-: utilizați comenzi numai pentru patroni, cum ar fi `intervalul '
+: utilizați comenzi numai pentru administratori, cum ar fi `intervalul '
 : setați mai multe mementouri (nelimitat)
 : setați mementouri mai lungi (2000 caractere)
 : setați mai multe / etichete mai lungi
-: utilizați doar "Patronul" TrackerBot "cu serverul dvs. pentru a urmări timpul jocului prin discordanță
+: utilizați doar "Botul" TrackerBot "cu serverul dvs. pentru a urmări timpul jocului prin discordanță
 Oricine este patron, vă mulțumesc: D Îl faceți pe bot să fie durabil
 Rețineți că trebuie să fiți conectat la serverul Discord pentru a primi recompense Patreon.
 ''',

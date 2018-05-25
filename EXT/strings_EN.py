@@ -152,7 +152,7 @@ Example:
 
         'no_perms' : '''You must have `Manage Messages` or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.''',
 
-        'success' : '''New reminder registered for <{}{}> in {} seconds. You can\'t edit the reminder now, so you are free to delete the message.'''
+        'success' : '''New reminder registered for <{}{}> in {} seconds. If you want to delete this reminder, type `$del`.'''
     },
 
     'interval' : {
