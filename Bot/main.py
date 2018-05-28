@@ -795,6 +795,7 @@ class BotClient(discord.Client):
 
         self.write_server(server)
 
+
     async def tag(self, message, stripped, server):
         if server is None:
             return
@@ -858,6 +859,7 @@ class BotClient(discord.Client):
             await message.channel.send(server.tags[name])
 
         self.write_server(server)
+
 
     async def todo(self, message, stripped, server):
         if 'todos' in message.content.split(' ')[0]:
