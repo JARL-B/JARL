@@ -5,4 +5,5 @@ import json
 @app.route('/help')
 def help():
     lang = request.args.get('lang') or 'EN'
-    
+
+    return render_template('help.html')

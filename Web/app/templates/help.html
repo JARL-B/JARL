@@ -5,23 +5,14 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="favicon.jpg">
 
-	<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
 	<link href='https://fonts.googleapis.com/css?family=SF+UI+Text+Regular,+Helvetica,+Arial,+sans-serif&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
-	<script src="./js/jquery-2.1.0.min.js"></script>
-	<script src="./js/bootstrap.min.js"></script>
-	<script src="./js/blocs.min.js"></script>
-	<script src="./js/lazysizes.min.js" defer></script>
-    <title>Home</title>
+  <title>Home</title>
 
-
-<!-- Google Analytics -->
-
-<!-- Google Analytics END -->
 
 </head>
 <body>
@@ -35,7 +26,7 @@
 			<div class="col-xs-12 col-md-8 col-md-offset-2">
 				<h1 class="mg-md title ">
 					Reminder Bot Documentation:
-				</h1><img src="{{ url_for('static', filename='img/lazyload-ph.png') }}" data-src="https://raw.githubusercontent.com/JellyWX/reminder-bot/master/Remind_Me_Bot_Logo_PPic.jpg" class="img-circle center-block top-image img-responsive lazyload" height="283" width="284" />
+				</h1><img src="https://raw.githubusercontent.com/JellyWX/reminder-bot/master/Remind_Me_Bot_Logo_PPic.jpg" class="img-circle center-block top-image img-responsive" height="283" width="284" />
 				<h3 class="mg-md">
 					Reminder Commands
 				</h3>
@@ -74,11 +65,6 @@
 	</div>
 </div>
 <!-- bloc-0 END -->
-
-<!-- ScrollToTop Button -->
-<a class="bloc-button btn btn-d scrollToTop" onclick="scrollToTarget('1')"><span class="fa fa-chevron-up"></span></a>
-<!-- ScrollToTop Button END-->
-
 
 <!-- Footer - bloc-1 -->
 <div class="bloc bgc-white l-bloc" id="bloc-1">
