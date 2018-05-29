@@ -9,4 +9,4 @@ def help():
     with open('../EXT/strings_EN.py', 'r') as f:
         s = eval(f.read())
 
-    return render_template('help.html', help=s['help_raw'])
+    return render_template('help.html', help=s['help_raw'], foot=s['web_foot'], foot2=s['web_foot2'])

@@ -21,7 +21,7 @@
 
             '$timezone' : 'set your server\'s timezone, for easier date-based reminders.' }],
 
-        ['''TheManagement Commands''', {
+        ['''Management Commands''', {
             '$autoclear [time/s] [channels]' : 'enables/disables autoclearing, where messages sent to the channel (default your channel) will be automatically deleted after time (default 10 seconds).',
 
             '$clear <user mentions>' : 'clears messages made by a user/s.',
@@ -41,8 +41,12 @@
 
             '$lang <name>' : 'change the language.',
 
-            '$clock' : 'get the current time.' }]],
+            '$clock' : 'get the current time.' }
+        ]
+    ],
 
+    'web_foot' : 'Do not type the brackets when you type out the command! For example, mbprefix !, not mbprefix <!>',
+    'web_foot2' : 'Please join our Discord Support Server if you need more help:',
 
     'info' : '''
 Default prefix: `$`
