@@ -34,8 +34,14 @@
 }]
 ],
 
+    'web_foot_title' : 'Extra Information',
     'web_foot' : 'Nu introduceți parantezele atunci când tastați comanda! De exemplu, "mbprefix!", Nu `mbprefix <!>`',
     'web_foot2' : 'Vă rugăm să vă alăturați serverului nostru discord dacă aveți nevoie de ajutor suplimentar',
+
+    'about' : {'About' : ['Bot Created By: Jude Southworth', 'Github: <a href=https://github.com/JellyWX>https://github.com/JellyWX</a>', 'Want a bot making? Please contact me on Discord.', 'Hosting provider: OVH']},
+
+    'join' : 'Join our Discord Server',
+    'invite' : 'Invite the Bot',
 
     'info' : '''
 Prefixul de baza: `$`

@@ -46,8 +46,14 @@
 '$clock' : 'obtén la hora actual.'}]
 ],
 
+    'web_foot_title' : 'Extra Information',
     'web_foot' : '¡No coloques los paréntesis al escribir un comando! Por ejemplo, `mbprefix !`, no `mbprefix <!>`',
     'web_foot2' : 'Por favor dirígete a nuestro servidor de Discord si necesitas más ayuda',
+
+    'about' : {'About' : ['Bot Created By: Jude Southworth', 'Github: <a href=https://github.com/JellyWX>https://github.com/JellyWX</a>', 'Want a bot making? Please contact me on Discord.', 'Hosting provider: OVH']},
+
+    'join' : 'Join our Discord Server',
+    'invite' : 'Invite the Bot',
 
     'info' : '''
 Prefijo por defecto: `$`

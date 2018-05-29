@@ -49,7 +49,7 @@
 				</h3>
 				<p>
 					<strong>{{ foot }}<br> <br></strong> {{ foot2 }}
-				</p><a href="https://discord.gg/WQVaYmT" class="btn btn-d btn-lg server" target="_blank">Join Our Discord Server</a><a href="https://discordapp.com/oauth2/authorize?client_id=349920059549941761&amp;scope=bot&amp;permissions=93248" class="btn btn-d btn-lg invite-button" target="_blank">Invite the Bot</a><span><br></span>
+				</p><a href="https://discord.gg/WQVaYmT" class="btn btn-d btn-lg server" target="_blank">{{ join }}</a><a href="https://discordapp.com/oauth2/authorize?client_id=349920059549941761&amp;scope=bot&amp;permissions=93248" class="btn btn-d btn-lg invite-button" target="_blank">{{ invite }}</a><span><br></span>
 			</div>
 		</div>
 	</div>
@@ -61,21 +61,16 @@
 	<div class="container bloc-lg">
 		<div class="row">
 			<div class="col-sm-3">
+        {% for item, value in footer.items() %}
 				<h3 class="mg-md bloc-mob-center-text">
-					About
+					{{ item }}
 				</h3>
+        {% for v in value %}
 				<h5 class="mg-md">
-					Bot Created By: Jude Southworth
+					{{ v|safe }}
 				</h5>
-				<h5 class="mg-md">
-					Github:&nbsp;<a href="https://github.com/JellyWX" target="_blank">https://github.com/JellyWX</a>
-				</h5>
-				<h5 class="mg-md">
-					Want a bot making? Please contact me on Discord.
-				</h5>
-				<h5 class="mg-md">
-					Hosting Provider: OVH
-				</h5>
+        {% endfor %}
+      {% endfor %}
 			</div>
 			<div class="col-sm-3">
 			</div>
