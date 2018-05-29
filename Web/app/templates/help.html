@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="favicon.jpg">
+
+	<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
+	<link href='https://fonts.googleapis.com/css?family=SF+UI+Text+Regular,+Helvetica,+Arial,+sans-serif&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+	<script src="./js/jquery-2.1.0.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/blocs.min.js"></script>
+	<script src="./js/lazysizes.min.js" defer></script>
+    <title>Home</title>
+
+
+<!-- Google Analytics -->
+
+<!-- Google Analytics END -->
+
+</head>
+<body>
+<!-- Main container -->
+<div class="page-container">
+
+<!-- bloc-0 -->
+<div class="bloc bgc-white l-bloc " id="bloc-0">
+	<div class="container bloc-lg">
+		<div class="row">
+			<div class="col-xs-12 col-md-8 col-md-offset-2">
+				<h1 class="mg-md title ">
+					Reminder Bot Documentation:
+				</h1><img src="{{ url_for('static', filename='img/lazyload-ph.png') }}" data-src="https://raw.githubusercontent.com/JellyWX/reminder-bot/master/Remind_Me_Bot_Logo_PPic.jpg" class="img-circle center-block top-image img-responsive lazyload" height="283" width="284" />
+				<h3 class="mg-md">
+					Reminder Commands
+				</h3>
+				<p>
+					<strong>$del</strong> - delete reminders and intervals on your server. <br><br><strong>$remind [user/channel] &lt;time-to-reminder&gt; &lt;message&gt;</strong> - set up a reminder. Takes times in the format of [num][s/m/h/d],<br> for example 10s for 10 seconds or 2s10m for 2 seconds 10 minutes. An exact time can be provided as day/month/year-hour:minute:second. <br><br><strong>$interval [user/channel] &lt;time-to-reminder&gt; &lt;interval&gt; &lt;message&gt;</strong> - set up an interval, where the given message will be sent every interval starting in the given time-to-reminder. Takes times in the formats above. Ex. $interval 0s 20m Hello World! will send Hello World! to your channel every 20 minutes. <br><br><strong>$todo</strong> - TODO list related commands. Use $todo help for more information. <br><br><strong>$todos</strong> - same as $todo but for server-wide task management. <br><br><strong>$timezone</strong> - set your server&rsquo;s timezone, for easier date-based reminders<br>
+				</p>
+				<div class="divider-h">
+					<span class="divider"></span>
+				</div>
+				<h3 class="mg-md">
+					Management Commands
+				</h3>
+				<p>
+					<strong>$autoclear [time/s] [channels]</strong> - enables/disables autoclearing, where messages sent to the channel (default your channel) will be automatically deleted after time (default 10 seconds) <br><br><strong>$clear &lt;user mentions&gt;</strong> - clears messages made by a user/s <br><br><strong>$restrict [role mentions]</strong> - add/remove roles from being allowed to send channel reminders and intervals. <br><br><strong>$tag</strong> - Aliasing commands. Use $tag help for more information. <br><br><strong>$blacklist [channel-name]</strong> - block or unblock a channel from sending commands.<br>
+				</p>
+				<div class="divider-h">
+					<span class="divider"></span>
+				</div>
+				<h3 class="mg-md">
+					Other Commands
+				</h3>
+				<p>
+					<strong>$donate</strong> - view information about donations. <br><br><strong>mbprefix &lt;string&gt;</strong> - change the prefix from $. This command does not use a prefix! <br><br><strong>$info</strong> - get info on the bot. <br><br><strong>$lang &lt;name&gt;</strong> - change the language. <br><br><strong>$clock</strong> - get the current time.<br>
+				</p>
+				<div class="divider-h">
+					<span class="divider"></span>
+				</div>
+				<h3 class="mg-md">
+					Extra Information
+				</h3>
+				<p>
+					<strong>Do not type the brackets when you type out the command! For example, mbprefix !, not mbprefix &lt;!&gt; <br> <br></strong>Please join our Discord Support Server if you need more help: <strong><br></strong>
+				</p><a href="https://discord.gg/WQVaYmT" class="btn btn-d btn-lg server" target="_blank">Join Our Discord Server</a><a href="https://discordapp.com/oauth2/authorize?client_id=349920059549941761&amp;scope=bot&amp;permissions=93248" class="btn btn-d btn-lg invite-button" target="_blank">Invite the Bot</a><span><br></span>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- bloc-0 END -->
+
+<!-- ScrollToTop Button -->
+<a class="bloc-button btn btn-d scrollToTop" onclick="scrollToTarget('1')"><span class="fa fa-chevron-up"></span></a>
+<!-- ScrollToTop Button END-->
+
+
+<!-- Footer - bloc-1 -->
+<div class="bloc bgc-white l-bloc" id="bloc-1">
+	<div class="container bloc-lg">
+		<div class="row">
+			<div class="col-sm-3">
+				<h3 class="mg-md bloc-mob-center-text">
+					About
+				</h3>
+				<h5 class="mg-md">
+					Bot Created By: Jude Southworth
+				</h5>
+				<h5 class="mg-md">
+					Github:&nbsp;<a href="https://github.com/JellyWX" target="_blank">https://github.com/JellyWX</a>
+				</h5>
+				<h5 class="mg-md">
+					Want a bot making? Please contact me on Discord.
+				</h5>
+				<h5 class="mg-md">
+					Hosting Provider: OVH
+				</h5>
+			</div>
+			<div class="col-sm-3">
+			</div>
+			<div class="col-sm-3">
+			</div>
+			<div class="col-sm-3">
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Footer - bloc-1 END -->
+
+</div>
+<!-- Main container END -->
+
+
+</body>
+</html>
