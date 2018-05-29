@@ -56,6 +56,22 @@ try:
 except sqlite3.OperationalError:
     print('Skipping server table gen')
 
+try:
+    with sqlite3.connect('../DATA/calendar.db') as connection:
+        cursor = connection.cursor()
+
+        command = '''CREATE TABLE connections (
+        id INTEGER,
+        users VARCHAR
+        )'''
+
+        cursor.execute(command)
+        connection.commit()
+
+except sqlite3.OperationalError:
+    print('Skipping connection table gen')
+
+
 if 'config.ini' not in os.listdir('..'):
     config = configparser.ConfigParser()
     config['DEFAULT'] = {
