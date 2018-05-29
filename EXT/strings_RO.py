@@ -5,7 +5,7 @@
 
     'admin_required' : 'Trebuie sa fi Administrator pentru a folosii aceasta comanda.',
 
-    'help' : '''Viziteaza https://jellywx.co.uk/''',
+    'help' : '''Viziteaza https://jellywx.co.uk/help?lang=RO''',
 
     'help_raw' : [
 ['Reminder Commands', {
