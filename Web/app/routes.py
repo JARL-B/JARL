@@ -6,4 +6,7 @@ import json
 def help():
     lang = request.args.get('lang') or 'EN'
 
-    return render_template('help.html')
+    with open('../EXT/strings_EN.py', 'r') as f:
+        s = eval(f.read())
+
+    return render_template('help.html', help=s['help_raw'])

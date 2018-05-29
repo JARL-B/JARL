@@ -27,33 +27,20 @@
 				<h1 class="mg-md title ">
 					Reminder Bot Documentation:
 				</h1><img src="https://raw.githubusercontent.com/JellyWX/reminder-bot/master/Remind_Me_Bot_Logo_PPic.jpg" class="img-circle center-block top-image img-responsive" height="283" width="284" />
+
+        {% for category, items in help %}
 				<h3 class="mg-md">
-					Reminder Commands
+					{{ category }}
 				</h3>
 				<p>
-					<strong>$del</strong> - delete reminders and intervals on your server. <br><br><strong>$remind [user/channel] &lt;time-to-reminder&gt; &lt;message&gt;</strong> - set up a reminder. Takes times in the format of [num][s/m/h/d],<br> for example 10s for 10 seconds or 2s10m for 2 seconds 10 minutes. An exact time can be provided as day/month/year-hour:minute:second. <br><br><strong>$interval [user/channel] &lt;time-to-reminder&gt; &lt;interval&gt; &lt;message&gt;</strong> - set up an interval, where the given message will be sent every interval starting in the given time-to-reminder. Takes times in the formats above. Ex. $interval 0s 20m Hello World! will send Hello World! to your channel every 20 minutes. <br><br><strong>$todo</strong> - TODO list related commands. Use $todo help for more information. <br><br><strong>$todos</strong> - same as $todo but for server-wide task management. <br><br><strong>$timezone</strong> - set your server&rsquo;s timezone, for easier date-based reminders<br>
-				</p>
+          {% for item, description in items.items() %}
+					<strong>{{ item }}</strong> - {{ description }} <br><br>
+          {% endfor %}
+        </p>
 				<div class="divider-h">
 					<span class="divider"></span>
 				</div>
-				<h3 class="mg-md">
-					Management Commands
-				</h3>
-				<p>
-					<strong>$autoclear [time/s] [channels]</strong> - enables/disables autoclearing, where messages sent to the channel (default your channel) will be automatically deleted after time (default 10 seconds) <br><br><strong>$clear &lt;user mentions&gt;</strong> - clears messages made by a user/s <br><br><strong>$restrict [role mentions]</strong> - add/remove roles from being allowed to send channel reminders and intervals. <br><br><strong>$tag</strong> - Aliasing commands. Use $tag help for more information. <br><br><strong>$blacklist [channel-name]</strong> - block or unblock a channel from sending commands.<br>
-				</p>
-				<div class="divider-h">
-					<span class="divider"></span>
-				</div>
-				<h3 class="mg-md">
-					Other Commands
-				</h3>
-				<p>
-					<strong>$donate</strong> - view information about donations. <br><br><strong>mbprefix &lt;string&gt;</strong> - change the prefix from $. This command does not use a prefix! <br><br><strong>$info</strong> - get info on the bot. <br><br><strong>$lang &lt;name&gt;</strong> - change the language. <br><br><strong>$clock</strong> - get the current time.<br>
-				</p>
-				<div class="divider-h">
-					<span class="divider"></span>
-				</div>
+        {% endfor %}
 				<h3 class="mg-md">
 					Extra Information
 				</h3>

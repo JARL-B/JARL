@@ -5,10 +5,10 @@
 
     'admin_required' : 'You need to be an admin to run this command.',
 
-    'help' : '''Please visit http://jellywx.co.uk/''',
+    'help' : '''Please visit https://jellywx.co.uk/''',
 
-    'help_raw' : {
-        '''__Reminder Commands__''' : {
+    'help_raw' : [
+        ['''Reminder Commands''', {
             '$del' : 'delete reminders and intervals on your server.',
 
             '$remind [user/channel] <time-to-reminder> <message>' : 'set up a reminder. Takes times in the format of [num][s/m/h/d], for example 10s for 10 seconds or 2s10m for 2 seconds 10 minutes. An exact time can be provided as `day`/`month`/`year`-`hour`:`minute`:`second`.',
@@ -19,9 +19,9 @@
 
             '$todos' : 'same as `$todo` but for server-wide task management.',
 
-            '$timezone' : 'set your server\'s timezone, for easier date-based reminders.' },
+            '$timezone' : 'set your server\'s timezone, for easier date-based reminders.' }],
 
-        '''__TheManagement Commands__''' : {
+        ['''TheManagement Commands''', {
             '$autoclear [time/s] [channels]' : 'enables/disables autoclearing, where messages sent to the channel (default your channel) will be automatically deleted after time (default 10 seconds).',
 
             '$clear <user mentions>' : 'clears messages made by a user/s.',
@@ -30,9 +30,9 @@
 
             '$tag' : 'Aliasing commands. Use `$tag help` for more information.',
 
-            '$blacklist [channel-name]' : 'block or unblock a channel from sending commands.' },
+            '$blacklist [channel-name]' : 'block or unblock a channel from sending commands.' }],
 
-        '''__Other Commands__''' : {
+        ['''Other Commands''', {
             '$donate' : 'view information about donations.',
 
             'mbprefix <string>' : 'change the prefix from $. This command does not use a prefix!',
@@ -41,14 +41,7 @@
 
             '$lang <name>' : 'change the language.',
 
-            '$clock' : 'get the current time.' },
-
-        'foot' :
-        '''do not type the brackets when you type out the command! For example, `mbprefix !`, not `mbprefix <!>`
-
-        Please join our Discord server if you need more help
-
-        https://discord.gg/WQVaYmT''' },
+            '$clock' : 'get the current time.' }]],
 
 
     'info' : '''
