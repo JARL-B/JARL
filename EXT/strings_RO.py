@@ -5,32 +5,37 @@
 
     'admin_required' : 'Trebuie sa fi Administrator pentru a folosii aceasta comanda.',
 
-    'help' : '''Viziteaza http://jellywx.co.uk/''',
+    'help' : '''Viziteaza https://jellywx.co.uk/''',
 
-    'help_raw' : '''
-__Reminder Commands__
-> `$del` - Sterge reaminitriile serverului.
-> `$remind [user/channel] <time-to-reminder> <message>` - Setează o reamintire. Are timpul în format de [num][s/m/h/d], de exemplu 10s timp de 10 secunde sau 2s10m timp de 2 secunde 10 minute. O oră exactă poate fi dată ca `day`/`month`/`year`-`hour`:`minute`:`second`.
-> `$interval [user/channel] <time-to-reminder> <interval> <message>` - Seteaza un interval unde `message` o sa fie trimis `interval` începand cu data `time-to-reminder`. Are timp in formatele de mai sus. Ex. `$interval 0s 20m Salutari Tuturor!` o sa trimita `Salutari Tuturor!` in canalul dvs la fiecare 20 de minute.
-> `$todo` - Lista de activitati.Folositi `$todo help` pentru mai multe informatii.
-> `$todos` - La fel ca si `$todo` dar pentru gestionarea sarcinilor la nivel de server.
-> `$timezone` - Setați fusul orar al serverului dvs., pentru mementouri mai ușoare bazate pe date.
-__TheManagement Commands__
-> `$autoclear [time/s] [channels]` - Activează / dezactivează autoștergerea, unde mesajele trimise canalului (canalul tău implicit) vor fi șterse automat după timp (implicit 10 secunde).
-> `$clear <user mentions>` - Șterge mesajele făcute de un utilizator / utilizatori.
-> `$restrict [role mentions]` - Adăugați / eliminați rolurile de la a li se permite să trimită mementouri și intervale de canale.
-> `$tag` - Comenzi de aliniere. Folositi `$tag help` pentru mai multe informatii.
-> `$blacklist [channel-name]` - Blocați sau deblocați un canal din trimiterea comenzilor.
-__Other Commands__
-> `$donate` - Vezi informatii despre donatii.
-> `mbprefix <string>` - Modificati prefixul din $. Această comandă nu utilizează un prefix!
-> `$info` - Primeste informatiile botului.
-> `$lang <name>` - Schimbați limba.
-> `$clock` - Vedeți cat este ora.
-> Nu introduceți parantezele atunci când tastați comanda! De exemplu, "mbprefix!", Nu `mbprefix <!>`
-Vă rugăm să vă alăturați serverului nostru discord dacă aveți nevoie de ajutor suplimentar
-https://discord.gg/WQVaYmT
-''',
+    'help_raw' : [
+['Reminder Commands', {
+'$del' : 'Sterge reaminitriile serverului.',
+'$remind [user/channel] <time-to-reminder> <message>' : 'Setează o reamintire. Are timpul în format de [num][s/m/h/d], de exemplu 10s timp de 10 secunde sau 2s10m timp de 2 secunde 10 minute. O oră exactă poate fi dată ca `day`/`month`/`year`-`hour`:`minute`:`second`.',
+'$interval [user/channel] <time-to-reminder> <interval> <message>' : 'Seteaza un interval unde `message` o sa fie trimis `interval` începand cu data `time-to-reminder`. Are timp in formatele de mai sus. Ex. `$interval 0s 20m Salutari Tuturor!` o sa trimita `Salutari Tuturor!` in canalul dvs la fiecare 20 de minute.',
+'$todo' : 'Lista de activitati.Folositi `$todo help` pentru mai multe informatii.',
+'$todos' : 'La fel ca si `$todo` dar pentru gestionarea sarcinilor la nivel de server.',
+'$timezone' : 'Setați fusul orar al serverului dvs., pentru mementouri mai ușoare bazate pe date.'
+}],
+
+['Management Commands', {
+'$autoclear [time/s] [channels]' : 'Activează / dezactivează autoștergerea, unde mesajele trimise canalului (canalul tău implicit) vor fi șterse automat după timp (implicit 10 secunde).',
+'$clear <user mentions>' : 'Șterge mesajele făcute de un utilizator / utilizatori.',
+'$restrict [role mentions]' : 'Adăugați / eliminați rolurile de la a li se permite să trimită mementouri și intervale de canale.',
+'$tag' : 'Comenzi de aliniere. Folositi `$tag help` pentru mai multe informatii.',
+'$blacklist [channel-name]' : 'Blocați sau deblocați un canal din trimiterea comenzilor.',
+}],
+
+['Other Commands', {
+'$donate' : 'Vezi informatii despre donatii.',
+'mbprefix <string>' : 'Modificati prefixul din $. Această comandă nu utilizează un prefix!',
+'$info' : 'Primeste informatiile botului.',
+'$lang <name>' : 'Schimbați limba.',
+'$clock' : 'Vedeți cat este ora.'
+}]
+],
+
+    'web_foot' : 'Nu introduceți parantezele atunci când tastați comanda! De exemplu, "mbprefix!", Nu `mbprefix <!>`',
+    'web_foot2' : 'Vă rugăm să vă alăturați serverului nostru discord dacă aveți nevoie de ajutor suplimentar',
 
     'info' : '''
 Prefixul de baza: `$`

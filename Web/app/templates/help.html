@@ -11,8 +11,11 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
 	<link href='https://fonts.googleapis.com/css?family=SF+UI+Text+Regular,+Helvetica,+Arial,+sans-serif&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
-  <title>Home</title>
+  <title>Help</title>
 
+  {% for lang in languages %}
+  <a href="{{ url_for('help', lang=lang) }}"><strong> {{ lang }} </strong></a>
+  {% endfor %}
 
 </head>
 <body>
