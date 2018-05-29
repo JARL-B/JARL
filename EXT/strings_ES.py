@@ -7,50 +7,47 @@
 
     'help' : '''Por favor visita http://jellywx.co.uk/espanol.html''',
 
-    'help_raw' : '''
-__Reminder Commands__
-> `$del` - elimina recordatorios e intervalos en tu servidor.
+    'help_raw' : [
+['Reminder Commands', {
+'$del' : 'elimina recordatorios e intervalos en tu servidor.',
 
-> `$remind [usuario/canal] <tiempo-para-recordatorio> <mensaje>` - coloca un recordatorio. El tiempo debe ponerse como [num][s/m/h/d], por ejemplo 10s para 10 segundos o 2s10m para 2 segundos 10 minutos. Un tiempo exacto puede ser colocado como `día`/`mes`/`año`-`hora`:`minuto`:`segundo`.
+'$remind [usuario/canal] <tiempo-para-recordatorio> <mensaje>' : 'coloca un recordatorio. El tiempo debe ponerse como [num][s/m/h/d], por ejemplo 10s para 10 segundos o 2s10m para 2 segundos 10 minutos. Un tiempo exacto puede ser colocado como `día`/`mes`/`año`-`hora`:`minuto`:`segundo`.',
 
-> `$interval [usuario/canal] <tiempo-para-recordatorio> <intervalo> <mensaje>` - coloca un intervalo, donde el `mensaje` se enviará cada cierto `intervalo` iniciando desde el `tiempo-para-recordatorio` dado. El tiempo se coloca como dice arriba. Ej. `$interval 0s 20m ¡Hola Mundo!` enviará `¡Hola Mundo!` a tu canal cada 20 minutos.
+'$interval [usuario/canal] <tiempo-para-recordatorio> <intervalo> <mensaje>' : 'coloca un intervalo, donde el `mensaje` se enviará cada cierto `intervalo` iniciando desde el `tiempo-para-recordatorio` dado. El tiempo se coloca como dice arriba. Ej. `$interval 0s 20m ¡Hola Mundo!` enviará `¡Hola Mundo!` a tu canal cada 20 minutos.',
 
-> `$todo` - Comandos relacionado a la lista TO-DO (lista de tareas por hacer). Utiliza `$todo help` para más información.
+'$todo' : 'Comandos relacionado a la lista TO-DO (lista de tareas por hacer). Utiliza `$todo help` para más información.',
 
-> `$todos` - lo mismo que `$todo` pero para tareas a nivel de servidor.
+'$todos' : 'lo mismo que `$todo` pero para tareas a nivel de servidor.',
 
-> `$timezone` - configura la zona horaria del servidor, para facilitar los recordatorios basados en tiempo.
+'$timezone' : 'configura la zona horaria del servidor, para facilitar los recordatorios basados en tiempo.'
+}],
 
+['Management Commands', {
+'$autoclear [veces] [canales]' : 'activa/desactiva la limpieza automática de mensajes, donde los mensajes enviados al canal (por defecto el canal en el que estás) serán eliminados automáticamente luego de un tiempo (por defecto 10 segundos).',
 
-__Management Commands__
-> `$autoclear [veces] [canales]` - activa/desactiva la limpieza automática de mensajes, donde los mensajes enviados al canal (por defecto el canal en el que estás) serán eliminados automáticamente luego de un tiempo (por defecto 10 segundos).
+'$clear <usuarios>' : 'elimina mensajes enviados por los usuarios mencionados.',
 
-> `$clear <usuarios>` - elimina mensajes enviados por los usuarios mencionados.
+'$restrict [roles]' : 'añade/remueve permiso a ciertos roles mencionados para colocar recordatorios e intervalos.',
 
-> `$restrict [roles]` - añade/remueve permiso a ciertos roles mencionados para colocar recordatorios e intervalos.
+'$tag' : 'Comando para alias. Utiliza `$tag help` para más información.',
 
-> `$tag` - Comando para alias. Utiliza `$tag help` para más información.
+'$blacklist [canal]' : 'bloquea o desbloquea un canal de enviar comandos.'
+}],
 
-> `$blacklist [canal]` - bloquea o desbloquea un canal de enviar comandos.
+['Other Commands', {
+'$donate' : 'muestra información sobre donaciones.',
 
+'mbprefix <prefijo>' : 'cambia el prefijo "$". ¡Este comando no utiliza un prefijo!',
 
-__Other Commands__
-> `$donate` - muestra información sobre donaciones.
+'$info' : 'obtén información sobre el bot.',
 
-> `mbprefix <prefijo>` - cambia el prefijo "$". ¡Este comando no utiliza un prefijo!
+'$lang <nombre>' : 'cambia el idioma.',
 
-> `$info` - obtén información sobre el bot.
+'$clock' : 'obtén la hora actual.'}]
+],
 
-> `$lang <nombre>` - cambia el idioma.
-
-> `$clock` - obtén la hora actual.
-
-> ¡No coloques los paréntesis al escribir un comando! Por ejemplo, `mbprefix !`, no `mbprefix <!>`
-
-Por favor dirígete a nuestro servidor de Discord si necesitas más ayuda
-
-https://discord.gg/WQVaYmT
-''', #### Line added in english
+    'web_foot' : '¡No coloques los paréntesis al escribir un comando! Por ejemplo, `mbprefix !`, no `mbprefix <!>`',
+    'web_foot2' : 'Por favor dirígete a nuestro servidor de Discord si necesitas más ayuda',
 
     'info' : '''
 Prefijo por defecto: `$`
