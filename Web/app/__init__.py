@@ -4,7 +4,7 @@ from flask_dance.contrib.discord import make_discord_blueprint, discord
 
 app = Flask(__name__)
 app.config.from_object(Config)
-discord_blueprint = make_discord_blueprint(redirect_url='/experimental')
+discord_blueprint = make_discord_blueprint()
 app.register_blueprint(discord_blueprint, url_prefix='/login')
 
 from app import routes

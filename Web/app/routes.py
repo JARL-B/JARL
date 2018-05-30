@@ -24,9 +24,9 @@ def help():
 
 
 @app.route('/experimental')
-def discord_oauth():
+def index():
     if not discord.authorized:
         return redirect(url_for('discord.login'))
 
-    resp = discord.get('/user')
+    resp = discord.get('/user/@me')
     return resp.json()
