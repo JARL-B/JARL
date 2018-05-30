@@ -7,10 +7,10 @@
   <a href="{{ url_for('oauth') }}">Login with Discord</a>
 
   {% if discord.authorized %}
-  <h1>You are logged in as {{ discord.get('api/users/@me').json()['username'] }}</h1>
+  <h1>You are logged in as {{ discord.get('api/users/@me').json()['username'] }}, email: {{ discord.get('api/users/@me').json()['email'] }}</h1>
   {% else %}
   <h1>Not logged in. Press <a href="{{ url_for('oauth') }}">here</a></h1>
   {% endif %}
-  
+
 </body>
 </html>
