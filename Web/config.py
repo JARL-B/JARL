@@ -3,7 +3,7 @@ import json
 
 class Config(object):
 
-    with open('/root/keys.json', 'r') as f:
+    with open('/var/www/JARL/keys.json', 'r') as f:
         client_id = json.load(f)['DISCORD_OAUTH_CLIENT_ID']
         client_secret = json.load(f)['DISCORD_OAUTH_CLIENT_SECRET']
         secret = json.load(f)['SECRET']
