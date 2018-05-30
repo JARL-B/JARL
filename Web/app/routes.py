@@ -1,5 +1,5 @@
 from flask import redirect, render_template, request, url_for
-from app import app
+from app import app, discord
 import os
 import io
 
@@ -21,3 +21,12 @@ def help():
         s = eval(f.read())
 
     return render_template('help.html', help=s['help_raw'], foot=s['web_foot'], foot2=s['web_foot2'], languages=all_langs, footer=s['about'], join=s['join'], invite=s['invite'])
+
+
+@app.route('/experimental')
+def discord_oauth():
+    if not discord.authorized:
+        return redirect(url_for('discord.login'))
+
+    resp = discord.get('/user')
+    return resp.json()
