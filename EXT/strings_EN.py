@@ -5,7 +5,7 @@
 
     'admin_required' : 'You need to be an admin to run this command.',
 
-    'help' : '''Please visit https://jellywx.co.uk/''',
+    'help' : '''Please visit https://jellywx.co.uk/help?lang=EN''',
 
     'help_raw' : [
         ['''Reminder Commands''', {
