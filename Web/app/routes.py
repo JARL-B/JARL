@@ -34,3 +34,7 @@ def oauth():
 @app.route('/index')
 def index():
     return render_template('index.html', discord=discord)
+
+@app.route('/debug')
+def debug():
+    return os.path.abspath(__file__)
