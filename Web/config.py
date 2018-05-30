@@ -4,7 +4,7 @@ import configparser
 class Config(object):
 
     config = configparser.SafeConfigParser()
-    config.read('../config.ini')
+    config.read('/var/www/JARL/config.ini')
     client_id = config.get('WEB', 'DISCORD_OAUTH_CLIENT_ID')
     client_secret = config.get('WEB', 'DISCORD_OAUTH_CLIENT_SECRET')
     secret = config.get('WEB', 'SECRET')
