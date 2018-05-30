@@ -1,13 +1,13 @@
 import os
-import json
+import configparser
 
 class Config(object):
 
-    with open('/var/www/JARL/keys.json', 'r') as f:
-        d = json.load(f)
-        client_id = d['DISCORD_OAUTH_CLIENT_ID']
-        client_secret = d['DISCORD_OAUTH_CLIENT_SECRET']
-        secret = d['SECRET']
+    config = configparser.SafeConfigParser()
+    config.read('../config.ini')
+    client_id = config.get('WEB', 'DISCORD_OAUTH_CLIENT_ID')
+    client_secret = config.get('WEB', 'DISCORD_OAUTH_CLIENT_SECRET')
+    secret = config.get('WEB', 'SECRET')
 
     SECRET_KEY = os.environ.get('SECRET_KEY') or secret
 
