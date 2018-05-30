@@ -8,33 +8,33 @@
     'help' : '''Por favor visita https://jellywx.co.uk/help?lang=ES''',
 
     'help_raw' : [
-['Reminder Commands', {
-'$del' : 'elimina recordatorios e intervalos en tu servidor.',
+['Comandos de recordatorios', {
+'$del' : 'Elimina recordatorios e intervalos en tu servidor.',
 
 '$remind [usuario/canal] <tiempo-para-recordatorio> <mensaje>' : 'coloca un recordatorio. El tiempo debe ponerse como [num][s/m/h/d], por ejemplo 10s para 10 segundos o 2s10m para 2 segundos 10 minutos. Un tiempo exacto puede ser colocado como `día`/`mes`/`año`-`hora`:`minuto`:`segundo`.',
 
 '$interval [usuario/canal] <tiempo-para-recordatorio> <intervalo> <mensaje>' : 'coloca un intervalo, donde el `mensaje` se enviará cada cierto `intervalo` iniciando desde el `tiempo-para-recordatorio` dado. El tiempo se coloca como dice arriba. Ej. `$interval 0s 20m ¡Hola Mundo!` enviará `¡Hola Mundo!` a tu canal cada 20 minutos.',
 
-'$todo' : 'Comandos relacionado a la lista TO-DO (lista de tareas por hacer). Utiliza `$todo help` para más información.',
+'$todo' : 'comandos relacionado a la lista TO-DO (lista de tareas). Utiliza `$todo help` para más información.',
 
 '$todos' : 'lo mismo que `$todo` pero para tareas a nivel de servidor.',
 
 '$timezone' : 'configura la zona horaria del servidor, para facilitar los recordatorios basados en tiempo.'
 }],
 
-['Management Commands', {
+['Comandos de administración', {
 '$autoclear [veces] [canales]' : 'activa/desactiva la limpieza automática de mensajes, donde los mensajes enviados al canal (por defecto el canal en el que estás) serán eliminados automáticamente luego de un tiempo (por defecto 10 segundos).',
 
 '$clear <usuarios>' : 'elimina mensajes enviados por los usuarios mencionados.',
 
 '$restrict [roles]' : 'añade/remueve permiso a ciertos roles mencionados para colocar recordatorios e intervalos.',
 
-'$tag' : 'Comando para alias. Utiliza `$tag help` para más información.',
+'$tag' : 'comando para alias. Utiliza `$tag help` para más información.',
 
 '$blacklist [canal]' : 'bloquea o desbloquea un canal de enviar comandos.'
 }],
 
-['Other Commands', {
+['Otros comandos', {
 '$donate' : 'muestra información sobre donaciones.',
 
 'mbprefix <prefijo>' : 'cambia el prefijo "$". ¡Este comando no utiliza un prefijo!',
@@ -46,14 +46,14 @@
 '$clock' : 'obtén la hora actual.'}]
 ],
 
-    'web_foot_title' : 'Extra Information',
+    'web_foot_title' : 'Información extra',
     'web_foot' : '¡No coloques los paréntesis al escribir un comando! Por ejemplo, `mbprefix !`, no `mbprefix <!>`',
     'web_foot2' : 'Por favor dirígete a nuestro servidor de Discord si necesitas más ayuda',
 
-    'about' : {'About' : ['Bot Created By: Jude Southworth', 'Github: <a href=https://github.com/JellyWX>https://github.com/JellyWX</a>', 'Want a bot making? Please contact me on Discord.', 'Hosting provider: OVH']},
+    'about' : {'Sobre el bot' : ['Creado por: Jude Southworth', 'Github: <a href=https://github.com/JellyWX>https://github.com/JellyWX</a>', 'Want a bot making? Please contact me on Discord.', 'Hosting provider: OVH']},
 
-    'join' : 'Join our Discord Server',
-    'invite' : 'Invite the Bot',
+    'join' : 'Ingresa a nuestro servidor de Discord',
+    'invite' : 'Invita el bot a tu servidor',
 
     'info' : '''
 Prefijo por defecto: `$`
