@@ -1066,29 +1066,6 @@ class BotClient(discord.Client):
 
                                 self.process_deletes[message.id] = {'time' : time.time() + wait_time, 'channel' : message.channel.id}
 
-                            elif reminder.message.startswith('getfrom['):
-                                id_started = False
-                                chars = ''
-                                for char in reminder.message[8:].strip():
-                                    if char in '0123456789':
-                                        id_started = True
-                                        chars += char
-                                    elif id_started:
-                                        break
-
-                                channel_id = int(chars)
-                                get_from = [s for s in recipient.guild.channels if s.id == channel_id]
-                                if not get_from:
-                                    print('getfrom call failed')
-                                    continue
-
-                                a = []
-                                async for item in get_from[0].history(limit=50):
-                                    a.append(item)
-                                quote = random.choice(a)
-
-                                await recipient.send(quote.content)
-
                             else:
                                 await recipient.send(reminder.message)
 
@@ -1138,7 +1115,7 @@ client = BotClient()
 try:
     client.loop.create_task(client.check_reminders())
 
-    client.run(client.config.get('DEFAULT', 'token'))
+    client.run(client.config.get('DEFAULT', 'token'), max_messages=400)
 except Exception as e:
     print('Error detected. Restarting in 15 seconds.')
     print(sys.exc_info()[0])
