@@ -9,7 +9,6 @@ import asyncio
 import aiohttp
 
 from itertools import chain
-import zlib
 import datetime
 import time
 import sys
