@@ -9,7 +9,7 @@ import asyncio
 import aiohttp
 
 from itertools import chain
-import datetime
+from datetime import datetime 
 import time
 import sys
 import os
@@ -223,7 +223,7 @@ class BotClient(discord.Client):
 
     def format_time(self, text, server):
         if '/' in text or ':' in text:
-            date = datetime.datetime.now(pytz.timezone(server.timezone))
+            date = datetime.now(pytz.timezone(server.timezone))
 
             for clump in text.split('-'):
                 if '/' in clump:
@@ -467,7 +467,7 @@ class BotClient(discord.Client):
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['timezone']['no_timezone']))
             else:
                 server.timezone = stripped
-                d = datetime.datetime.now(pytz.timezone(server.timezone))
+                d = datetime.now(pytz.timezone(server.timezone))
 
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['timezone']['success'].format(timezone=server.timezone, time=d.strftime('%H:%M:%S'))))
 
@@ -496,7 +496,7 @@ class BotClient(discord.Client):
         if server is None:
             return
 
-        t = datetime.datetime.now(pytz.timezone(server.timezone))
+        t = datetime.now(pytz.timezone(server.timezone))
 
         await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['clock']['time'].format(t.strftime('%H:%M:%S'))))
 
@@ -952,7 +952,7 @@ class BotClient(discord.Client):
             rem = Reminder(dictv=dict(r))
             if rem.channel in li:
                 remli.append(rem)
-                s_temp = '**' + str(n) + '**: \'' + rem.message + '\' (' + datetime.datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + ('' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention) + '\n'
+                s_temp = '**' + str(n) + '**: \'' + rem.message + '\' (' + datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + ('' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention) + '\n'
                 if len(s) + len(s_temp) > 2000:
                     await message.channel.send(s)
                     s = s_temp
@@ -1028,13 +1028,13 @@ class BotClient(discord.Client):
                 recipient = discord.utils.get(msg_points, id=reminder.channel)
 
                 if recipient == None:
-                    print('{}: Failed to locate channel'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
+                    print('{}: Failed to locate channel'.format(datetime.utcnow().strftime('%H:%M:%S')))
                     continue
 
                 try:
                     if reminder.interval == None:
                         await recipient.send(reminder.message)
-                        print('{}: Administered reminder to {}'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name))
+                        print('{}: Administered reminder to {}'.format(datetime.utcnow().strftime('%H:%M:%S'), recipient.name))
 
                     else:
                         server_members = recipient.guild.members
@@ -1067,7 +1067,7 @@ class BotClient(discord.Client):
                             else:
                                 await recipient.send(reminder.message)
 
-                            print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
+                            print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
                         else:
                             await recipient.send(self.get_strings(self.get_server(recipient.guild))['interval']['removed'])
                             continue
@@ -1093,7 +1093,7 @@ class BotClient(discord.Client):
                         if message is None or message.pinned:
                             pass
                         else:
-                            print('{}: Attempting to auto-delete a message...'.format(datetime.datetime.utcnow().strftime('%H:%M:%S')))
+                            print('{}: Attempting to auto-delete a message...'.format(datetime.utcnow().strftime('%H:%M:%S')))
                             try:
                                 await message.delete()
                             except Exception as e:
