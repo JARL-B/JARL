@@ -9,7 +9,7 @@
 
     'help_raw' : [
         ['''Reminder Commands''', {
-            '$del' : 'delete reminders and intervals on your server.',
+            '$del' : 'delete reminders and intervals on your server. If the reminders are set up for DMs, direct message this command to the bot.',
 
             '$remind [user/channel] <time-to-reminder> <message>' : 'set up a reminder. Takes times in the format of [num][s/m/h/d], for example 10s for 10 seconds or 2s10m for 2 seconds 10 minutes. An exact time can be provided as `day`/`month`/`year`-`hour`:`minute`:`second`.',
 

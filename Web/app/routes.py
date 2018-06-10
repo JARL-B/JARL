@@ -5,6 +5,7 @@ import io
 
 base_dir = os.environ.get('BASE_DIR') or '/var/www/JARL/EXT'
 
+@app.route('/')
 @app.route('/help')
 def help():
     all_langs = sorted([s[-5:-3] for s in os.listdir(base_dir)])
@@ -30,10 +31,6 @@ def oauth():
     resp = discord.get('api/users/@me')
     return redirect(url_for('index'))
 
-@app.route('/')
-@app.route('/index')
-def index():
-    return render_template('index.html', discord=discord)
 
 @app.route('/debug')
 def debug():
