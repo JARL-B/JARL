@@ -9,7 +9,7 @@ import asyncio
 import aiohttp
 
 from itertools import chain
-from datetime import datetime 
+from datetime import datetime
 import time
 import sys
 import os
@@ -508,7 +508,7 @@ class BotClient(discord.Client):
         args = stripped.split(' ')
 
         if len(args) < 2:
-            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['no_argument']))
+            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['no_argument'].format(prefix=server.prefix)))
             return
 
         scope = message.channel.id
@@ -541,12 +541,12 @@ class BotClient(discord.Client):
         msg_text = ' '.join(args)
 
         if self.count_reminders(scope) > 5 and not self.get_patrons(message.author.id):
-            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['invalid_count']))
+            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['invalid_count'].format(prefix=server.prefix)))
             return
 
         if self.length_check(message, msg_text) is not True:
             if self.length_check(message, msg_text) == '150':
-                await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['invalid_chars'].format(len(msg_text))))
+                await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['invalid_chars'].format(len(msg_text), prefix=server.prefix)))
 
             elif self.length_check(message, msg_text) == '2000':
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['invalid_chars_2000']))
@@ -555,7 +555,7 @@ class BotClient(discord.Client):
 
         if pref == '#':
             if not self.perm_check(message, server):
-                await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['no_perms']))
+                await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['no_perms'].format(prefix=server.prefix)))
                 return
 
         reminder = Reminder(time=msg_time, channel=scope, message=msg_text)
@@ -574,14 +574,14 @@ class BotClient(discord.Client):
             return
 
         if not self.get_patrons(message.author.id, level=1):
-            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['interval']['donor']))
+            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['interval']['donor'].format(prefix=server.prefix)))
             return
 
         args = message.content.split(' ')
         args.pop(0) # remove the command item
 
         if len(args) < 3:
-            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['interval']['no_argument']))
+            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['interval']['no_argument'].format(prefix=server.prefix)))
             return
 
         scope = message.channel.id
@@ -804,7 +804,7 @@ class BotClient(discord.Client):
 
         if stripped == '':
             if len(server.tags) == 0:
-                await message.channel.send(embed=discord.Embed(title='No Tags!', description=self.get_strings(server)['tags']['help']))
+                await message.channel.send(embed=discord.Embed(title='No Tags!', description=self.get_strings(server)['tags']['help'].format(prefix=server.prefix)))
             else:
                 await message.channel.send(embed=discord.Embed(title='Tags', description='\n'.join(server.tags.keys())))
 
@@ -815,7 +815,7 @@ class BotClient(discord.Client):
 
             if splits[0] in ['add', 'new']:
                 if len(server.tags) > 5 and not self.get_patrons(message.author.id):
-                    await message.channel.send(self.get_strings(server)['tags']['invalid_count'])
+                    await message.channel.send(self.get_strings(server)['tags']['invalid_count'].format(prefix=server.prefix))
                     return
 
                 elif len(content) > 80 and not self.get_patrons(message.author.id):
@@ -862,7 +862,7 @@ class BotClient(discord.Client):
     async def todo(self, message, stripped, server):
         if 'todos' in message.content.split(' ')[0]:
             if server is None:
-                await message.channel.send(self.get_strings(server)['todo']['server_only'])
+                await message.channel.send(self.get_strings(server)['todo']['server_only'].format(prefix=server.prefix))
                 return
 
             location = message.guild.id

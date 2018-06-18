@@ -139,22 +139,22 @@ Zona horaria actual: {timezone}''',
     'remind' : {
         'no_argument' : '''
 Uso:
-    ```$remind [canal o usuario] <tiempo para/tiempo exacto> <mensaje>```
+    ```{prefix}remind [canal o usuario] <tiempo para/tiempo exacto> <mensaje>```
 Ejemplo:
-    ```$remind #general 10s Hola mundo```
-    ```$remind 10:30 Son las 10:30```''',
+    ```{prefix}remind #general 10s Hola mundo```
+    ```{prefix}remind 10:30 Son las 10:30```''',
 
         'invalid_tag' : '''No es posible encontrar la localización de tu tag.''',
 
         'invalid_time' : '''Asegúrate que la hora que colocaste es en el formato [num][s/m/h/d][num][s/m/h/d] etc. o `día/mes/año-hora:minuto:segundo`.''',
 
-        'invalid_count' : '''¡Demasiados recordatorios en el canal especificado! Utiliza `$del` para eliminar algunos, o utiliza `$donate` para aumentar el límite (tier de $5).''',
+        'invalid_count' : '''¡Demasiados recordatorios en el canal especificado! Utiliza `{prefix}del` para eliminar algunos, o utiliza `{prefix}donate` para aumentar el límite (tier de $5).''',
 
-        'invalid_chars' : '''¡Recordatorio demasiado largo! (máx. 150, usaste {}). Utiliza `$donate` para aumentar el límite a 1900 caracteres (tier de $5).''',
+        'invalid_chars' : '''¡Recordatorio demasiado largo! (máx. 150, usaste {}). Utiliza `{prefix}donate` para aumentar el límite a 1900 caracteres (tier de $5).''',
 
         'invalid_chars_2000' : '''Discord no permite colocar recordatorios con 2000+ caracteres. Lo siento,''',
 
-        'no_perms' : '''Necesitas `Administrar Mensajes` tener un rol con el cual puedas colocar recordaorios a ese canal. Contacta al admnistrador de tu servidor y dile que utilice el comando `$restrict` para especificar roles permitidos.''',
+        'no_perms' : '''Necesitas `Administrar Mensajes` tener un rol con el cual puedas colocar recordaorios a ese canal. Contacta al admnistrador de tu servidor y dile que utilice el comando `{prefix}restrict` para especificar roles permitidos.''',
 
         'success' : '''Nuevo recordatorio registrado para <{}{}> en {} segundos. Ya no puedes editarlo, así que eres libre de eliminarlo.'''
     },
@@ -162,16 +162,16 @@ Ejemplo:
     'interval' : {
         'no_argument' : '''
 Uso:
-    ```$interval [canal o usuario] <tiempo para/tiempo exacto> <intervalo> <mensaje>```
+    ```{prefix}interval [canal o usuario] <tiempo para/tiempo exacto> <intervalo> <mensaje>```
 Ejemplo:
-    ```$interval #general 9:30 1d ¡Buen día!```
-    ```$interval 0s 10s Esto será muy irritante```''',
+    ```{prefix}interval #general 9:30 1d ¡Buen día!```
+    ```{prefix}interval 0s 10s Esto será muy irritante```''',
 
         'invalid_interval' : '''Asegúrate que la hora que colocaste es en el formato [num][s/m/h/d][num][s/m/h/d] etc. sin espacios, ej. 10s para 10 segundos o 10s12m15h1d for 10 segundos, 12 minutos, 15 horas y 1 día.''',
 
         '8_seconds' : '''Por favor asegúrate que tu intervalo es mayor a 8 segundos.''',
 
-        'donor' : '''¡Necesitas ser un Patreon (dona 2$ o más) para acceder a este comando! Escribe `$donate` para más información.''',
+        'donor' : '''¡Necesitas ser un Patreon (dona 2$ o más) para acceder a este comando! Escribe `{prefix}donate` para más información.''',
 
         'success' : '''Nuevo intervalo registrado para <{}{}> en {} segundos . Ya no puedes editarlo, así que eres libre de eliminarlo.''',
 
@@ -194,7 +194,7 @@ Ejemplo:
     },
 
     'todo' : {
-        'server_only' : '''Por favor utiliza `$todo` para tu lista de tareas personal. `$todos` es para las tareas del servidor entero.''',
+        'server_only' : '''Por favor utiliza `{prefix}todo` para tu lista de tareas personal. `{prefix}todos` es para las tareas del servidor entero.''',
 
         'add' : '''*Pon `{prefix}{command} add <mensaje>` para añadir un ítem a tu TODO, o escribe `{prefix}{command} help` para más comandos*''',
 
@@ -221,7 +221,7 @@ Ejemplo:
 
         'added' : '''Añadido el tag {}''',
 
-        'invalid_count' : '''Lo siento, para usuarios normales hay un límite de 6 tags. Por favor elimina algunos o considera donar con `$donate` (tier de 5$).''',
+        'invalid_count' : '''Lo siento, para usuarios normales hay un límite de 6 tags. Por favor elimina algunos o considera donar con `{prefix}donate` (tier de 5$).''',
 
         'invalid_chars' : '''Los tags están limitados a 80 caracteres. ¡Mantenlo conciso!''',
 
@@ -231,7 +231,7 @@ Ejemplo:
 
         'unfound' : '''No se pudo encontrar el tag con el nombre que has especificado.''',
 
-        'help' : '''Utiliza `$tag add <nombre>: <mensaje>` para añadir nuevos tags. Utiliza `$tag remove <nombre>` para eliminar un tag. Utiliza `$tag <nombre>` para ver un tag. Utiliza `$tag` para ver todos los tags.'''
+        'help' : '''Utiliza `{prefix}tag add <nombre>: <mensaje>` para añadir nuevos tags. Utiliza `{prefix}tag remove <nombre>` para eliminar un tag. Utiliza `{prefix}tag <nombre>` para ver un tag. Utiliza `{prefix}tag` para ver todos los tags.'''
     },
 
     'blacklist' : {

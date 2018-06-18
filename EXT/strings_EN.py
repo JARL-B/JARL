@@ -138,22 +138,22 @@ Current timezone: {timezone}''',
     'remind' : {
         'no_argument' : '''
 Usage:
-    ```$remind [channel mention or user mention] <time to or time at> <message>```
+    ```{prefix}remind [channel mention or user mention] <time to or time at> <message>```
 Example:
-    ```$remind #general 10s Hello world```
-    ```$remind 10:30 It\'s now 10:30```''',
+    ```{prefix}remind #general 10s Hello world```
+    ```{prefix}remind 10:30 It\'s now 10:30```''',
 
         'invalid_tag' : '''Couldn't find a location by your tag present.''',
 
         'invalid_time' : '''Make sure the time you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. or `day/month/year-hour:minute:second`.''',
 
-        'invalid_count' : '''Too many reminders in specified channel! Use `$del` to delete some of them, or use `$donate` to increase your maximum ($5 tier).''',
+        'invalid_count' : '''Too many reminders in specified channel! Use `{prefix}del` to delete some of them, or use `{prefix}donate` to increase your maximum ($5 tier).''',
 
-        'invalid_chars' : '''Reminder message too long! (max 150, you used {}). Use `$donate` to increase your character limit to 1900 ($5 tier).''',
+        'invalid_chars' : '''Reminder message too long! (max 150, you used {}). Use `{prefix}donate` to increase your character limit to 1900 ($5 tier).''',
 
         'invalid_chars_2000' : '''Discord restrictions mean we can\'t send reminders 2000+ characters. Sorry.''',
 
-        'no_perms' : '''You must have `Manage Messages` or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `$restrict` command to specify allowed roles.''',
+        'no_perms' : '''You must have `Manage Messages` or have a role capable of sending reminders to that channel. Please talk to your server admin, and tell her/him to use the `{prefix}restrict` command to specify allowed roles.''',
 
         'success' : '''New reminder registered for <{}{}> in {} seconds. If you want to delete this reminder, type `$del`.'''
     },
@@ -161,16 +161,16 @@ Example:
     'interval' : {
         'no_argument' : '''
 Usage:
-    ```$interval [channel mention or user mention] <time to or time at> <interval> <message>```
+    ```{prefix}interval [channel mention or user mention] <time to or time at> <interval> <message>```
 Example:
-    ```$interval #general 9:30 1d Good morning!```
-    ```$interval 0s 10s This will be really irritating```''',
+    ```{prefix}interval #general 9:30 1d Good morning!```
+    ```{prefix}interval 0s 10s This will be really irritating```''',
 
         'invalid_interval' : '''Make sure the interval you have provided is in the format of [num][s/m/h/d][num][s/m/h/d] etc. with no spaces, eg. 10s for 10 seconds or 10s12m15h1d for 10 seconds, 12 minutes, 15 hours and 1 day.''',
 
         '8_seconds' : '''Please make sure your interval timer is longer than 8 seconds.''',
 
-        'donor' : '''You need to be a Patron (donating 2$ or more) to access this command! Type `$donate` to find out more.''',
+        'donor' : '''You need to be a Patron (donating 2$ or more) to access this command! Type `{prefix}donate` to find out more.''',
 
         'success' : '''New interval registered for <{}{}> in {} seconds . You can\'t edit the reminder now, so you are free to delete the message.''',
 
@@ -193,7 +193,7 @@ Example:
     },
 
     'todo' : {
-        'server_only' : '''Please use `$todo` for your personal TODO list. `$todos` is only for server use.''',
+        'server_only' : '''Please use `{prefix}todo` for your personal TODO list. `{prefix}todos` is only for server use.''',
 
         'add' : '''*Do `{prefix}{command} add <message>` to add an item to your TODO, or type `{prefix}{command} help` for more commands!*''',
 
@@ -220,7 +220,7 @@ Example:
 
         'added' : '''Added tag {}''',
 
-        'invalid_count' : '''Sorry, but for normal users tags are capped at 6. Please remove some or consider donating with `$donate` ($5 tier).''',
+        'invalid_count' : '''Sorry, but for normal users tags are capped at 6 tags. Please remove some or consider donating with `{prefix}donate` ($5 tier).''',
 
         'invalid_chars' : '''Tags are capped at 80 characters. Keep it concise!''',
 
@@ -230,7 +230,7 @@ Example:
 
         'unfound' : '''Couldn\'t find the tag by the name you specified.''',
 
-        'help' : '''Use `$tag add <name>: <message>` to add new tags. Use `$tag remove <name>` to delete a tag. Use `$tag <name>` to view a tag. Use `$tag` to list all tags'''
+        'help' : '''Use `{prefix}tag add <name>: <message>` to add new tags. Use `{prefix}tag remove <name>` to delete a tag. Use `{prefix}tag <name>` to view a tag. Use `{prefix}tag` to list all tags'''
     },
 
     'blacklist' : {

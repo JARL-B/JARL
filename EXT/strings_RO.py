@@ -119,22 +119,22 @@ Current timezone: {timezone}''',
     'remind' : {
         'no_argument' : '''
 Usage:
-    ```$remind [channel mention or user mention] <time to or time at> <message>```
+    ```{prefix}remind [channel mention or user mention] <time to or time at> <message>```
 Example:
-    ```$remind #general 10s Hello world```
-    ```$remind 10:30 It\'s now 10:30```''',
+    ```{prefix}remind #general 10s Hello world```
+    ```{prefix}remind 10:30 It\'s now 10:30```''',
 
         'invalid_tag' : '''Nu s-a putut găsi o locație prin eticheta prezentă.''',
 
         'invalid_time' : '''Asigurați-vă că timpul furnizat este în formatul [num][s/m/h/d][num][s/m/h/d] etc. sau `day/month/year-hour:minute:second`.''',
 
-        'invalid_count' : '''Prea multe mementouri în canalul specificat! Folositi `$del` pentru a șterge unele dintre ele sau pentru a le utiliza `$donate` pentru a vă crește maximul (nivelul de 5 $).''',
+        'invalid_count' : '''Prea multe mementouri în canalul specificat! Folositi `{prefix}del` pentru a șterge unele dintre ele sau pentru a le utiliza `{prefix}donate` pentru a vă crește maximul (nivelul de 5 $).''',
 
-        'invalid_chars' : '''Mesajul de reamintire este prea lung! (maxim 150, tu ai folosit {}). Foloseste `$donate` Pentru a creste limita la 1900 caractere (nivelul de 5 $).''',
+        'invalid_chars' : '''Mesajul de reamintire este prea lung! (maxim 150, tu ai folosit {}). Foloseste `{prefix}donate` Pentru a creste limita la 1900 caractere (nivelul de 5 $).''',
 
         'invalid_chars_2000' : '''Restricțiile discordante înseamnă că nu putem trimite mementouri de 2000 de caractere. Scuze.''',
 
-        'no_perms' : '''Trebuie sa ai `Manage Messages` sau au un rol capabil de a trimite mementouri la acel canal. Vă rugăm să discutați cu administratorul serverului dvs. și spuneți-i să utilizeze `$restrict` comandă pentru a specifica rolurile permise.''',
+        'no_perms' : '''Trebuie sa ai `Manage Messages` sau au un rol capabil de a trimite mementouri la acel canal. Vă rugăm să discutați cu administratorul serverului dvs. și spuneți-i să utilizeze `{prefix}restrict` comandă pentru a specifica rolurile permise.''',
 
         'success' : '''Un nou memento înregistrat pentru <{}{}> in {} secunde. Nu poți edita memento-ul acum, deci ai libertatea de a șterge mesajul.'''
     },
@@ -142,16 +142,16 @@ Example:
     'interval' : {
         'no_argument' : '''
 Usage:
-    ```$interval [channel mention or user mention] <time to or time at> <interval> <message>```
+    ```{prefix}interval [channel mention or user mention] <time to or time at> <interval> <message>```
 Example:
-    ```$interval #general 9:30 1d Good morning!```
-    ```$interval 0s 10s This will be really irritating```''',
+    ```{prefix}interval #general 9:30 1d Good morning!```
+    ```{prefix}interval 0s 10s This will be really irritating```''',
 
         'invalid_interval' : '''Asigurați-vă că intervalul pe care l-ați furnizat este în formatul [num][s/m/h/d][num][s/m/h/d] etc. wfără spații, de ex. 10s pentru 10 secunde sau 10s12m15h1d timp de 10 secunde, 12 minute, 15 ore și 1 zi.''',
 
         '8_seconds' : '''Asigurați-vă că intervalul de timp este mai lung de 8 secunde.''',
 
-        'donor' : '''Trebuie să fii Patron (care donează 2 $ sau mai mult) pentru a accesa această comandă! Scrie `$donate` pentru a afla mai multe''',
+        'donor' : '''Trebuie să fii Patron (care donează 2 $ sau mai mult) pentru a accesa această comandă! Scrie `{prefix}donate` pentru a afla mai multe''',
 
         'success' : '''Noul interval înregistrat pentru <{}{}> in {} secunde . Nu puteți edita memento-ul acum, deci aveți libertatea de a șterge mesajul.''',
 
@@ -174,7 +174,7 @@ Example:
     },
 
     'todo' : {
-        'server_only' : '''Folositi `$todo` pentru lista dvs. de gestionare a sarcinilor `$todos` este doar pentru utilizarea serverului.''',
+        'server_only' : '''Folositi `{prefix}todo` pentru lista dvs. de gestionare a sarcinilor `{prefix}todos` este doar pentru utilizarea serverului.''',
 
         'add' : '''*Folositi `{prefix}{command} adaugati <message>` pentru a adăuga un element la gestionarea sarcinilor, sau scrieti `{prefix}{command} help` pentru mai multe comenzi!*''',
 
@@ -201,7 +201,7 @@ Example:
 
         'added' : '''Etichetă adăugată {}''',
 
-        'invalid_count' : '''Ne pare rău, dar pentru utilizatorii normali etichetele sunt limitate la 6. Vă rugăm să eliminați unele sau să luați în considerare donarea cu `$ donate` ($ 5 tier).''',
+        'invalid_count' : '''Ne pare rău, dar pentru utilizatorii normali etichetele sunt limitate la 6. Vă rugăm să eliminați unele sau să luați în considerare donarea cu `{prefix}donate` (5$ tier).''',
 
         'invalid_chars' : '''Etichetele sunt limitate la 80 de caractere. Păstrați-l concis!''',
 
@@ -211,7 +211,7 @@ Example:
 
         'unfound' : '''Nu am putut găsi eticheta după numele pe care l-ați specificat.''',
 
-        'help' : '''Utilizați "$ tag add <name>: <message> pentru a adăuga etichete noi. Utilizați "$ remove remove <nume> pentru a șterge o etichetă. Utilizați "$ tag <nume>" pentru a vedea o etichetă. Utilizați "$ tag" pentru a lista toate etichetele'''
+        'help' : '''Utilizați `{prefix}tag add <name>: <message>` pentru a adăuga etichete noi. Utilizați "{prefix}tag remove <nume> pentru a șterge o etichetă. Utilizați `{prefix}tag <nume>` pentru a vedea o etichetă. Utilizați `{prefix}tag` pentru a lista toate etichetele'''
     },
 
     'blacklist' : {
