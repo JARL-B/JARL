@@ -90,7 +90,6 @@ With your new rank, you'll be able to:
 : set more reminders (unlimited)
 : set longer reminders (2000 chars)
 : set more/longer tags
-: use the Patron-only `TrackerBot` with your server to track your game time through Discord
 
 Anyone who is a Patron, thank you :D You make this bot sustainable
 

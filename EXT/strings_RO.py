@@ -71,8 +71,9 @@ Cu noul dvs. rang, veți putea:
 : setați mai multe mementouri (nelimitat)
 : setați mementouri mai lungi (2000 caractere)
 : setați mai multe / etichete mai lungi
-: utilizați doar "Botul" TrackerBot "cu serverul dvs. pentru a urmări timpul jocului prin discordanță
+
 Oricine este patron, vă mulțumesc: D Îl faceți pe bot să fie durabil
+
 Rețineți că trebuie să fiți conectat la serverul Discord pentru a primi recompense Patreon.
 ''',
 

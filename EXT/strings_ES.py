@@ -91,7 +91,6 @@ Con tu nuevo rango, podrás:
 : colocar más recordatorios (ilimitados)
 : colocar recordatorios más largos (2000 caracteres)
 : seleccionar más/largos tags
-: usar el exclusivo `TrackerBot` con tu servidor para rastrear tu tiempo de juego mediante Discord
 
 Para quienes estén en Patreon, muchas gracias :D Haces que este bot pueda sostenerse.
 
