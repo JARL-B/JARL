@@ -498,7 +498,11 @@ class BotClient(discord.Client):
 
         t = datetime.now(pytz.timezone(server.timezone))
 
-        await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['clock']['time'].format(t.strftime('%H:%M:%S'))))
+        if stripped == '12':
+            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['clock']['time'].format(t.strftime('%I:%M:%S %p'))))
+
+        else:
+            await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['clock']['time'].format(t.strftime('%H:%M:%S'))))
 
 
     async def remind(self, message, stripped, server):
