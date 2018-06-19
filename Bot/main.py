@@ -841,7 +841,7 @@ class BotClient(discord.Client):
                 not_done = False
 
             elif splits[0] in ['remove', 'del']:
-                name = ' '.join(splits[2:])
+                name = ' '.join(splits[1:])
                 if name not in server.tags.keys():
                     await message.channel.send(self.get_strings(server)['tags']['unfound'])
                     return
