@@ -41,7 +41,7 @@
 
             '$lang <name>' : 'change the language.',
 
-            '$clock' : 'get the current time.' }
+            '$clock [12]' : 'get the current time, optionally as 12 hour clock.' }
         ]
     ],
 
