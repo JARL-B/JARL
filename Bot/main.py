@@ -855,7 +855,7 @@ class BotClient(discord.Client):
             name = ' '.join(splits).strip()
 
             if name not in server.tags.keys():
-                await message.channel.send(self.get_strings(server)['tags']['help'])
+                await message.channel.send(self.get_strings(server)['tags']['help'].format(prefix=server.prefix))
                 return
 
             await message.channel.send(server.tags[name])
@@ -866,7 +866,7 @@ class BotClient(discord.Client):
     async def todo(self, message, stripped, server):
         if 'todos' in message.content.split(' ')[0]:
             if server is None:
-                await message.channel.send(self.get_strings(server)['todo']['server_only'].format(prefix=server.prefix))
+                await message.channel.send(self.get_strings(server)['todo']['server_only'].format(prefix='$'))
                 return
 
             location = message.guild.id
