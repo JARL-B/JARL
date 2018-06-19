@@ -915,15 +915,17 @@ class BotClient(discord.Client):
                 except IndexError:
                     await message.channel.send(self.get_strings(server)['todo']['error_index'])
 
-            elif splits[0] in ['remove*', 'r*', 'clear', 'clr']:
-                self.todos[location] = []
-                await message.channel.send(self.get_strings(server)['todo']['cleared'])
 
             else:
                 await message.channel.send(self.get_strings(server)['todo']['help'].format(prefix='$' if server is None else server.prefix, command=command))
 
         else:
-            await message.channel.send(self.get_strings(server)['todo']['help'].format(prefix='$' if server is None else server.prefix, command=command))
+            if stripped in ['remove*', 'r*', 'clear', 'clr']:
+                self.todos[location] = []
+                await message.channel.send(self.get_strings(server)['todo']['cleared'])
+
+            else:
+                await message.channel.send(self.get_strings(server)['todo']['help'].format(prefix='$' if server is None else server.prefix, command=command))
 
         with open('DATA/todos.json', 'w') as f:
             json.dump(self.todos, f)
