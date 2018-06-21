@@ -934,7 +934,7 @@ class BotClient(discord.Client):
     async def delete(self, message, stripped, server):
         if server is not None:
             if not self.perm_check(message, server):
-                await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['no_perms']))
+                await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['no_perms'].format(prefix=server.prefix)))
                 return
 
             li = [ch.id for ch in message.guild.channels] ## get all channels and their ids in the current server
