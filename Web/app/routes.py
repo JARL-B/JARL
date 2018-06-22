@@ -45,10 +45,9 @@ def dashboard():
     elif request.method == 'GET':
         if request.args.get('refresh') == '1':
             session.pop('guilds')
-            session.pop('guild_names')
             return redirect(url_for('dashboard'))
 
-        if session.get('guilds') is not None and session.get('guild_names') is not None:
+        if session.get('guilds') is not None:
             pass
 
         else:
@@ -76,17 +75,16 @@ def dashboard():
                     if restrictions is None:
                         continue
 
-                    member = requests.get('https://discordapp.com/api/v6/guilds/{}/members/{}'.format(idx, user_id), headers={'authorization': 'Bot {}'.format(app.config['BOT_TOKEN'])}).json()
+                    member = requests.get('https://discordapp.com/api/v6/guilds/{}/members/{}'.format(idx, user_id), headers={'Authorization': 'Bot {}'.format(app.config['BOT_TOKEN'])}).json()
                     for role in member['roles']:
                         if int(role) in json.loads(dict(restrictions)['restrictions']):
-                            available_guilds.append(guild['name'])
-                            guild_ids.append(guild['id'])
+                            available_guilds.append((guild['name'], guild['id']))
                             break
 
-            session['guilds'] = guild_ids
-            session['guild_names'] = available_guilds
+            session['guilds'] = available_guilds
 
-        return render_template('dashboard.html', guilds=session['guild_names'])
+        return render_template('dashboard.html', guilds=session['guilds'])
+
 
 @app.route('/dash_help')
 def dashboard_help():

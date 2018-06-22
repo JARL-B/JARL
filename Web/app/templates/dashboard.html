@@ -54,12 +54,31 @@
     <div class="dropdown">
      <button class="dropbtn">Guilds</button>
      <div class="dropdown-content">
-       {% for name in guilds %}
+       {% for name, id in guilds %}
        <a href="{{ url_for('dashboard', name=name) }}">{{ name }}</a>
        {% endfor %}
        <a href="{{ url_for('dashboard_help') }}">Guild not appearing?</a>
+       <a href="{{ url_for('dashboard', refresh=1) }}">Refresh List</a>
      </div>
     </div>
+
+    <table>
+      <tr>
+        <td><p>Reminder Content</p></td>
+        <td><p>Reminder Time</p></td>
+        <td><p>Reminder Channel</p></td>
+        <td><p>Reminder Interval</p></td>
+      </tr>
+      {% for reminder in reminders %}
+      <tr>
+        <td>{{ reminder['message'] }}</td>
+        <td>{{ reminder['time'] }}</td>
+        <td>{{ reminder['channel'] }}</td>
+        <td>{{ reminder['interval'] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
   </div>
 </body>
 </html>
