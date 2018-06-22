@@ -43,14 +43,13 @@ def dashboard():
         pass # make DB modifications & check user auth.
 
     elif request.method == 'GET':
+        reminders = []
+
         if request.args.get('refresh') == '1':
             session.pop('guilds')
             return redirect(url_for('dashboard'))
 
-        if session.get('guilds') is not None:
-            pass
-
-        else:
+        if session.get('guilds') is None: # the code below is time-consuming; only run on first load and if the user wants to refresh the guild list.
 
             user = discord.get('api/users/@me').json()
             guilds = discord.get('api/users/@me/guilds').json()
@@ -78,12 +77,33 @@ def dashboard():
                     member = requests.get('https://discordapp.com/api/v6/guilds/{}/members/{}'.format(idx, user_id), headers={'Authorization': 'Bot {}'.format(app.config['BOT_TOKEN'])}).json()
                     for role in member['roles']:
                         if int(role) in json.loads(dict(restrictions)['restrictions']):
-                            available_guilds.append((guild['name'], guild['id']))
+                            available_guilds.append(guild)
                             break
 
             session['guilds'] = available_guilds
 
-        return render_template('dashboard.html', guilds=session['guilds'])
+        if request.args.get('id') is not None:
+            for guild in session['guilds']:
+                if guild['id'] == request.args.get('id'):
+                    channels = [int(x['id']) for x in requests.get('https://discordapp.com/api/v6/guilds/{}/channels'.format(guild['id']), headers={'Authorization': 'Bot {}'.format(app.config['BOT_TOKEN'])}).json()]
+                    break
+
+            else:
+                return '403. Don\'t be naughty.'
+
+            with sqlite3.connect(base_dir + '/DATA/calendar.db') as connection:
+                cursor = connection.cursor()
+                cursor.row_factory = sqlite3.Row
+
+                command = 'SELECT * FROM reminders WHERE channel IN ({})'.format(','.join(['?'] * len(channels)))
+                cursor.execute(command, channels)
+
+                reminders = [dict(x) for x in cursor.fetchall()]
+
+                print(reminders)
+                print(channels)
+
+        return render_template('dashboard.html', guilds=session['guilds'], reminders=reminders)
 
 
 @app.route('/dash_help')
