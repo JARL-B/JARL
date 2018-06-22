@@ -45,6 +45,30 @@
 
  /* Change the background color of the dropdown button when the dropdown content is shown */
  .dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+#reminders {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#reminders td, #reminders th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#reminders tr:nth-child(even){background-color: #f2f2f2;}
+
+#reminders tr:hover {background-color: #ddd;}
+
+#reminders th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
   </style>
 </head>
 <body>
@@ -62,7 +86,7 @@
      </div>
     </div>
 
-    <table>
+    <table id="reminders">
       <tr>
         <td><p>Reminder Content</p></td>
         <td><p>Reminder Time</p></td>

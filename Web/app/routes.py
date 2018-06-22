@@ -100,9 +100,6 @@ def dashboard():
 
                 reminders = [dict(x) for x in cursor.fetchall()]
 
-                print(reminders)
-                print(channels)
-
         return render_template('dashboard.html', guilds=session['guilds'], reminders=reminders)
 
 
