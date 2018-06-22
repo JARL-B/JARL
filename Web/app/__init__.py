@@ -4,7 +4,7 @@ from flask_dance.contrib.discord import make_discord_blueprint, discord
 
 app = Flask(__name__)
 app.config.from_object(Config)
-discord_blueprint = make_discord_blueprint(scope='email')
+discord_blueprint = make_discord_blueprint(scope=['identify', 'guilds'])
 app.register_blueprint(discord_blueprint, url_prefix='/login')
 
 from app import routes
