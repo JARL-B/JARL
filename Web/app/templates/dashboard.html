@@ -100,13 +100,20 @@
         <th><p>Reminder Time</p></th>
         <th><p>Reminder Channel</p></th>
         <th><p>Reminder Interval</p></th>
+        <th><p>Delete</p></th>
+        <th><p>Save Changes</p></th>
       </tr>
       {% for reminder in reminders %}
       <tr>
-        <td>{{ reminder['message'] }}</td>
-        <td>{{ reminder['time'] }}</td>
-        <td>{{ '#' + reminder['channel']['name'] }}</td>
-        <td>{{ reminder['interval'] }}</td>
+        <form action="{{ url_for('dashboard') }}" method="POST">
+          <input type="hidden" value="{{ reminder['index'] }}" name="index">
+          <td><input type="text" value="{{ reminder['message'] }}" name="message"></td>
+          <td><input type="text" value="{{ reminder['time'][1] }}" name="time" readonly></td>
+          <td><input type="text" value="{{ '#' + reminder['channel']['name'] }}" name="channel" readonly></td>
+          <td><input type="text" value="{{ reminder['interval'] }}" name="interval" readonly></td>
+          <td><input type="checkbox" name="delete"></td>
+          <td><input type="submit"></td>
+        </form>
       </tr>
       {% endfor %}
     </table>

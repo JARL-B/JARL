@@ -41,9 +41,27 @@ def dashboard():
         return redirect(url_for('oauth'))
 
     if request.method == 'POST':
-        pass # make DB modifications & check user auth.
+        print(request.form)
 
-    elif request.method == 'GET':
+        try:
+            reminder_rewrite = [x for x in session.get('reminders') if str(x['index']) == request.form['index']][0]
+        except IndexError:
+            return '400 Bad Request'
+
+        if request.form.get('delete') is not None:
+            with sqlite3.connect(base_dir + 'DATA/calendar.db') as connection:
+                cursor = connection.cursor()
+
+                cursor.execute('DELETE FROM reminders WHERE channel = ? AND message = ? AND time = ?', (reminder_rewrite['channel']['id'], reminder_rewrite['message'], reminder_rewrite['time'][0]))
+
+        try:
+            session.pop('reminders')
+        except KeyError:
+            pass
+
+        return redirect(url_for('dashboard'))
+
+    else:
         reminders = []
 
         if request.args.get('refresh') == '1':
@@ -76,7 +94,7 @@ def dashboard():
 
                     restrictions = cursor.fetchone()
 
-                    if restrictions is None:
+                    if restrictions is None or json.loads(dict(restrictions)['restrictions']) == []:
                         continue
 
                     member = requests.get('https://discordapp.com/api/v6/guilds/{}/members/{}'.format(idx, user_id), headers={'Authorization': 'Bot {}'.format(app.config['BOT_TOKEN'])}).json()
@@ -105,14 +123,21 @@ def dashboard():
 
                 reminders = [dict(x) for x in cursor.fetchall()]
 
+            index = 0
+
             for reminder in reminders:
+                reminder['index'] = index
+                index += 1
+
                 channel = [x for x in channels if int(x['id']) == reminder['channel']][0]
 
                 reminder['channel'] = channel
 
-                reminder['time'] = datetime.fromtimestamp(reminder['time']).strftime('%d/%b/%Y %H:%M:%S')
+                reminder['time'] = [reminder['time'], datetime.fromtimestamp(reminder['time']).strftime('%d/%b/%Y %H:%M:%S')]
 
-        return render_template('dashboard.html', guilds=session['guilds'], reminders=reminders)
+        session['reminders'] = reminders
+
+        return render_template('dashboard.html', guilds=session['guilds'], reminders=session['reminders'])
 
 
 @app.route('/dash_help')
