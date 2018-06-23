@@ -5,6 +5,7 @@ import io
 import requests
 import sqlite3
 import json
+from datetime import datetime
 
 base_dir = os.environ.get('BASE_DIR') or '../'
 
@@ -85,7 +86,7 @@ def dashboard():
         if request.args.get('id') is not None:
             for guild in session['guilds']:
                 if guild['id'] == request.args.get('id'):
-                    channels = [int(x['id']) for x in requests.get('https://discordapp.com/api/v6/guilds/{}/channels'.format(guild['id']), headers={'Authorization': 'Bot {}'.format(app.config['BOT_TOKEN'])}).json()]
+                    channels = requests.get('https://discordapp.com/api/v6/guilds/{}/channels'.format(guild['id']), headers={'Authorization': 'Bot {}'.format(app.config['BOT_TOKEN'])}).json()
                     break
 
             else:
@@ -96,9 +97,16 @@ def dashboard():
                 cursor.row_factory = sqlite3.Row
 
                 command = 'SELECT * FROM reminders WHERE channel IN ({})'.format(','.join(['?'] * len(channels)))
-                cursor.execute(command, channels)
+                cursor.execute(command, [int(x['id']) for x in channels])
 
                 reminders = [dict(x) for x in cursor.fetchall()]
+
+            for reminder in reminders:
+                channel = [x for x in channels if int(x['id']) == reminder['channel']][0]
+
+                reminder['channel'] = channel
+
+                reminder['time'] = datetime.fromtimestamp(reminder['time']).strftime('%d/%b/%Y %H:%M:%S')
 
         return render_template('dashboard.html', guilds=session['guilds'], reminders=reminders)
 

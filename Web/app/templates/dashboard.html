@@ -5,7 +5,7 @@
   <style>
   /* Dropdown Button */
  .dropbtn {
-     background-color: #4CAF50;
+     background-color: #8fb677;
      color: white;
      padding: 16px;
      font-size: 16px;
@@ -47,26 +47,34 @@
  .dropdown:hover .dropbtn {background-color: #3e8e41;}
 
 #reminders {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
+  font-family: sans-serif;
+  border-collapse: collapse;
+  width: 100%;
 }
 
 #reminders td, #reminders th {
-    border: 1px solid #ddd;
-    padding: 8px;
+  border: 1px solid #ddd;
+  padding: 4px;
 }
 
-#reminders tr:nth-child(even){background-color: #f2f2f2;}
+#reminders td {
+  padding: 6px;
+}
 
-#reminders tr:hover {background-color: #ddd;}
+#reminders tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#reminders tr:hover {
+  background-color: #ddd;
+}
 
 #reminders th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  text-align: left;
+  background-color: #8fb677;
+  color: white;
 }
 
   </style>
@@ -88,16 +96,16 @@
 
     <table id="reminders">
       <tr>
-        <td><p>Reminder Content</p></td>
-        <td><p>Reminder Time</p></td>
-        <td><p>Reminder Channel</p></td>
-        <td><p>Reminder Interval</p></td>
+        <th><p>Reminder Content</p></th>
+        <th><p>Reminder Time</p></th>
+        <th><p>Reminder Channel</p></th>
+        <th><p>Reminder Interval</p></th>
       </tr>
       {% for reminder in reminders %}
       <tr>
         <td>{{ reminder['message'] }}</td>
         <td>{{ reminder['time'] }}</td>
-        <td>{{ reminder['channel'] }}</td>
+        <td>{{ '#' + reminder['channel']['name'] }}</td>
         <td>{{ reminder['interval'] }}</td>
       </tr>
       {% endfor %}
