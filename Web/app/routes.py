@@ -65,6 +65,10 @@ def dashboard():
                 cursor.row_factory = sqlite3.Row
 
                 for guild in guilds:
+                    if (guild['permissions'] & 0x00002000) or (guild['permissions'] & 0x00000020) or (guild['permissions'] & 0x00000008):
+                        available_guilds.append(guild)
+                        continue
+
                     idx = guild['id']
 
                     command = 'SELECT restrictions FROM servers WHERE id = ?'
