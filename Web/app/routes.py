@@ -43,17 +43,25 @@ def dashboard():
     if request.method == 'POST':
 
         for index in range(len(session.get('reminders'))):
-            if request.form.get('delete{}'.format(index)) is not None:
+            try:
+                reminder_rewrite = [x for x in session.get('reminders') if x['index'] == index][0]
+            except IndexError:
+                return '400 Bad Request'
 
-                try:
-                    reminder_rewrite = [x for x in session.get('reminders') if x['index'] == index][0]
-                except IndexError:
-                    return '400 Bad Request'
+            if request.form.get('delete{}'.format(index)) is not None:
 
                 with sqlite3.connect(base_dir + 'DATA/calendar.db') as connection:
                     cursor = connection.cursor()
 
                     cursor.execute('DELETE FROM reminders WHERE channel = ? AND message = ? AND time = ?', (reminder_rewrite['channel']['id'], reminder_rewrite['message'], reminder_rewrite['time'][0]))
+
+            elif request.form.get('message{}'.format(index)) != reminder_rewrite['message']:
+
+                with sqlite3.connect(base_dir + 'DATA/calendar.db') as connection:
+                    cursor = connection.cursor()
+
+                    cursor.execute('UPDATE reminders SET message = ? WHERE channel = ? AND message = ? AND time = ?', (request.form.get('message{}'.format(index)), reminder_rewrite['channel']['id'], reminder_rewrite['message'], reminder_rewrite['time'][0]))
+
 
         try:
             session.pop('reminders')
