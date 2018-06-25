@@ -89,7 +89,6 @@
        {% for guild in guilds %}
        <a href="{{ url_for('dashboard', id=guild['id']) }}">{{ guild['name'] }}</a>
        {% endfor %}
-       <a href="{{ url_for('dashboard_help') }}">Guild not appearing?</a>
        <a href="{{ url_for('dashboard', refresh=1) }}">Refresh List</a>
      </div>
     </div>

@@ -150,8 +150,3 @@ def dashboard():
         session['reminders'] = reminders
 
         return render_template('dashboard.html', guilds=session['guilds'], reminders=session['reminders'])
-
-
-@app.route('/dash_help')
-def dashboard_help():
-    return render_template('dashboard_help.html')
