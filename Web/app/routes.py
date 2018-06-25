@@ -41,25 +41,26 @@ def dashboard():
         return redirect(url_for('oauth'))
 
     if request.method == 'POST':
-        print(request.form)
 
-        try:
-            reminder_rewrite = [x for x in session.get('reminders') if str(x['index']) == request.form['index']][0]
-        except IndexError:
-            return '400 Bad Request'
+        for index in range(len(session.get('reminders'))):
+            if request.form.get('delete{}'.format(index)) is not None:
 
-        if request.form.get('delete') is not None:
-            with sqlite3.connect(base_dir + 'DATA/calendar.db') as connection:
-                cursor = connection.cursor()
+                try:
+                    reminder_rewrite = [x for x in session.get('reminders') if x['index'] == index][0]
+                except IndexError:
+                    return '400 Bad Request'
 
-                cursor.execute('DELETE FROM reminders WHERE channel = ? AND message = ? AND time = ?', (reminder_rewrite['channel']['id'], reminder_rewrite['message'], reminder_rewrite['time'][0]))
+                with sqlite3.connect(base_dir + 'DATA/calendar.db') as connection:
+                    cursor = connection.cursor()
+
+                    cursor.execute('DELETE FROM reminders WHERE channel = ? AND message = ? AND time = ?', (reminder_rewrite['channel']['id'], reminder_rewrite['message'], reminder_rewrite['time'][0]))
 
         try:
             session.pop('reminders')
         except KeyError:
             pass
 
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('dashboard', id=request.args.get('id')))
 
     else:
         reminders = []
@@ -76,16 +77,12 @@ def dashboard():
             user_id = user['id']
 
             available_guilds = []
-            guild_ids = []
 
             with sqlite3.connect(base_dir + '/DATA/calendar.db') as connection:
                 cursor = connection.cursor()
                 cursor.row_factory = sqlite3.Row
 
                 for guild in guilds:
-                    if (guild['permissions'] & 0x00002000) or (guild['permissions'] & 0x00000020) or (guild['permissions'] & 0x00000008):
-                        available_guilds.append(guild)
-                        continue
 
                     idx = guild['id']
 
@@ -94,7 +91,14 @@ def dashboard():
 
                     restrictions = cursor.fetchone()
 
-                    if restrictions is None or json.loads(dict(restrictions)['restrictions']) == []:
+                    if restrictions is None:
+                        continue
+
+                    elif (guild['permissions'] & 0x00002000) or (guild['permissions'] & 0x00000020) or (guild['permissions'] & 0x00000008):
+                        available_guilds.append(guild)
+                        continue
+
+                    elif json.loads(dict(restrictions)['restrictions']) == []:
                         continue
 
                     member = requests.get('https://discordapp.com/api/v6/guilds/{}/members/{}'.format(idx, user_id), headers={'Authorization': 'Bot {}'.format(app.config['BOT_TOKEN'])}).json()
