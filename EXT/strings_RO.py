@@ -52,9 +52,10 @@ Developer: <@203532103185465344>
 Baiatul de treaba care se pricepe si el: <@174243954487853056>
 Icoana: <@253202252821430272>
 Ma gasiti si pe https://discord.gg/WQVaYmT cat si pe https://github.com/JellyWX :)
+
 Framework: `discord.py`
-Total SᵒᵘʳᶜᵉLᶦⁿᵉˢOᶠCᵒᵈᵉ: {sloc} (100% Python)
 Hosting : OVH
+
 Alti boti de ai mei (Patreon doar,):
 https://discordapp.com/oauth2/authorize?client_id=411224415863570434&scope=bot&permissions=35840
 * Dacă aveți întrebări despre noi caracteristici, vă rugăm să trimiteți la serverul de discordanță *

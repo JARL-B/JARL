@@ -1,5 +1,4 @@
-from sloccount import sloccount_py
-from models import Reminder, 
+from models import Reminder, Server, session
 
 import discord
 import msgpack
@@ -360,7 +359,7 @@ class BotClient(discord.Client):
 
 
     async def on_message(self, message):
-        if message.guild is not None and self.get_server(message.guild) is None:
+        if message.guild is not None and session.query(Server).filter_by(id=message.guild.id).first() is None:
 
             command = '''INSERT INTO servers (id, prefix, timezone, language, blacklist, restrictions, tags, autoclears)
             VALUES (?, "$", "UTC", "EN", "[]", "[]", "{}", "{}")'''
@@ -384,6 +383,7 @@ class BotClient(discord.Client):
                 await message.channel.send('Action forbidden. Please ensure I have the correct permissions.')
             except discord.errors.Forbidden:
                 print('Twice Forbidden')
+
 
     async def get_cmd(self, message):
 
@@ -424,7 +424,7 @@ class BotClient(discord.Client):
 
 
     async def info(self, message, stripped, server):
-        embed = discord.Embed(description=self.get_strings(server)['info'].format(prefix=server.prefix, sloc=sloccount_py(), user=self.user.name))
+        embed = discord.Embed(description=self.get_strings(server)['info'].format(prefix=server.prefix, user=self.user.name))
         await message.channel.send(embed=embed)
 
 

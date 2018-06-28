@@ -67,7 +67,6 @@ Un chico cool: <@174243954487853056>
 Encuéntrame en https://discord.gg/WQVaYmT y en https://github.com/JellyWX :)
 
 Framework: `discord.py`
-Total SᵒᵘʳᶜᵉLᶦⁿᵉˢOᶠCᵒᵈᵉ: {sloc} (100% Python)
 Proveedor de host: OVH
 
 Mi otro bot (solo Patreon):
