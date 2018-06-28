@@ -269,7 +269,7 @@ class BotClient(discord.Client):
     async def cleanup(self, *args):
         all_ids = [g.id for g in self.guilds]
 
-        session.query(Server).filter(Server.id in all_ids).delete()
+        session.query(Server).filter(Server.id.in_(all_ids)).delete()
         session.commit()
 
 
@@ -324,7 +324,7 @@ class BotClient(discord.Client):
     async def on_message(self, message):
         if message.guild is not None and session.query(Server).filter_by(id=message.guild.id).first() is None:
 
-            server = Server(id=message.guild.id, prefix='$', timezone='UTC', language='EN', blacklist='[]', restrictions='[]', tags='{}', autoclears='{}')
+            server = Server(id=message.guild.id, prefix='$', timezone='UTC', language='EN', blacklist=[], restrictions=[], tags={}, autoclears={})
 
             session.add(server)
             session.commit()
@@ -426,7 +426,8 @@ class BotClient(discord.Client):
 
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['timezone']['success'].format(timezone=server.timezone, time=d.strftime('%H:%M:%S'))))
 
-                self.write_server(server)
+                session.commit()
+
 
     async def language(self, message, stripped, server):
         if server is None:
@@ -444,7 +445,7 @@ class BotClient(discord.Client):
             await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['lang']['invalid'].format('\n'.join(['{} ({})'.format(x.title(), y.upper()) for x, y in self.languages.items()]))))
             return
 
-        self.write_server(server)
+        session.commit()
 
 
     async def clock(self, message, stripped, server):
@@ -746,7 +747,7 @@ class BotClient(discord.Client):
             else:
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['restrict']['allowed'].format(' '.join(['<@&' + str(i) + '>' for i in server.restrictions]))))
 
-        self.write_server(server)
+        session.commit()
 
 
     async def tag(self, message, stripped, server):
@@ -811,7 +812,7 @@ class BotClient(discord.Client):
 
             await message.channel.send(server.tags[name])
 
-        self.write_server(server)
+        session.commit()
 
 
     async def todo(self, message, stripped, server):
@@ -895,9 +896,8 @@ class BotClient(discord.Client):
         await message.channel.send(self.get_strings(server)['del']['listing'])
 
         n = 1
-        remli = []
 
-        reminders = session.query(Reminder).filter(Reminder.channel in li).all()
+        reminders = session.query(Reminder).filter(Reminder.channel.in_(li)).all()
 
         s = ''
         for rem in reminders:
@@ -917,6 +917,7 @@ class BotClient(discord.Client):
 
         num = await client.wait_for('message', check=lambda m: m.author == message.author and m.channel == message.channel)
         nums = [n.strip() for n in num.content.split(',')]
+
 
         dels = 0
         for i in nums:
@@ -946,7 +947,7 @@ class BotClient(discord.Client):
             self.times['last_loop'] = time.time()
             self.times['loops'] += 1
 
-            reminders = sesssion.query(Reminder).filter(Reminder.time <= time.time()).all()
+            reminders = session.query(Reminder).filter(Reminder.time <= time.time()).all()
 
             for reminder in reminders:
                 print('Looping for reminder(s)...')
@@ -1047,7 +1048,7 @@ client = BotClient()
 try:
     client.loop.create_task(client.check_reminders())
 
-    client.run(client.config.get('DEFAULT', 'token'), max_messages=400)
+    client.run(client.config.get('DEFAULT', 'token'), max_messages=350)
 except Exception as e:
     print('Error detected. Restarting in 15 seconds.')
     print(sys.exc_info()[0])
