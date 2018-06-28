@@ -1,7 +1,8 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, BigInteger, String, JSON
+from sqlalchemy import Column, Integer, BigInteger, String, PickleType
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy_json import NestedMutableJson, MutableJson
 
 
 Base = declarative_base()
@@ -27,10 +28,10 @@ class Server(Base):
     prefix = Column( String(5) )
     language = Column( String(2) )
     timezone = Column( String(30) )
-    blacklist = Column( JSON )
-    restrictions = Column( JSON )
-    tags = Column( JSON )
-    autoclears = Column( JSON )
+    blacklist = Column( NestedMutableJson )
+    restrictions = Column( NestedMutableJson )
+    tags = Column( MutableJson )
+    autoclears = Column( MutableJson )
 
     def __repr__(self):
         return '<Server {}>'.format(self.id)

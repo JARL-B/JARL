@@ -107,10 +107,6 @@ class BotClient(discord.Client):
             sys.exit()
 
 
-    def write_server(self, data):
-        session.commit()
-
-
     def count_reminders(self, loc):
         return session.query(Reminder).filter_by(channel=loc).count()
 
@@ -163,7 +159,7 @@ class BotClient(discord.Client):
     def perm_check(self, message, server):
         if not message.author.guild_permissions.manage_messages:
             for role in message.author.roles:
-                if role.id in server.restrictions:
+                if role.id in server.restrictions['data']:
                     return True
             else:
                 return False
@@ -324,7 +320,7 @@ class BotClient(discord.Client):
     async def on_message(self, message):
         if message.guild is not None and session.query(Server).filter_by(id=message.guild.id).first() is None:
 
-            server = Server(id=message.guild.id, prefix='$', timezone='UTC', language='EN', blacklist=[], restrictions=[], tags={}, autoclears={})
+            server = Server(id=message.guild.id, prefix='$', timezone='UTC', language='EN', blacklist={'data': []}, restrictions={'data': []}, tags={}, autoclears={})
 
             session.add(server)
             session.commit()
@@ -359,7 +355,7 @@ class BotClient(discord.Client):
         if message.content[0:len(prefix)] == prefix:
             command = (message.content + ' ')[len(prefix):message.content.find(' ')]
             if command in self.commands:
-                if server is not None and message.channel.id in server.blacklist and not message.content.startswith(('{}help'.format(server.prefix), '{}blacklist'.format(server.prefix))):
+                if server is not None and message.channel.id in server.blacklist['data'] and not message.content.startswith(('{}help'.format(server.prefix), '{}blacklist'.format(server.prefix))):
                     await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['blacklisted']))
                     return False
 
@@ -369,7 +365,7 @@ class BotClient(discord.Client):
 
         elif self.user.id in map(lambda x: x.id, message.mentions) and len(message.content.split(' ')) > 1:
             if message.content.split(' ')[1] in self.commands.keys():
-                if server is not None and message.channel.id in server.blacklist and not message.content.startswith(('{}help'.format(server.prefix), '{}blacklist'.format(server.prefix))):
+                if server is not None and message.channel.id in server.blacklist['data'] and not message.content.startswith(('{}help'.format(server.prefix), '{}blacklist'.format(server.prefix))):
                     await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['blacklisted']))
                     return False
 
@@ -407,7 +403,7 @@ class BotClient(discord.Client):
         else:
             await message.channel.send(self.get_strings(server)['prefix']['no_argument'].format(prefix=server.prefix))
 
-        self.write_server(server)
+        session.commit()
 
 
     async def timezone(self, message, stripped, server):
@@ -650,7 +646,7 @@ class BotClient(discord.Client):
             else:
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['autoclear']['enable'].format(seconds)))
 
-        self.write_server(server)
+        session.commit()
 
 
     async def blacklist(self, message, stripped, server):
@@ -665,32 +661,32 @@ class BotClient(discord.Client):
             disengage_all = True
 
             for mention in message.channel_mentions:
-                if mention.id not in server.blacklist:
+                if mention.id not in server.blacklist['data']:
                     disengage_all = False
 
             if disengage_all:
                 for mention in message.channel_mentions:
-                    server.blacklist.remove(mention.id)
+                    server.blacklist['data'].remove(mention.id)
 
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['blacklist']['removed_from']))
 
             else:
                 for mention in message.channel_mentions:
-                    if mention.id not in server.blacklist:
-                        server.blacklist.append(mention.id)
+                    if mention.id not in server.blacklist['data']:
+                        server.blacklist['data'].append(mention.id)
 
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['blacklist']['added_from']))
 
         else:
-            if message.channel.id in server.blacklist:
-                server.blacklist.remove(message.channel.id)
+            if message.channel.id in server.blacklist['data']:
+                server.blacklist['data'].remove(message.channel.id)
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['blacklist']['removed']))
 
             else:
-                server.blacklist.append(message.channel.id)
+                server.blacklist['data'].append(message.channel.id)
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['blacklist']['added']))
 
-        self.write_server(server)
+        session.commit()
 
 
     async def clear(self, message, stripped, server):
@@ -730,14 +726,14 @@ class BotClient(discord.Client):
 
             for role in message.role_mentions:
                 args = True
-                if role.id not in server.restrictions:
+                if role.id not in server.restrictions['data']:
                     disengage_all = False
-                server.restrictions.append(role.id)
+                server.restrictions['data'].append(role.id)
 
             if disengage_all and args:
                 for role in message.role_mentions:
-                    server.restrictions.remove(role.id)
-                    server.restrictions.remove(role.id)
+                    server.restrictions['data'].remove(role.id)
+                    server.restrictions['data'].remove(role.id)
 
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['restrict']['disabled']))
 
@@ -745,7 +741,7 @@ class BotClient(discord.Client):
                 await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['restrict']['enabled']))
 
             else:
-                await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['restrict']['allowed'].format(' '.join(['<@&' + str(i) + '>' for i in server.restrictions]))))
+                await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['restrict']['allowed'].format(' '.join(['<@&' + str(i) + '>' for i in server.restrictions['data']]))))
 
         session.commit()
 
@@ -804,6 +800,7 @@ class BotClient(discord.Client):
                 not_done = False
 
         if not_done:
+            print('running past')
             name = ' '.join(splits).strip()
 
             if name not in server.tags.keys():
