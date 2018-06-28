@@ -1,5 +1,8 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 
 Base = declarative_base()
 
@@ -15,7 +18,6 @@ class Reminder(Base):
     def __repr__(self):
         return '<Reminder "{}" <#{}> {}s>'.format(self.message, self.channel, self.time)
 
-import json
 
 class Server(Base):
     __tablename__ = 'servers'
@@ -30,4 +32,11 @@ class Server(Base):
     autoclears = Column( String(1000) )
 
     def __repr__(self):
-        return '<Server ' + str(self.__dict__) + ' >'
+        return '<Server {}>'.format(self.id)
+
+
+engine = create_engine('sqlite:///DATA/app.db')
+Base.metadata.create_all(bind=engine)
+
+Session = sessionmaker(bind=engine)
+session = Session()

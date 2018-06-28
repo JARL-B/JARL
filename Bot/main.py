@@ -1,6 +1,5 @@
-from server_data import ServerData
 from sloccount import sloccount_py
-from Reminder import Reminder
+from models import Reminder, 
 
 import discord
 import msgpack
@@ -14,7 +13,6 @@ import time
 import sys
 import os
 import configparser
-import sqlite3
 import json
 
 
@@ -87,11 +85,6 @@ class BotClient(discord.Client):
 
         if self.patreon:
             print('Patreon is enabled. Will look for servers {}'.format(self.patreon_servers))
-
-        self.connection = sqlite3.connect('DATA/calendar.db') #open SQL db
-        self.cursor = self.connection.cursor() #place cursor
-        self.cursor.execute('''PRAGMA journal_mode=DELETE;''')
-        self.cursor.row_factory = sqlite3.Row #set row to read as SQLite Rows
 
         try:
             with open('DATA/todos.json', 'r') as f:
