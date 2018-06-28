@@ -107,17 +107,6 @@ class BotClient(discord.Client):
             sys.exit()
 
 
-    def get_server(self, guild):
-        self.cursor.execute('SELECT * FROM servers WHERE id = ?', (guild.id, ))
-        d = self.cursor.fetchone()
-
-        if d is None:
-            return None
-
-        else:
-            return ServerData(**dict(d))
-
-
     def write_server(self, data):
         print(data)
 
@@ -297,17 +286,10 @@ class BotClient(discord.Client):
 
 
     async def cleanup(self, *args):
-        command = '''SELECT * FROM servers'''
-
-        self.cursor.execute(command)
         all_ids = [g.id for g in self.guilds]
 
-        for d in self.cursor.fetchall():
-            idx = dict(d)['id']
-
-            if idx not in all_ids:
-                print('Deleting server {}'.format(idx))
-                self.cursor.execute('DELETE FROM servers WHERE id = ?', (idx,))
+        session.query(Server).filter(Server.id in all_ids).delete()
+        session.commit()
 
 
     async def on_ready(self):
@@ -361,13 +343,12 @@ class BotClient(discord.Client):
     async def on_message(self, message):
         if message.guild is not None and session.query(Server).filter_by(id=message.guild.id).first() is None:
 
-            command = '''INSERT INTO servers (id, prefix, timezone, language, blacklist, restrictions, tags, autoclears)
-            VALUES (?, "$", "UTC", "EN", "[]", "[]", "{}", "{}")'''
+            server = Server(id=message.guild.id, prefix='$', timezone='UTC', language='EN', blacklist='[]', restrictions='[]', tags='{}', autoclears='{}')
 
-            self.cursor.execute(command, (message.guild.id, ))
-            self.connection.commit()
+            session.add(server)
+            session.commit()
 
-        server = None if message.guild is None else self.get_server(message.guild)
+        server = None if message.guild is None else session.query(Server).filter_by(id=message.guild.id).first()
         if server is not None and message.channel.id in server.autoclears.keys():
             self.process_deletes[message.id] = {'time' : time.time() + server.autoclears[message.channel.id], 'channel' : message.channel.id}
 
@@ -387,7 +368,7 @@ class BotClient(discord.Client):
 
     async def get_cmd(self, message):
 
-        server = None if message.guild is None else self.get_server(message.guild)
+        server = None if message.guild is None else session.query(Server).filter_by(id=message.guild.id).first()
         prefix = '$' if server is None else server.prefix
 
         if message.content.startswith('mbprefix'):
@@ -1068,7 +1049,7 @@ class BotClient(discord.Client):
 
                             print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
                         else:
-                            await recipient.send(self.get_strings(self.get_server(recipient.guild))['interval']['removed'])
+                            await recipient.send(self.get_strings( session.query(Server).filter_by(id=recipient.guild.id).first() )['interval']['removed'])
                             continue
 
                         while reminder.time <= time.time():
