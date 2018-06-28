@@ -108,30 +108,11 @@ class BotClient(discord.Client):
 
 
     def write_server(self, data):
-        print(data)
-
-        command = '''UPDATE servers
-        SET prefix = ?, timezone = ?, language = ?, blacklist = ?, restrictions = ?, tags = ?, autoclears = ?
-        WHERE id = ?
-        '''
-
-        self.cursor.execute(command, (
-            data.prefix,
-            data.timezone,
-            data.language,
-            json.dumps(data.blacklist),
-            json.dumps(data.restrictions),
-            json.dumps(data.tags),
-            json.dumps(data.autoclears),
-            data.id
-        ))
-
-        self.connection.commit()
+        session.commit()
 
 
     def count_reminders(self, loc):
-        self.cursor.execute('SELECT * FROM reminders WHERE channel = ?', (loc,))
-        return len([r for r in self.cursor.fetchall() if dict(r)['interval'] == None])
+        return session.query(Reminder).filter_by(channel=loc).count()
 
 
     def get_patrons(self, memberid, level=2):
@@ -538,10 +519,8 @@ class BotClient(discord.Client):
 
         reminder = Reminder(time=msg_time, channel=scope, message=msg_text)
 
-        command = '''INSERT INTO reminders (interval, time, channel, message)
-        VALUES (?, ?, ?, ?)'''
-
-        self.cursor.execute(command, (reminder.interval, reminder.time, reminder.channel, reminder.message))
+        session.add(reminder)
+        session.commit()
 
         await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['success'].format(pref, scope, round(msg_time - time.time()))))
         print('Registered a new reminder for {}'.format(message.guild.name))
@@ -622,10 +601,8 @@ class BotClient(discord.Client):
 
         reminder = Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text)
 
-        command = '''INSERT INTO reminders (interval, time, channel, message)
-        VALUES (?, ?, ?, ?)'''
-
-        self.cursor.execute(command, (reminder.interval, reminder.time, reminder.channel, reminder.message))
+        session.add(reminder)
+        session.commit()
 
         await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['interval']['success'].format(pref, scope, round(msg_time - time.time()))))
         print('Registered a new interval for {}'.format(message.guild.name))
@@ -920,26 +897,18 @@ class BotClient(discord.Client):
         n = 1
         remli = []
 
-        command = '''SELECT *
-        FROM reminders
-        WHERE channel IN ({})
-        '''.format(', '.join([str(x) for x in li]))
-
-        self.cursor.execute(command)
+        reminders = session.query(Reminder).filter(Reminder.channel in li).all()
 
         s = ''
-        for r in self.cursor.fetchall():
-            rem = Reminder(dictv=dict(r))
-            if rem.channel in li:
-                remli.append(rem)
-                s_temp = '**' + str(n) + '**: \'' + rem.message + '\' (' + datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + ('' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention) + '\n'
-                if len(s) + len(s_temp) > 2000:
-                    await message.channel.send(s)
-                    s = s_temp
-                else:
-                    s += s_temp
+        for rem in reminders:
+            s_temp = '**' + str(n) + '**: \'' + rem.message + '\' (' + datetime.fromtimestamp(rem.time, pytz.timezone('UTC' if server is None else server.timezone)).strftime('%Y-%m-%d %H:%M:%S') + ') ' + ('' if self.get_channel(rem.channel) is None else self.get_channel(rem.channel).mention) + '\n'
+            if len(s) + len(s_temp) > 2000:
+                await message.channel.send(s)
+                s = s_temp
+            else:
+                s += s_temp
 
-                n += 1
+            n += 1
 
         if s:
             await message.channel.send(s)
@@ -956,10 +925,7 @@ class BotClient(discord.Client):
                 if i < 0:
                     continue
 
-                if remli[i].interval is None:
-                    self.cursor.execute('DELETE FROM reminders WHERE time = ? and channel = ? and message = ?', (remli[i].time, remli[i].channel, remli[i].message))
-                else:
-                    self.cursor.execute('DELETE FROM reminders WHERE interval = ? and channel = ? and message = ?', (remli[i].interval, remli[i].channel, remli[i].message))
+                session.query(Reminder).filter(Reminder.id == reminders[i].id).delete()
 
                 print('Deleted reminder')
                 dels += 1
@@ -980,22 +946,12 @@ class BotClient(discord.Client):
             self.times['last_loop'] = time.time()
             self.times['loops'] += 1
 
-            command = '''
-            SELECT *
-            FROM reminders
-            WHERE time < ?;
-            '''
-            self.cursor.execute(command, (time.time(),))
+            reminders = sesssion.query(Reminder).filter(Reminder.time <= time.time()).all()
 
-            for r in self.cursor.fetchall():
+            for reminder in reminders:
                 print('Looping for reminder(s)...')
-                reminder = Reminder(dictv=dict(r))
 
-                command = '''DELETE
-                FROM reminders
-                WHERE time = ? AND channel = ? AND message = ?;
-                '''
-                self.cursor.execute(command, (reminder.time, reminder.channel, reminder.message))
+                session.query(Reminder).filter(Reminder.id == reminder.id).delete()
 
                 if reminder.interval is not None and reminder.interval < 8:
                     continue
@@ -1055,10 +1011,8 @@ class BotClient(discord.Client):
                         while reminder.time <= time.time():
                             reminder.time += reminder.interval ## change the time for the next interval
 
-                        command = '''INSERT INTO reminders (interval, time, channel, message)
-                        VALUES (?, ?, ?, ?)'''
-
-                        self.cursor.execute(command, (reminder.interval, reminder.time, reminder.channel, reminder.message))
+                        session.add(reminder)
+                        session.commit()
 
                 except Exception as e:
                     print(e)
