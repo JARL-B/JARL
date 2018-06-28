@@ -1039,7 +1039,7 @@ class BotClient(discord.Client):
             with open('DATA/process_deletes.mp', 'wb') as f:
                 msgpack.dump(self.process_deletes, f)
 
-            self.connection.commit()
+            session.commit()
             await asyncio.sleep(2.5)
 
 client = BotClient()
