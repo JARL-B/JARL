@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, BigInteger, String, PickleType
+from sqlalchemy import Column, Integer, BigInteger, String, Unicode
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_json import NestedMutableJson, MutableJson
@@ -18,10 +18,12 @@ class Reminder(Base):
     __tablename__ = 'reminders'
 
     id = Column(Integer, primary_key=True, unique=True)
-    message = Column(String(2000))
+    message = Column(Unicode(2000))
     channel = Column(BigInteger)
-    time = Column(Integer)
+    time = Column(BigInteger)
     interval = Column(Integer)
+
+    mysql_charset = 'utf8mb4'
 
     def __repr__(self):
         return '<Reminder "{}" <#{}> {}s>'.format(self.message, self.channel, self.time)
@@ -44,7 +46,7 @@ class Server(Base):
         return '<Server {}>'.format(self.id)
 
 
-engine = create_engine('mysql+pymysql://{user}:{passwd}@{host}/{db}'.format(user=user, passwd=passwd, host=host, db=database))
+engine = create_engine('mysql+pymysql://{user}:{passwd}@{host}/{db}?charset=utf8mb4'.format(user=user, passwd=passwd, host=host, db=database))
 Base.metadata.create_all(bind=engine)
 
 Session = sessionmaker(bind=engine)

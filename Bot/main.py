@@ -396,9 +396,16 @@ class BotClient(discord.Client):
             return
 
         if stripped:
+            old = server.prefix
             stripped += ' '
             server.prefix = stripped[:stripped.find(' ')]
-            await message.channel.send(self.get_strings(server)['prefix']['success'].format(prefix=server.prefix))
+
+            if len(server.prefix) > 5:
+                await message.channel.send(self.get_strings(server)['prefix']['too_long'])
+                server.prefix = old
+
+            else:
+                await message.channel.send(self.get_strings(server)['prefix']['success'].format(prefix=server.prefix))
 
         else:
             await message.channel.send(self.get_strings(server)['prefix']['no_argument'].format(prefix=server.prefix))
