@@ -101,7 +101,9 @@ Please use this command as `mbprefix <prefix>`
 ''',
         'success' : '''
 Prefix changed to {prefix}
-'''
+''',
+
+        'too_long' : '''Please select a prefix under 5 characters'''
     },
 
     'timezone' : {

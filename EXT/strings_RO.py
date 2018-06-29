@@ -84,7 +84,9 @@ Utilizați această comandă ca `mbprefix <prefix>`
 ''',
         'success' : '''
 Prefix schimbat in {prefix}
-'''
+''',
+
+        'too_long' : '''Please select a prefix under 5 characters'''
     },
 
     'timezone' : {
