@@ -523,10 +523,11 @@ class BotClient(discord.Client):
 
         reminder = Reminder(time=msg_time, channel=scope, message=msg_text)
 
+        await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['success'].format(pref, scope, round(msg_time - time.time()))))
+
         session.add(reminder)
         session.commit()
 
-        await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['remind']['success'].format(pref, scope, round(msg_time - time.time()))))
         print('Registered a new reminder for {}'.format(message.guild.name))
 
 
@@ -605,10 +606,11 @@ class BotClient(discord.Client):
 
         reminder = Reminder(time=msg_time, interval=msg_interval, channel=scope, message=msg_text)
 
+        await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['interval']['success'].format(pref, scope, round(msg_time - time.time()))))
+        
         session.add(reminder)
         session.commit()
 
-        await message.channel.send(embed=discord.Embed(description=self.get_strings(server)['interval']['success'].format(pref, scope, round(msg_time - time.time()))))
         print('Registered a new interval for {}'.format(message.guild.name))
 
 
@@ -956,9 +958,8 @@ class BotClient(discord.Client):
             for reminder in reminders:
                 print('Looping for reminder(s)...')
 
-                session.query(Reminder).filter(Reminder.id == reminder.id).delete()
-
                 if reminder.interval is not None and reminder.interval < 8:
+                    session.query(Reminder).filter(Reminder.id == reminder.id).delete()
                     continue
 
                 users = self.get_all_members()
@@ -970,11 +971,13 @@ class BotClient(discord.Client):
 
                 if recipient == None:
                     print('{}: Failed to locate channel'.format(datetime.utcnow().strftime('%H:%M:%S')))
+                    session.query(Reminder).filter(Reminder.id == reminder.id).delete()
                     continue
 
                 try:
                     if reminder.interval == None:
                         await recipient.send(reminder.message)
+                        session.query(Reminder).filter(Reminder.id == reminder.id).delete()
                         print('{}: Administered reminder to {}'.format(datetime.utcnow().strftime('%H:%M:%S'), recipient.name))
 
                     else:
@@ -1011,12 +1014,12 @@ class BotClient(discord.Client):
                             print('{}: Administered interval to {} (Reset for {} seconds)'.format(datetime.utcnow().strftime('%H:%M:%S'), recipient.name, reminder.interval))
                         else:
                             await recipient.send(self.get_strings( session.query(Server).filter_by(id=recipient.guild.id).first() )['interval']['removed'])
+                            session.query(Reminder).filter(Reminder.id == reminder.id).delete()
                             continue
 
                         while reminder.time <= time.time():
                             reminder.time += reminder.interval ## change the time for the next interval
 
-                        session.add(reminder)
                         session.commit()
 
                 except Exception as e:
