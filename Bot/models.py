@@ -9,6 +9,7 @@ config = configparser.SafeConfigParser()
 config.read('config.ini')
 user = config.get('MYSQL', 'USER')
 passwd = config.get('MYSQL', 'PASSWD')
+host = config.get('MYSQL', 'HOST')
 database = config.get('MYSQL', 'DATABASE')
 
 Base = declarative_base()
@@ -43,7 +44,7 @@ class Server(Base):
         return '<Server {}>'.format(self.id)
 
 
-engine = create_engine('mysql+pymysql://{user}:{passwd}@ssh.jellywx.co.uk/{db}'.format(user=user, passwd=passwd, db=database))
+engine = create_engine('mysql+pymysql://{user}:{passwd}@{host}/{db}'.format(user=user, passwd=passwd, host=host, db=database))
 Base.metadata.create_all(bind=engine)
 
 Session = sessionmaker(bind=engine)
