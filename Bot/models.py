@@ -43,7 +43,7 @@ class Server(Base):
         return '<Server {}>'.format(self.id)
 
 
-engine = create_engine('mysql+pymysql://{user}:{pass}@ssh.jellywx.co.uk/{db}'.format(user=user, pass=passwd, db=database))
+engine = create_engine('mysql+pymysql://{user}:{passwd}@ssh.jellywx.co.uk/{db}'.format(user=user, passwd=passwd, db=database))
 Base.metadata.create_all(bind=engine)
 
 Session = sessionmaker(bind=engine)
