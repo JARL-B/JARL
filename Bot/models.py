@@ -3,7 +3,13 @@ from sqlalchemy import Column, Integer, BigInteger, String, PickleType
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_json import NestedMutableJson, MutableJson
+import configparser
 
+config = configparser.SafeConfigParser()
+config.read('config.ini')
+user = config.get('MYSQL', 'USER')
+passwd = config.get('MYSQL', 'PASSWD')
+database = config.get('MYSQL', 'DATABASE')
 
 Base = declarative_base()
 
@@ -37,7 +43,7 @@ class Server(Base):
         return '<Server {}>'.format(self.id)
 
 
-engine = create_engine('mysql+pymysql://jude:d8c1F\'T^!$K+6Xy979~Gx9hLwfU;@ssh.jellywx.co.uk/test')
+engine = create_engine('mysql+pymysql://{user}:{pass}@ssh.jellywx.co.uk/{db}'.format(user=user, pass=passwd, db=database))
 Base.metadata.create_all(bind=engine)
 
 Session = sessionmaker(bind=engine)
