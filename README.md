@@ -1,5 +1,5 @@
 # Reminder Bot
-## Cool beans
+## New source code at the [reminder-bot organization](https://github.com/reminder-bot)
 
 [![Discord Bots](https://discordbots.org/api/widget/349920059549941761.svg)](https://discordbots.org/bot/349920059549941761)
 
