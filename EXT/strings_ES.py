@@ -43,7 +43,7 @@
 
 '$lang <nombre>' : 'cambia el idioma.',
 
-'$clock' : 'obtén la hora actual.'}]
+'$clock [12]' : 'obtén la hora actual, opcionalmente en formato de 12 horas.'}]
 ],
 
     'web_foot_title' : 'Información extra',
